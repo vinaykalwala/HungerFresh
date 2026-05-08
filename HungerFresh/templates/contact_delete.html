@@ -1,0 +1,29 @@
+<!-- templates/contact/contact_delete.html -->
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Delete Contact</h2>
+
+<p>
+
+    Are you sure you want to delete:
+
+    <strong>
+        {{ contact.name }}
+    </strong> ?
+
+</p>
+
+<form method="POST">
+
+    {% csrf_token %}
+
+    <button type="submit" class="btn">
+        Confirm Delete
+    </button>
+
+</form>
+
+{% endblock %}

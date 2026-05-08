@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="delete-container">
+
+    <div class="delete-box">
+
+        <h2>
+            Delete Update
+        </h2>
+
+        <p>
+
+            Are you sure you want to delete
+
+            <strong>
+                {{ update.title }}
+            </strong> ?
+
+        </p>
+
+        {% if update.image %}
+
+            <img
+                src="{{ update.image.url }}"
+                width="250"
+                style="margin:20px 0;"
+            >
+
+        {% endif %}
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+            <button type="submit" class="delete-btn">
+                Confirm Delete
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+<style>
+
+    .delete-container{
+        display:flex;
+        justify-content:center;
+        padding:50px 0;
+    }
+
+    .delete-box{
+        width:500px;
+        background:white;
+        padding:40px;
+        border-radius:10px;
+        text-align:center;
+    }
+
+    .delete-btn{
+        padding:12px 20px;
+        background:red;
+        color:white;
+        border:none;
+        border-radius:5px;
+        cursor:pointer;
+    }
+
+</style>
+
+{% endblock %}

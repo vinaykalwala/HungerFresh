@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="page-header">
+
+    <h1>
+        Gallery Management
+    </h1>
+
+    <a
+        href="{% url 'gallery_create' %}"
+        class="btn"
+    >
+        Add Gallery
+    </a>
+
+</div>
+
+<table>
+
+    <tr>
+
+        <th>ID</th>
+
+        <th>Image</th>
+
+        <th>Title</th>
+
+        <th>Category</th>
+
+        <th>Status</th>
+
+        <th>Actions</th>
+
+    </tr>
+
+    {% for gallery in galleries %}
+
+    <tr>
+
+        <td>{{ gallery.id }}</td>
+
+        <td>
+
+            <img
+                src="{{ gallery.image.url }}"
+                width="100"
+            >
+
+        </td>
+
+        <td>{{ gallery.title }}</td>
+
+        <td>{{ gallery.category }}</td>
+
+        <td>
+
+            {% if gallery.is_active %}
+
+                Active
+
+            {% else %}
+
+                Inactive
+
+            {% endif %}
+
+        </td>
+
+        <td>
+
+            <a
+                href="{% url 'gallery_detail' gallery.id %}"
+                class="btn-small"
+            >
+                View
+            </a>
+
+            <a
+                href="{% url 'gallery_update' gallery.id %}"
+                class="btn-small edit-btn"
+            >
+                Edit
+            </a>
+
+            <a
+                href="{% url 'gallery_delete' gallery.id %}"
+                class="btn-small delete-btn"
+            >
+                Delete
+            </a>
+
+        </td>
+
+    </tr>
+
+    {% empty %}
+
+    <tr>
+
+        <td colspan="6">
+            No gallery items found.
+        </td>
+
+    </tr>
+
+    {% endfor %}
+
+</table>
+
+<style>
+
+    .page-header{
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        margin-bottom:30px;
+    }
+
+    table{
+        width:100%;
+        border-collapse:collapse;
+        background:white;
+    }
+
+    table th,
+    table td{
+        border:1px solid #ddd;
+        padding:12px;
+    }
+
+    table th{
+        background:#111;
+        color:white;
+    }
+
+    .btn{
+        padding:10px 20px;
+        background:black;
+        color:white;
+        text-decoration:none;
+        border-radius:5px;
+    }
+
+    .btn-small{
+        padding:6px 12px;
+        background:#111;
+        color:white;
+        text-decoration:none;
+        border-radius:4px;
+    }
+
+    .edit-btn{
+        background:orange;
+    }
+
+    .delete-btn{
+        background:red;
+    }
+
+</style>
+
+{% endblock %}

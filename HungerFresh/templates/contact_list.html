@@ -1,0 +1,76 @@
+<!-- templates/contact/contact_list.html -->
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>All Contacts</h2>
+
+<table>
+
+    <tr>
+
+        <th>ID</th>
+
+        <th>Name</th>
+
+        <th>Email</th>
+
+        <th>Phone</th>
+
+        <th>Status</th>
+
+        <th>Date</th>
+
+        <th>Actions</th>
+
+    </tr>
+
+    {% for contact in contacts %}
+
+    <tr>
+
+        <td>{{ contact.id }}</td>
+
+        <td>{{ contact.name }}</td>
+
+        <td>{{ contact.email }}</td>
+
+        <td>{{ contact.phone_number }}</td>
+
+        <td>{{ contact.status }}</td>
+
+        <td>{{ contact.created_at }}</td>
+
+        <td>
+
+            <a
+                href="{% url 'contact_detail' contact.id %}"
+                class="btn"
+            >
+                View
+            </a>
+
+            <a
+                href="{% url 'contact_update' contact.id %}"
+                class="btn"
+            >
+                Edit
+            </a>
+
+            <a
+                href="{% url 'contact_delete' contact.id %}"
+                class="btn"
+            >
+                Delete
+            </a>
+
+        </td>
+
+    </tr>
+
+    {% endfor %}
+
+</table>
+
+{% endblock %}

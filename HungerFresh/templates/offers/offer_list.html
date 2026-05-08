@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="page-header">
+
+    <h1>
+        Offers Management
+    </h1>
+
+    <a
+        href="{% url 'offer_create' %}"
+        class="btn"
+    >
+        Add Offer
+    </a>
+
+</div>
+
+<table>
+
+    <tr>
+
+        <th>ID</th>
+
+        <th>Image</th>
+
+        <th>Title</th>
+
+        <th>Discount</th>
+
+        <th>Status</th>
+
+        <th>Actions</th>
+
+    </tr>
+
+    {% for offer in offers %}
+
+    <tr>
+
+        <td>{{ offer.id }}</td>
+
+        <td>
+
+            <img
+                src="{{ offer.image.url }}"
+                width="100"
+            >
+
+        </td>
+
+        <td>{{ offer.title }}</td>
+
+        <td>{{ offer.discount }}</td>
+
+        <td>
+
+            {% if offer.is_active %}
+
+                Active
+
+            {% else %}
+
+                Inactive
+
+            {% endif %}
+
+        </td>
+
+        <td>
+
+            <a
+                href="{% url 'offer_update' offer.id %}"
+                class="btn-small edit-btn"
+            >
+                Edit
+            </a>
+
+            <a
+                href="{% url 'offer_delete' offer.id %}"
+                class="btn-small delete-btn"
+            >
+                Delete
+            </a>
+
+        </td>
+
+    </tr>
+
+    {% empty %}
+
+    <tr>
+
+        <td colspan="6">
+            No offers found.
+        </td>
+
+    </tr>
+
+    {% endfor %}
+
+</table>
+
+<style>
+
+    .page-header{
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        margin-bottom:30px;
+    }
+
+    table{
+        width:100%;
+        border-collapse:collapse;
+        background:white;
+    }
+
+    table th,
+    table td{
+        border:1px solid #ddd;
+        padding:12px;
+    }
+
+    table th{
+        background:#111;
+        color:white;
+    }
+
+    .btn{
+        padding:10px 20px;
+        background:black;
+        color:white;
+        text-decoration:none;
+        border-radius:5px;
+    }
+
+    .btn-small{
+        padding:6px 12px;
+        background:#111;
+        color:white;
+        text-decoration:none;
+        border-radius:4px;
+    }
+
+    .edit-btn{
+        background:orange;
+    }
+
+    .delete-btn{
+        background:red;
+    }
+
+</style>
+
+{% endblock %}

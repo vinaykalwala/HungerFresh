@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Contact Detail</h2>
+
+<p>
+    <strong>Name:</strong>
+    {{ contact.name }}
+</p>
+
+<p>
+    <strong>Email:</strong>
+    {{ contact.email }}
+</p>
+
+<p>
+    <strong>Phone Number:</strong>
+    {{ contact.phone_number }}
+</p>
+
+<p>
+    <strong>Subject:</strong>
+    {{ contact.subject }}
+</p>
+
+<p>
+    <strong>Message:</strong>
+    {{ contact.message }}
+</p>
+
+<p>
+    <strong>Status:</strong>
+    {{ contact.status }}
+</p>
+
+<p>
+    <strong>Created At:</strong>
+    {{ contact.created_at }}
+</p>
+
+{% endblock %}

@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="delete-container">
+
+    <div class="delete-box">
+
+        <h2>Delete Service</h2>
+
+        <p>
+
+            Are you sure you want to delete
+
+            <strong>
+                {{ service.title }}
+            </strong> ?
+
+        </p>
+
+        {% if service.image %}
+
+            <img
+                src="{{ service.image.url }}"
+                width="200"
+                style="margin:20px 0;"
+            >
+
+        {% endif %}
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+            <button type="submit" class="delete-btn">
+                Confirm Delete
+            </button>
+
+            <a
+                href="{% url 'service_list' %}"
+                class="cancel-btn"
+            >
+                Cancel
+            </a>
+
+        </form>
+
+    </div>
+
+</div>
+
+<style>
+
+    .delete-container{
+        display:flex;
+        justify-content:center;
+        padding:50px 0;
+    }
+
+    .delete-box{
+        width:500px;
+        background:white;
+        padding:40px;
+        border-radius:10px;
+        text-align:center;
+        box-shadow:0px 0px 10px rgba(0,0,0,0.1);
+    }
+
+    .delete-btn{
+        padding:12px 20px;
+        background:red;
+        color:white;
+        border:none;
+        border-radius:5px;
+        cursor:pointer;
+        margin-right:10px;
+    }
+
+    .cancel-btn{
+        padding:12px 20px;
+        background:#333;
+        color:white;
+        text-decoration:none;
+        border-radius:5px;
+    }
+
+</style>
+
+{% endblock %}

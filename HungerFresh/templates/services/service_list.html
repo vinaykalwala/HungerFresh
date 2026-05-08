@@ -1,0 +1,206 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="page-header">
+
+    <h1>Services</h1>
+
+    <a
+        href="{% url 'service_create' %}"
+        class="btn"
+    >
+        Add Service
+    </a>
+
+</div>
+
+{% if messages %}
+
+    {% for message in messages %}
+
+        <div class="message {{ message.tags }}">
+            {{ message }}
+        </div>
+
+    {% endfor %}
+
+{% endif %}
+
+<table>
+
+    <tr>
+
+        <th>ID</th>
+
+        <th>Image</th>
+
+        <th>Title</th>
+
+        <th>Status</th>
+
+        <th>Created</th>
+
+        <th>Actions</th>
+
+    </tr>
+
+    {% for service in services %}
+
+    <tr>
+
+        <td>{{ service.id }}</td>
+
+        <td>
+
+            {% if service.image %}
+
+                <img
+                    src="{{ service.image.url }}"
+                    width="80"
+                    height="60"
+                >
+
+            {% endif %}
+
+        </td>
+
+        <td>{{ service.title }}</td>
+
+        <td>
+
+            {% if service.is_active %}
+
+                <span class="active">
+                    Active
+                </span>
+
+            {% else %}
+
+                <span class="inactive">
+                    Inactive
+                </span>
+
+            {% endif %}
+
+        </td>
+
+        <td>{{ service.created_at }}</td>
+
+        <td>
+
+            <a
+                href="{% url 'service_detail' service.id %}"
+                class="btn-small"
+            >
+                View
+            </a>
+
+            <a
+                href="{% url 'service_update' service.id %}"
+                class="btn-small edit-btn"
+            >
+                Edit
+            </a>
+
+            <a
+                href="{% url 'service_delete' service.id %}"
+                class="btn-small delete-btn"
+            >
+                Delete
+            </a>
+
+        </td>
+
+    </tr>
+
+    {% empty %}
+
+    <tr>
+
+        <td colspan="6">
+            No services found.
+        </td>
+
+    </tr>
+
+    {% endfor %}
+
+</table>
+
+<style>
+
+    .page-header{
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        margin-bottom:30px;
+    }
+
+    table{
+        width:100%;
+        border-collapse:collapse;
+        background:white;
+    }
+
+    table th,
+    table td{
+        border:1px solid #ddd;
+        padding:12px;
+        text-align:left;
+    }
+
+    table th{
+        background:#111;
+        color:white;
+    }
+
+    .btn{
+        padding:10px 20px;
+        background:black;
+        color:white;
+        text-decoration:none;
+        border-radius:5px;
+    }
+
+    .btn-small{
+        padding:6px 12px;
+        background:#333;
+        color:white;
+        text-decoration:none;
+        border-radius:4px;
+        font-size:14px;
+    }
+
+    .edit-btn{
+        background:orange;
+    }
+
+    .delete-btn{
+        background:red;
+    }
+
+    .active{
+        color:green;
+        font-weight:bold;
+    }
+
+    .inactive{
+        color:red;
+        font-weight:bold;
+    }
+
+    .message{
+        padding:10px;
+        margin-bottom:20px;
+        border-radius:5px;
+    }
+
+    .success{
+        background:#d4edda;
+        color:#155724;
+    }
+
+</style>
+
+{% endblock %}

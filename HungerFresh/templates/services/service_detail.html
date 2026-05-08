@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="service-detail">
+
+    <h1>{{ service.title }}</h1>
+
+    {% if service.image %}
+
+        <img
+            src="{{ service.image.url }}"
+            class="service-image"
+        >
+
+    {% endif %}
+
+    <div class="detail-box">
+
+        <p>
+
+            <strong>Slug:</strong>
+
+            {{ service.slug }}
+
+        </p>
+
+        <p>
+
+            <strong>Short Description:</strong>
+
+            {{ service.short_description }}
+
+        </p>
+
+        <p>
+
+            <strong>Description:</strong>
+
+            {{ service.description }}
+
+        </p>
+
+        <p>
+
+            <strong>Status:</strong>
+
+            {% if service.is_active %}
+
+                Active
+
+            {% else %}
+
+                Inactive
+
+            {% endif %}
+
+        </p>
+
+        <p>
+
+            <strong>Created:</strong>
+
+            {{ service.created_at }}
+
+        </p>
+
+    </div>
+
+    <div class="actions">
+
+        <a
+            href="{% url 'service_update' service.id %}"
+            class="btn"
+        >
+            Edit
+        </a>
+
+        <a
+            href="{% url 'service_delete' service.id %}"
+            class="btn delete-btn"
+        >
+            Delete
+        </a>
+
+    </div>
+
+</div>
+
+<style>
+
+    .service-detail{
+        background:white;
+        padding:30px;
+        border-radius:10px;
+    }
+
+    .service-image{
+        width:100%;
+        max-width:500px;
+        margin-bottom:20px;
+        border-radius:10px;
+    }
+
+    .detail-box p{
+        margin-bottom:15px;
+        line-height:1.8;
+    }
+
+    .actions{
+        margin-top:30px;
+    }
+
+    .btn{
+        padding:10px 20px;
+        background:black;
+        color:white;
+        text-decoration:none;
+        border-radius:5px;
+        margin-right:10px;
+    }
+
+    .delete-btn{
+        background:red;
+    }
+
+</style>
+
+{% endblock %}

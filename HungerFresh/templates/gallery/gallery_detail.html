@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="gallery-detail">
+
+    <h1>
+        {{ gallery.title }}
+    </h1>
+
+    <img
+        src="{{ gallery.image.url }}"
+        class="gallery-image"
+    >
+
+    <div class="detail-box">
+
+        <p>
+
+            <strong>Category:</strong>
+
+            {{ gallery.category }}
+
+        </p>
+
+        <p>
+
+            <strong>Description:</strong>
+
+            {{ gallery.description }}
+
+        </p>
+
+        <p>
+
+            <strong>Status:</strong>
+
+            {% if gallery.is_active %}
+
+                Active
+
+            {% else %}
+
+                Inactive
+
+            {% endif %}
+
+        </p>
+
+        <p>
+
+            <strong>Created:</strong>
+
+            {{ gallery.created_at }}
+
+        </p>
+
+    </div>
+
+    <div class="actions">
+
+        <a
+            href="{% url 'gallery_update' gallery.id %}"
+            class="btn"
+        >
+            Edit
+        </a>
+
+        <a
+            href="{% url 'gallery_delete' gallery.id %}"
+            class="btn delete-btn"
+        >
+            Delete
+        </a>
+
+    </div>
+
+</div>
+
+<style>
+
+    .gallery-detail{
+        background:white;
+        padding:30px;
+        border-radius:10px;
+    }
+
+    .gallery-image{
+        width:100%;
+        max-width:700px;
+        border-radius:10px;
+        margin-bottom:20px;
+    }
+
+    .detail-box p{
+        margin-bottom:15px;
+        line-height:1.7;
+    }
+
+    .actions{
+        margin-top:30px;
+    }
+
+    .btn{
+        padding:10px 20px;
+        background:black;
+        color:white;
+        text-decoration:none;
+        border-radius:5px;
+        margin-right:10px;
+    }
+
+    .delete-btn{
+        background:red;
+    }
+
+</style>
+
+{% endblock %}
