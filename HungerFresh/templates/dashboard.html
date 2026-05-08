@@ -1,26 +1,59 @@
-<!-- templates/dashboard/dashboard.html -->
+<h2>Quick Links</h2>
 
-{% extends 'base.html' %}
+<ul>
 
-{% block content %}
+    <li>
+        <a href="{% url 'contact_list' %}">
+            View Contact Messages
+        </a>
+    </li>
 
-<h1>Dashboard</h1>
+    <li>
+        <a href="{% url 'service_list' %}">
+            View Services
+        </a>
+    </li>
 
-<hr>
+    <li>
+        <a href="{% url 'service_create' %}">
+            Add Service
+        </a>
+    </li>
 
-<h3>
-    Total Contacts:
-    {{ total_contacts }}
-</h3>
+    <li>
+        <a href="{% url 'gallery_list' %}">
+            View Gallery
+        </a>
+    </li>
 
-<h3>
-    New Contacts:
-    {{ new_contacts }}
-</h3>
+    <li>
+        <a href="{% url 'gallery_create' %}">
+            Add Gallery Image
+        </a>
+    </li>
 
-<h3>
-    Read Contacts:
-    {{ read_contacts }}
-</h3>
+    <li>
+        <a href="{% url 'offer_list' %}">
+            View Offers
+        </a>
+    </li>
 
-{% endblock %}
+    <li>
+        <a href="{% url 'offer_create' %}">
+            Add Offer
+        </a>
+    </li>
+
+    <li>
+        <a href="{% url 'latest_update_list' %}">
+            View Latest Updates
+        </a>
+    </li>
+
+    <li>
+        <a href="{% url 'latest_update_create' %}">
+            Add Latest Update
+        </a>
+    </li>
+
+</ul>
