@@ -1,206 +1,348 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
 
-<div class="page-header">
+<!-- ========================
+     PART 1: CSS STYLES
+     ======================== -->
+<style>
+    :root {
+        --svc-orange: #FF6600;
+        --svc-orange-dark: #E65A00;
+        --svc-orange-glow: rgba(255, 102, 0, 0.2);
+        --svc-white: #FFFFFF;
+        --svc-cream: #FFF9F2;
+        --svc-text-dark: #2C2C2C;
+        --svc-text-gray: #757575;
+        --svc-success: #28A745;
+        --svc-danger: #DC3545;
+        --svc-shadow-card: 0 10px 30px rgba(0, 0, 0, 0.06);
+        --svc-shadow-hover: 0 20px 40px rgba(255, 102, 0, 0.15);
+        --svc-transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
 
-    <h1>Services</h1>
+    /*
+       BACKGROUND SETUP – Now the image is visible.
+       Reduced overlay opacity and added a radial gradient for depth.
+    */
+    .svc-bg-layer {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+}
 
-    <a
-        href="{% url 'service_create' %}"
-        class="btn"
-    >
-        Add Service
-    </a>
+/* TOP AREA WITHOUT IMAGE */
+.svc-bg-layer::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 84.6px; /* adjust based on navbar height */
 
+    background: linear-gradient(135deg, #ffecd9 0%, #ffffff 100%);
+
+    z-index: 2;
+}
+
+/* BACKGROUND IMAGE BELOW NAVBAR */
+.svc-bg-layer::after {
+    content: "";
+    position: absolute;
+
+    top: 86px; /* same as above */
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    background-image: url('{% static "images/ss-bg.webp" %}');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    z-index: 1;
+}
+
+    /* Lighter overlay so the image stays visible, text remains readable */
+    .svc-overlay {
+        position: absolute;
+        inset: 0;
+        /* background: radial-gradient(
+            circle at 20% 30%,
+            rgba(255, 255, 255, 0.25) 0%,
+            rgba(255, 249, 242, 0.65) 100%
+        ); */
+    }
+
+    /*
+       MAIN CONTAINER
+       padding-top matches the expected navbar height + a safe margin.
+       Added position relative + z-index so container sits above the background.
+    */
+    .svc-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 130px 20px 60px;  
+        position: relative;
+        z-index: 1;  /* ensure it's above the fixed bg layer */
+    }
+
+    /* HEADER */
+    .svc-header {
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 3rem;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .svc-title {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: var(--svc-orange);
+        margin: 0;
+        letter-spacing: -1px;
+        text-shadow: 0 2px 10px rgba(255, 102, 0, 0.1);
+        background: whitesmoke;
+        backdrop-filter: blur(10px);
+        border-radius: 10px;
+        padding: 10px 20px;
+        
+    }
+
+    .btn-add-service {
+        background: linear-gradient(135deg, var(--svc-orange), var(--svc-orange-dark));
+        color: white;
+        padding: 12px 28px;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 1rem;
+        box-shadow: 0 4px 15px var(--svc-orange-glow);
+        transition: var(--svc-transition);
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .btn-add-service:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px var(--svc-orange-glow);
+        filter: brightness(1.1);
+    }
+
+    /* CARDS GRID */
+    .svc-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 30px;
+        padding-bottom: 40px;
+    }
+
+    /* CARD DESIGN */
+    .svc-card {
+        background: var(--svc-white);
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: var(--svc-shadow-card);
+        transition: var(--svc-transition);
+        border: 1px solid rgba(0,0,0,0.03);
+        display: flex;
+        flex-direction: column;
+        opacity: 0;
+        animation: svc-fade-up 0.6s forwards;
+    }
+
+    .svc-card:nth-child(1) { animation-delay: 0.1s; }
+    .svc-card:nth-child(2) { animation-delay: 0.2s; }
+    .svc-card:nth-child(3) { animation-delay: 0.3s; }
+    .svc-card:nth-child(n+4) { animation-delay: 0.4s; }
+
+    .svc-card:hover {
+        transform: translateY(-8px);
+        box-shadow: var(--svc-shadow-hover);
+    }
+
+    /* Card Image Wrapper – fixed height with smooth hover */
+    .svc-card-img-wrap {
+        width: 100%;
+        height: 220px;
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(135deg, #ffe0cc, #fff5eb); /* fallback gradient */
+    }
+
+    .svc-card-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+
+    .svc-card:hover .svc-card-img {
+        transform: scale(1.05);
+    }
+
+    /* Status Badge */
+    .svc-badge {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: white;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        z-index: 2;
+    }
+    .badge-active { background-color: var(--svc-success); }
+    .badge-inactive { background-color: var(--svc-danger); }
+
+    /* Card Body */
+    .svc-card-body {
+        padding: 25px;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+    }
+
+    .svc-card-title {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: var(--svc-text-dark);
+        margin: 0 0 8px;
+    }
+
+    .svc-card-date {
+        font-size: 0.9rem;
+        color: var(--svc-text-gray);
+        margin-bottom: 20px;
+    }
+
+    /* Action buttons */
+    .svc-actions {
+        margin-top: auto;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .svc-btn-action {
+        flex: 1;
+        padding: 10px;
+        border-radius: 10px;
+        text-align: center;
+        font-weight: 600;
+        font-size: 0.9rem;
+        text-decoration: none;
+        transition: var(--svc-transition);
+    }
+
+    .btn-view { background: #FFF0E6; color: var(--svc-orange); }
+    .btn-view:hover { background: var(--svc-orange); color: white; }
+
+    .btn-edit { background: #FFF8E1; color: #F59E0B; }
+    .btn-edit:hover { background: #F59E0B; color: white; }
+
+    .btn-delete { background: #FEE2E2; color: #DC3545; }
+    .btn-delete:hover { background: #DC3545; color: white; }
+
+    /* EMPTY STATE */
+    .svc-empty-state {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 60px;
+        background: rgba(255,255,255,0.6);
+        border-radius: 20px;
+    }
+
+    @keyframes svc-fade-up {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 768px) {
+        .svc-container { padding-top: 110px; }  /* slightly less on mobile */
+        .svc-header { flex-direction: column; align-items: flex-start; }
+        .btn-add-service { width: 100%; justify-content: center; }
+        .svc-title { font-size: 2rem; }
+    }
+</style>
+
+<!-- ========================
+     PART 2: HTML STRUCTURE
+     ======================== -->
+<div class="svc-bg-layer">
+    <div class="svc-overlay"></div>
 </div>
 
-{% if messages %}
+<div class="svc-container">
+    
+    <header class="svc-header">
+        <h1 class="svc-title">Our Services</h1>
+        
+        {% if user.is_staff or user.is_superuser %}
+        <a href="{% url 'service_create' %}" class="btn-add-service">
+            <span>+</span> Add Service
+        </a>
+        {% endif %}
+    </header>
 
-    {% for message in messages %}
-
-        <div class="message {{ message.tags }}">
+    {% if messages %}
+        {% for message in messages %}
+        <div style="padding: 15px; margin-bottom: 20px; border-radius: 10px; background: #dcfce7; color: #166534; font-weight: 500;">
             {{ message }}
         </div>
+        {% endfor %}
+    {% endif %}
 
-    {% endfor %}
+    <div class="svc-grid">
+        {% for service in services %}
+        <article class="svc-card">
+            
+            <div class="svc-card-img-wrap">
+                {% if service.image %}
+                    <img src="{{ service.image.url }}" alt="{{ service.title }}" class="svc-card-img">
+                {% else %}
+                    <!-- Fallback placeholder with nice gradient matching the theme -->
+                    <div style="width:100%; height:100%; background: linear-gradient(135deg, #ffe0cc, #fff5eb); display:flex; align-items:center; justify-content:center; color:var(--svc-orange); font-weight:600; font-size:1.2rem;">
+                        🍽️ No Image
+                    </div>
+                {% endif %}
+                
+                {% if service.is_active %}
+                    <span class="svc-badge badge-active">Active</span>
+                {% else %}
+                    <span class="svc-badge badge-inactive">Inactive</span>
+                {% endif %}
+            </div>
 
-{% endif %}
+            <div class="svc-card-body">
+                <h2 class="svc-card-title">{{ service.title }}</h2>
+                <p class="svc-card-date">Created: {{ service.created_at|date:"M d, Y" }}</p>
+                
+                <div class="svc-actions">
+                    <a href="{% url 'service_detail' service.id %}" class="svc-btn-action btn-view">View</a>
+                    <a href="{% url 'service_update' service.id %}" class="svc-btn-action btn-edit">Edit</a>
+                    <a href="{% url 'service_delete' service.id %}" class="svc-btn-action btn-delete">Delete</a>
+                </div>
+            </div>
 
-<table>
+        </article>
+        {% empty %}
+            <div class="svc-empty-state">
+                <h3 style="color: #888;">No services found</h3>
+                <p>Add a new service to get started.</p>
+            </div>
+        {% endfor %}
+    </div>
 
-    <tr>
-
-        <th>ID</th>
-
-        <th>Image</th>
-
-        <th>Title</th>
-
-        <th>Status</th>
-
-        <th>Created</th>
-
-        <th>Actions</th>
-
-    </tr>
-
-    {% for service in services %}
-
-    <tr>
-
-        <td>{{ service.id }}</td>
-
-        <td>
-
-            {% if service.image %}
-
-                <img
-                    src="{{ service.image.url }}"
-                    width="80"
-                    height="60"
-                >
-
-            {% endif %}
-
-        </td>
-
-        <td>{{ service.title }}</td>
-
-        <td>
-
-            {% if service.is_active %}
-
-                <span class="active">
-                    Active
-                </span>
-
-            {% else %}
-
-                <span class="inactive">
-                    Inactive
-                </span>
-
-            {% endif %}
-
-        </td>
-
-        <td>{{ service.created_at }}</td>
-
-        <td>
-
-            <a
-                href="{% url 'service_detail' service.id %}"
-                class="btn-small"
-            >
-                View
-            </a>
-
-            <a
-                href="{% url 'service_update' service.id %}"
-                class="btn-small edit-btn"
-            >
-                Edit
-            </a>
-
-            <a
-                href="{% url 'service_delete' service.id %}"
-                class="btn-small delete-btn"
-            >
-                Delete
-            </a>
-
-        </td>
-
-    </tr>
-
-    {% empty %}
-
-    <tr>
-
-        <td colspan="6">
-            No services found.
-        </td>
-
-    </tr>
-
-    {% endfor %}
-
-</table>
-
-<style>
-
-    .page-header{
-        display:flex;
-        justify-content:space-between;
-        align-items:center;
-        margin-bottom:30px;
-    }
-
-    table{
-        width:100%;
-        border-collapse:collapse;
-        background:white;
-    }
-
-    table th,
-    table td{
-        border:1px solid #ddd;
-        padding:12px;
-        text-align:left;
-    }
-
-    table th{
-        background:#111;
-        color:white;
-    }
-
-    .btn{
-        padding:10px 20px;
-        background:black;
-        color:white;
-        text-decoration:none;
-        border-radius:5px;
-    }
-
-    .btn-small{
-        padding:6px 12px;
-        background:#333;
-        color:white;
-        text-decoration:none;
-        border-radius:4px;
-        font-size:14px;
-    }
-
-    .edit-btn{
-        background:orange;
-    }
-
-    .delete-btn{
-        background:red;
-    }
-
-    .active{
-        color:green;
-        font-weight:bold;
-    }
-
-    .inactive{
-        color:red;
-        font-weight:bold;
-    }
-
-    .message{
-        padding:10px;
-        margin-bottom:20px;
-        border-radius:5px;
-    }
-
-    .success{
-        background:#d4edda;
-        color:#155724;
-    }
-
-</style>
+</div>
 
 {% endblock %}

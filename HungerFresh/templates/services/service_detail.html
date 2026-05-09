@@ -1,129 +1,306 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
 
-<div class="service-detail">
+<!-- ========================
+     CSS STYLES
+     ======================== -->
+<style>
+    :root {
+        --svc-orange: #FF6600;
+        --svc-orange-dark: #E65A00;
+        --svc-orange-glow: rgba(255,102,0,0.15);
+        --svc-white: #FFFFFF;
+        --svc-cream: #FFF9F2;
+        --svc-text-dark: #2C2C2C;
+        --svc-text-gray: #757575;
+        --svc-danger: #DC3545;
+        --svc-danger-dark: #B22234;
+        --svc-success: #28A745;
+        --svc-shadow-card: 0 20px 40px rgba(0,0,0,0.06);
+        --svc-shadow-hover: 0 25px 50px rgba(255,102,0,0.12);
+        --svc-transition: all 0.3s ease;
+        --radius-lg: 20px;
+        --radius-full: 50px;
+    }
 
-    <h1>{{ service.title }}</h1>
+    /* Background setup (same as other pages) */
+    .detail-bg-layer {
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        background-color: var(--svc-cream);
+        background-image: url('{% static "images/s-bg.webp" %}');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+    .detail-overlay {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+            circle at 30% 40%,
+            rgba(255,255,255,0.2) 0%,
+            rgba(255,249,242,0.7) 90%
+        );
+        backdrop-filter: blur(3px);
+    }
 
-    {% if service.image %}
+    /* Layout */
+    .detail-page {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        padding: 120px 20px 60px;
+        box-sizing: border-box;
+        position: relative;
+        z-index: 1;
+    }
 
-        <img
-            src="{{ service.image.url }}"
-            class="service-image"
-        >
+    .detail-card {
+        background: rgba(255,255,255,0.9);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--svc-shadow-card);
+        padding: 40px 35px;
+        max-width: 800px;
+        width: 100%;
+        border: 1px solid rgba(255,255,255,0.6);
+        transition: var(--svc-transition);
+        animation: fadeUp 0.6s ease;
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+    }
+    .detail-card:hover {
+        box-shadow: var(--svc-shadow-hover);
+    }
+    @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
 
-    {% endif %}
+    /* Title */
+    .service-title {
+        font-size: clamp(2rem, 5vw, 2.8rem);
+        font-weight: 800;
+        color: var(--svc-text-dark);
+        margin: 0;
+        line-height: 1.2;
+        word-break: break-word;
+    }
 
-    <div class="detail-box">
+    /* Image */
+    .detail-image-wrapper {
+        width: 100%;
+        max-width: 500px;
+        margin: 0 auto;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+        transition: var(--svc-transition);
+    }
+    .detail-image-wrapper:hover {
+        transform: scale(1.01);
+        box-shadow: 0 20px 45px rgba(255,102,0,0.15);
+    }
+    .detail-image {
+        width: 100%;
+        height: auto;
+        display: block;
+        object-fit: cover;
+        aspect-ratio: 16/10;
+        background: #ffe8d6; /* fallback */
+    }
 
-        <p>
+    /* Status badge */
+    .status-badge {
+        display: inline-block;
+        padding: 6px 18px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: white;
+    }
+    .badge-active { background: var(--svc-success); }
+    .badge-inactive { background: var(--svc-danger); }
 
-            <strong>Slug:</strong>
+    /* Meta info grid */
+    .meta-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+        background: rgba(255,240,230,0.35);
+        border-radius: 16px;
+        padding: 25px 25px 15px;
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(255,102,0,0.08);
+    }
+    .meta-item {
+        margin-bottom: 5px;
+    }
+    .meta-label {
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-weight: 600;
+        color: var(--svc-text-gray);
+        margin-bottom: 5px;
+    }
+    .meta-value {
+        font-size: 1rem;
+        color: var(--svc-text-dark);
+        font-weight: 500;
+        word-break: break-word;
+        line-height: 1.5;
+    }
 
-            {{ service.slug }}
+    /* Descriptions */
+    .description-block {
+        color: var(--svc-text-gray);
+        line-height: 1.8;
+        font-size: 1.05rem;
+    }
+    .description-block strong {
+        color: var(--svc-orange-dark);
+    }
 
-        </p>
+    /* Action buttons */
+    .action-buttons {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+        margin-top: 10px;
+    }
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 12px 24px;
+        border-radius: var(--radius-full);
+        font-weight: 600;
+        font-size: 1rem;
+        text-decoration: none;
+        transition: var(--svc-transition);
+        flex: 1;
+        min-width: 130px;
+    }
+    .btn-edit {
+        background: linear-gradient(135deg, var(--svc-orange), var(--svc-orange-dark));
+        color: white;
+        box-shadow: 0 8px 20px rgba(255,102,0,0.2);
+    }
+    .btn-edit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 15px 30px rgba(255,102,0,0.3);
+        filter: brightness(1.05);
+    }
+    .btn-delete {
+        background: white;
+        color: var(--svc-danger);
+        border: 1.5px solid #fecaca;
+        box-shadow: 0 8px 20px rgba(220,53,69,0.08);
+    }
+    .btn-delete:hover {
+        background: var(--svc-danger);
+        color: white;
+        border-color: var(--svc-danger);
+        transform: translateY(-2px);
+        box-shadow: 0 15px 30px rgba(220,53,69,0.2);
+    }
 
-        <p>
+    /* Responsive */
+    @media (max-width: 600px) {
+        .detail-page {
+            padding: 90px 15px 40px;
+        }
+        .detail-card {
+            padding: 30px 20px;
+        }
+        .meta-grid {
+            grid-template-columns: 1fr;
+            padding: 20px 20px 10px;
+        }
+        .btn {
+            padding: 14px 20px;
+        }
+    }
+</style>
 
-            <strong>Short Description:</strong>
-
-            {{ service.short_description }}
-
-        </p>
-
-        <p>
-
-            <strong>Description:</strong>
-
-            {{ service.description }}
-
-        </p>
-
-        <p>
-
-            <strong>Status:</strong>
-
-            {% if service.is_active %}
-
-                Active
-
-            {% else %}
-
-                Inactive
-
-            {% endif %}
-
-        </p>
-
-        <p>
-
-            <strong>Created:</strong>
-
-            {{ service.created_at }}
-
-        </p>
-
-    </div>
-
-    <div class="actions">
-
-        <a
-            href="{% url 'service_update' service.id %}"
-            class="btn"
-        >
-            Edit
-        </a>
-
-        <a
-            href="{% url 'service_delete' service.id %}"
-            class="btn delete-btn"
-        >
-            Delete
-        </a>
-
-    </div>
-
+<!-- ========================
+     BACKGROUND
+     ======================== -->
+<div class="detail-bg-layer">
+    <div class="detail-overlay"></div>
 </div>
 
-<style>
+<!-- ========================
+     CONTENT
+     ======================== -->
+<div class="detail-page">
+    <div class="detail-card">
 
-    .service-detail{
-        background:white;
-        padding:30px;
-        border-radius:10px;
-    }
+        <!-- Title -->
+        <h1 class="service-title">{{ service.title }}</h1>
 
-    .service-image{
-        width:100%;
-        max-width:500px;
-        margin-bottom:20px;
-        border-radius:10px;
-    }
+        <!-- Image (if exists) -->
+        {% if service.image %}
+            <div class="detail-image-wrapper">
+                <img src="{{ service.image.url }}" alt="{{ service.title }}" class="detail-image">
+            </div>
+        {% endif %}
 
-    .detail-box p{
-        margin-bottom:15px;
-        line-height:1.8;
-    }
+        <!-- Status badge -->
+        <div>
+            {% if service.is_active %}
+                <span class="status-badge badge-active">● Active</span>
+            {% else %}
+                <span class="status-badge badge-inactive">● Inactive</span>
+            {% endif %}
+        </div>
 
-    .actions{
-        margin-top:30px;
-    }
+        <!-- Meta information -->
+        <div class="meta-grid">
+            <div class="meta-item">
+                <div class="meta-label">Slug</div>
+                <div class="meta-value">{{ service.slug }}</div>
+            </div>
+            <div class="meta-item">
+                <div class="meta-label">Created</div>
+                <div class="meta-value">{{ service.created_at|date:"F j, Y" }}</div>
+            </div>
+            {% if service.short_description %}
+                <div class="meta-item" style="grid-column: 1 / -1;">
+                    <div class="meta-label">Short Description</div>
+                    <div class="meta-value">{{ service.short_description }}</div>
+                </div>
+            {% endif %}
+        </div>
 
-    .btn{
-        padding:10px 20px;
-        background:black;
-        color:white;
-        text-decoration:none;
-        border-radius:5px;
-        margin-right:10px;
-    }
+        <!-- Full description -->
+        {% if service.description %}
+            <div class="description-block">
+                <strong>Full Description</strong><br>
+                {{ service.description }}
+            </div>
+        {% endif %}
 
-    .delete-btn{
-        background:red;
-    }
+        <!-- Action buttons -->
+        <div class="action-buttons">
+            <a href="{% url 'service_update' service.id %}" class="btn btn-edit">
+                ✏️ Edit Service
+            </a>
+            <a href="{% url 'service_delete' service.id %}" class="btn btn-delete">
+                🗑️ Delete
+            </a>
+        </div>
 
-</style>
+    </div>
+</div>
 
 {% endblock %}

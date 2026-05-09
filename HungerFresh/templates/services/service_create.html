@@ -1,74 +1,720 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
-
-<div class="form-container">
-
-    <div class="form-box">
-
-        <h2>Add Service</h2>
-
-        <form
-            method="POST"
-            enctype="multipart/form-data"
-        >
-
-            {% csrf_token %}
-
-            {{ form.as_p }}
-
-            <button type="submit" class="btn">
-                Create Service
-            </button>
-
-        </form>
-
-    </div>
-
-</div>
-
 <style>
+  /* ===== Premium CSS Variables - Food Theme ===== */
+  :root {
+    --orange-50: #fffaf5;
+    --orange-100: #ffedd5;
+    --orange-200: #fed7aa;
+    --orange-300: #fdba74;
+    --orange-400: #fb923c;
+    --orange-500: #f97316;
+    --orange-600: #ea580c;
+    --orange-700: #c2410c;
+    --orange-800: #9a3412;
+    
+    --white: #ffffff;
+    --white-glass: rgba(255, 255, 255, 0.95);
+    
+    --text-primary: #1c1917;
+    --text-secondary: #44403c;
+    --text-placeholder: #a8a29e;
+    
+    --shadow-sm: 0 2px 8px rgba(234, 88, 12, 0.08);
+    --shadow-md: 0 8px 24px rgba(234, 88, 12, 0.12);
+    --shadow-lg: 0 16px 48px rgba(234, 88, 12, 0.18);
+    --shadow-xl: 0 24px 64px rgba(234, 88, 12, 0.25);
+    --shadow-glow: 0 0 60px rgba(249, 115, 22, 0.3);
+    
+    --gradient-orange: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+    --gradient-orange-soft: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+    --gradient-input: linear-gradient(145deg, #ffffff, #fffaf5);
+    
+    --radius-3xl: 2rem;
+    --radius-2xl: 1.5rem;
+    --radius-xl: 1.25rem;
+    --radius-lg: 1rem;
+    --radius-full: 9999px;
+    
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
 
-    .form-container{
-        display:flex;
-        justify-content:center;
-        padding:40px 0;
+  /* ===== Base Reset ===== */
+  .service-form-page *,
+  .service-form-page *::before,
+  .service-form-page *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  .service-form-page {
+    font-family: 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--text-primary);
+    line-height: 1.6;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+    
+    /* Background with subtle food pattern */
+    background: 
+      radial-gradient(ellipse at top, rgba(255,247,237,0.9) 0%, transparent 50%),
+      radial-gradient(ellipse at bottom right, rgba(249,115,22,0.06) 0%, transparent 50%),
+      var(--white);
+    
+    padding: 3rem 1.5rem 5rem;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+
+    /* Background image with proper handling */
+    background-color: #fff8f2;
+    background-image: 
+      radial-gradient(ellipse at top, rgba(255,247,237,0.8) 0%, transparent 50%),
+      radial-gradient(ellipse at bottom right, rgba(249,115,22,0.08) 0%, transparent 50%),
+      url("{% static 'images/sc-bg.webp' %}");
+    background-size: cover;
+    background-position: center center;
+    /* background-attachment: fixed; */
+    background-repeat: no-repeat;
+  }
+
+  /* Floating food decorations */
+  .form-floating {
+    position: fixed;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.08;
+    font-size: 2.5rem;
+    animation: float 18s ease-in-out infinite;
+  }
+  
+  .form-floating:nth-child(1) { top: 10%; left: 5%; animation-delay: 0s; }
+  .form-floating:nth-child(2) { top: 35%; right: 8%; animation-delay: 4s; font-size: 3rem; }
+  .form-floating:nth-child(3) { bottom: 25%; left: 6%; animation-delay: 8s; }
+  .form-floating:nth-child(4) { bottom: 12%; right: 5%; animation-delay: 12s; font-size: 2.8rem; }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    25% { transform: translateY(-20px) rotate(5deg); }
+    50% { transform: translateY(-10px) rotate(-3deg); }
+    75% { transform: translateY(-25px) rotate(8deg); }
+  }
+
+  .form-container {
+    max-width: 700px;
+    width: 100%;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+    padding-top: 40px;
+  }
+
+  /* ===== Premium Form Card ===== */
+  .form-card {
+    background: var(--white-glass);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: var(--radius-3xl);
+    padding: 3rem;
+    box-shadow: var(--shadow-lg), 0 0 0 1px rgba(255,255,255,0.9) inset;
+    border: 1px solid rgba(255, 255, 255, 0.95);
+    border-top: 6px solid var(--orange-500);
+    position: relative;
+    overflow: hidden;
+    animation: cardEntrance 0.7s ease-out;
+  }
+  
+  @keyframes cardEntrance {
+    from { opacity: 0; transform: translateY(40px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .form-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--orange-200), transparent);
+  }
+  
+  .form-card::after {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(circle, rgba(249, 115, 22, 0.08) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+  }
+
+  .form-card:hover {
+    box-shadow: var(--shadow-xl), var(--shadow-glow);
+    border-color: var(--orange-200);
+  }
+  
+  .form-card:hover::after {
+    opacity: 1;
+  }
+
+  /* ===== Form Header ===== */
+  .form-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    position: relative;
+    padding-bottom: 1.5rem;
+  }
+  
+  .form-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 4px;
+    background: var(--gradient-orange);
+    border-radius: var(--radius-full);
+  }
+
+  .form-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 1.25rem;
+    background: var(--gradient-orange);
+    border-radius: var(--radius-2xl);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    box-shadow: 0 12px 32px rgba(249, 115, 22, 0.35);
+    animation: iconPulse 2.5s ease-in-out infinite;
+  }
+  
+  @keyframes iconPulse {
+    0%, 100% { transform: scale(1) rotate(0deg); }
+    50% { transform: scale(1.08) rotate(3deg); }
+  }
+
+  .form-header h2 {
+    font-size: clamp(1.75rem, 4vw, 2.25rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+    background: linear-gradient(135deg, var(--text-primary), var(--orange-700));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .form-header p {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    font-weight: 500;
+  }
+
+  /* ===== Form Fields ===== */
+  .form-group {
+    margin-bottom: 1.75rem;
+    position: relative;
+  }
+
+  .form-group label {
+    display: block;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.6rem;
+    font-size: 0.95rem;
+    letter-spacing: -0.01em;
+  }
+  
+  .form-group label .required {
+    color: var(--orange-500);
+    margin-left: 2px;
+  }
+
+  .form-field {
+    position: relative;
+  }
+
+  .form-field input,
+  .form-field textarea,
+  .form-field select {
+    width: 100%;
+    padding: 1rem 1.25rem;
+    background: var(--gradient-input);
+    border: 2px solid var(--orange-100);
+    border-radius: var(--radius-lg);
+    font-size: 1rem;
+    color: var(--text-primary);
+    transition: var(--transition-bounce);
+    font-family: inherit;
+  }
+  
+  .form-field input::placeholder,
+  .form-field textarea::placeholder {
+    color: var(--text-placeholder);
+    font-weight: 400;
+  }
+
+  .form-field input:focus,
+  .form-field textarea:focus,
+  .form-field select:focus {
+    outline: none;
+    border-color: var(--orange-400);
+    box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.15), var(--shadow-md);
+    background: var(--white);
+    transform: translateY(-2px);
+  }
+
+  .form-field textarea {
+    min-height: 120px;
+    resize: vertical;
+    line-height: 1.6;
+  }
+
+  .form-field select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23f97316' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1.25rem;
+    padding-right: 2.75rem;
+    cursor: pointer;
+  }
+
+  .form-field select:focus {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23ea580c' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  }
+
+  /* File Upload Styling */
+  .file-upload {
+    position: relative;
+    border: 2px dashed var(--orange-200);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    text-align: center;
+    background: var(--orange-50);
+    transition: var(--transition);
+    cursor: pointer;
+  }
+  
+  .file-upload:hover,
+  .file-upload.dragover {
+    border-color: var(--orange-400);
+    background: var(--orange-100);
+    transform: translateY(-2px);
+  }
+  
+  .file-upload input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .file-upload-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.75rem;
+    display: block;
+  }
+  
+  .file-upload-text {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
+  
+  .file-upload-text strong {
+    color: var(--orange-600);
+  }
+  
+  .file-upload-hint {
+    display: block;
+    margin-top: 0.5rem;
+    color: var(--text-placeholder);
+    font-size: 0.85rem;
+  }
+
+  /* ===== Submit Button ===== */
+  .submit-btn {
+    width: 100%;
+    padding: 1.25rem 2rem;
+    background: var(--gradient-orange);
+    color: var(--white);
+    border: none;
+    border-radius: var(--radius-full);
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition-bounce);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(249, 115, 22, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+  
+  .submit-btn::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.5s ease;
+  }
+  
+  .submit-btn:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 16px 40px rgba(249, 115, 22, 0.45);
+  }
+  
+  .submit-btn:hover::before {
+    left: 100%;
+  }
+  
+  .submit-btn:active {
+    transform: translateY(-1px) scale(1);
+  }
+  
+  .submit-btn .btn-icon {
+    font-size: 1.3rem;
+    transition: transform 0.3s ease;
+  }
+  
+  .submit-btn:hover .btn-icon {
+    transform: translateX(3px);
+  }
+
+  /* ===== Helper Text & Errors ===== */
+  .helper-text {
+    display: block;
+    margin-top: 0.4rem;
+    color: var(--text-placeholder);
+    font-size: 0.85rem;
+    font-weight: 400;
+  }
+  
+  .error-text {
+    color: #dc2626;
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-top: 0.4rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  
+  .error-text::before {
+    content: '⚠️';
+    font-size: 0.9rem;
+  }
+
+  .form-field.error input,
+  .form-field.error textarea,
+  .form-field.error select {
+    border-color: #dc2626;
+    background: #fef2f2;
+  }
+  
+  .form-field.error input:focus,
+  .form-field.error textarea:focus,
+  .form-field.error select:focus {
+    border-color: #dc2626;
+    box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.15);
+  }
+
+  /* ===== Success Animation ===== */
+  @keyframes successPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+  }
+  
+  .form-card.success {
+    animation: successPulse 0.5s ease-in-out;
+    border-color: #22c55e;
+    border-top-color: #22c55e;
+  }
+  
+  .form-card.success .submit-btn {
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+    box-shadow: 0 8px 24px rgba(34, 197, 94, 0.3);
+  }
+
+  /* ===== Responsive Design ===== */
+  @media (max-width: 768px) {
+    .service-form-page {
+      padding: 2rem 1rem 4rem;
     }
-
-    .form-box{
-        width:600px;
-        background:white;
-        padding:40px;
-        border-radius:10px;
-        box-shadow:0px 0px 10px rgba(0,0,0,0.1);
+    
+    .form-card {
+      padding: 2.25rem 1.75rem;
+      border-radius: var(--radius-2xl);
     }
-
-    .form-box h2{
-        margin-bottom:25px;
+    
+    .form-icon {
+      width: 70px;
+      height: 70px;
+      font-size: 2.2rem;
     }
-
-    input,
-    textarea,
-    select{
-        width:100%;
-        padding:12px;
-        margin-top:5px;
-        margin-bottom:20px;
-        border:1px solid #ccc;
-        border-radius:5px;
-        box-sizing:border-box;
+    
+    .form-header h2 {
+      font-size: 1.75rem;
     }
-
-    .btn{
-        width:100%;
-        padding:14px;
-        background:black;
-        color:white;
-        border:none;
-        border-radius:5px;
-        cursor:pointer;
+    
+    .form-field input,
+    .form-field textarea,
+    .form-field select {
+      padding: 0.9rem 1.1rem;
+      font-size: 0.95rem;
     }
+    
+    .file-upload {
+      padding: 1.25rem;
+    }
+    
+    .submit-btn {
+      padding: 1.1rem 1.75rem;
+      font-size: 1.05rem;
+    }
+    
+    .form-floating {
+      display: none;
+    }
+  }
 
+  @media (max-width: 480px) {
+    .form-card {
+      padding: 1.75rem 1.25rem;
+      border-radius: var(--radius-xl);
+    }
+    
+    .form-header {
+      margin-bottom: 2rem;
+      padding-bottom: 1.25rem;
+    }
+    
+    .form-header::after {
+      width: 60px;
+      height: 3px;
+    }
+    
+    .form-icon {
+      width: 60px;
+      height: 60px;
+      font-size: 2rem;
+    }
+    
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    
+    .submit-btn {
+      padding: 1rem 1.5rem;
+      font-size: 1rem;
+    }
+  }
+
+  /* ===== Accessibility ===== */
+  .form-field input:focus-visible,
+  .form-field textarea:focus-visible,
+  .form-field select:focus-visible,
+  .submit-btn:focus-visible {
+    outline: 3px solid var(--orange-400);
+    outline-offset: 2px;
+  }
+
+  /* ===== Print Styles ===== */
+  @media print {
+    .service-form-page {
+      background: white;
+      padding: 1rem;
+    }
+    .form-card {
+      box-shadow: none;
+      border: 2px solid var(--orange-200);
+    }
+    .form-floating {
+      display: none;
+    }
+  }
 </style>
 
-{% endblock %}
+<!-- Floating food decorations -->
+<div class="form-floating">🍕</div>
+<div class="form-floating">🥗</div>
+<div class="form-floating">🍔</div>
+<div class="form-floating">🍰</div>
+
+<div class="service-form-page">
+  <div class="form-container">
+    <div class="form-card">
+      
+      <!-- Form Header -->
+      <div class="form-header">
+        <div class="form-icon">👨‍🍳</div>
+        <h2>Add New Service</h2>
+        <p>Create a delicious new offering for your Hunger Fresh menu</p>
+      </div>
+
+      <!-- Form -->
+      <form method="POST" enctype="multipart/form-data" id="serviceForm">
+        {% csrf_token %}
+        
+        <!-- Render Django form fields with enhanced styling -->
+        {% for field in form %}
+          <div class="form-group {% if field.errors %}error{% endif %}">
+            <label for="{{ field.id_for_label }}">
+              {{ field.label }}
+              {% if field.field.required %}<span class="required">*</span>{% endif %}
+            </label>
+            
+            <div class="form-field">
+              {% if field.field.widget.input_type == 'file' %}
+                <!-- Custom File Upload -->
+                <label class="file-upload" for="{{ field.id_for_label }}">
+                  <span class="file-upload-icon">📁</span>
+                  <span class="file-upload-text">
+                    <strong>Click to upload</strong> or drag and drop
+                  </span>
+                  <span class="file-upload-hint">PNG, JPG, WEBP up to 10MB</span>
+                  {{ field }}
+                </label>
+              {% elif field.field.widget.input_type == 'textarea' %}
+                {{ field }}
+                {% if field.help_text %}
+                  <small class="helper-text">{{ field.help_text }}</small>
+                {% endif %}
+              {% elif field.name == 'category' or field.name == 'status' %}
+                {{ field }}
+              {% else %}
+                {{ field }}
+                {% if field.help_text %}
+                  <small class="helper-text">{{ field.help_text }}</small>
+                {% endif %}
+              {% endif %}
+            </div>
+            
+            {% if field.errors %}
+              {% for error in field.errors %}
+                <span class="error-text">{{ error }}</span>
+              {% endfor %}
+            {% endif %}
+          </div>
+        {% endfor %}
+
+        <!-- Submit Button -->
+        <button type="submit" class="submit-btn">
+          <span class="btn-icon">✨</span>
+          Create Service
+          <span class="btn-icon">→</span>
+        </button>
+      </form>
+      
+    </div>
+  </div>
+</div>
+
+<!-- Enhanced form interactions -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('serviceForm');
+    const fileUploads = document.querySelectorAll('.file-upload');
+    
+    // File upload drag & drop feedback
+    fileUploads.forEach(upload => {
+      const input = upload.querySelector('input[type="file"]');
+      const text = upload.querySelector('.file-upload-text');
+      const originalText = text.innerHTML;
+      
+      // Drag events
+      upload.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        upload.classList.add('dragover');
+        text.innerHTML = '<strong>Drop to upload</strong> 🎉';
+      });
+      
+      upload.addEventListener('dragleave', () => {
+        upload.classList.remove('dragover');
+        text.innerHTML = originalText;
+      });
+      
+      upload.addEventListener('drop', (e) => {
+        e.preventDefault();
+        upload.classList.remove('dragover');
+        if (input.files.length > 0) {
+          text.innerHTML = `<strong>✓ ${input.files[0].name}</strong>`;
+        }
+      });
+      
+      // File selection
+      input.addEventListener('change', function() {
+        if (this.files.length > 0) {
+          text.innerHTML = `<strong>✓ ${this.files[0].name}</strong>`;
+        }
+      });
+    });
+    
+    // Form submission with visual feedback
+    form.addEventListener('submit', function(e) {
+      const card = document.querySelector('.form-card');
+      const btn = document.querySelector('.submit-btn');
+      const originalBtnText = btn.innerHTML;
+      
+      // Show loading state
+      btn.disabled = true;
+      btn.innerHTML = '<span class="btn-icon">⏳</span> Creating...';
+      
+      // Simulate success animation (remove in production - this is just visual demo)
+      setTimeout(() => {
+        card.classList.add('success');
+        btn.innerHTML = '<span class="btn-icon">✅</span> Service Created!';
+        
+        // Reset after 2 seconds (in production, redirect instead)
+        setTimeout(() => {
+          card.classList.remove('success');
+          btn.disabled = false;
+          btn.innerHTML = originalBtnText;
+        }, 2000);
+      }, 1500);
+    });
+    
+    // Auto-focus first input for better UX
+    const firstInput = form.querySelector('input:not([type="hidden"]), textarea, select');
+    if (firstInput) {
+      setTimeout(() => firstInput.focus(), 300);
+    }
+    
+    // Real-time validation feedback
+    const inputs = form.querySelectorAll('input, textarea, select');
+    inputs.forEach(input => {
+      input.addEventListener('blur', function() {
+        const field = this.closest('.form-field');
+        if (this.value.trim() && this.validity.valid) {
+          field.style.borderColor = '#22c55e';
+        }
+      });
+      
+      input.addEventListener('input', function() {
+        const field = this.closest('.form-field');
+        if (field.classList.contains('error')) {
+          if (this.validity.valid) {
+            field.classList.remove('error');
+          }
+        }
+      });
+    });
+  });
+</script>
+{% endblock %}  
