@@ -1,446 +1,1539 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
-
-<div class="contact-container">
-
-    <div class="contact-box">
-
-        <h2>Contact Us</h2>
-
-        <p class="subtitle">
-            Fill the form below and we'll contact you soon.
-        </p>
-
-        <!-- SUCCESS / ERROR MESSAGES -->
-
-        {% if messages %}
-
-            {% for message in messages %}
-
-                <div class="message {{ message.tags }}">
-                    {{ message }}
-                </div>
-
-            {% endfor %}
-
-        {% endif %}
-
-        <form method="POST">
-
-            {% csrf_token %}
-
-            <!-- NAME -->
-
-            <div class="form-group">
-
-                <label>
-                    Name
-                </label>
-
-                {{ form.name }}
-
-                {% if form.name.errors %}
-
-                    <small class="error-text">
-                        {{ form.name.errors }}
-                    </small>
-
-                {% endif %}
-
-            </div>
-
-            <!-- EMAIL -->
-
-            <div class="form-group">
-
-                <label>
-                    Email
-                </label>
-
-                {{ form.email }}
-
-                {% if form.email.errors %}
-
-                    <small class="error-text">
-                        {{ form.email.errors }}
-                    </small>
-
-                {% endif %}
-
-            </div>
-
-            <!-- PHONE -->
-
-            <div class="form-group">
-
-                <label>
-                    Phone Number
-                </label>
-
-                {{ form.phone_number }}
-
-                {% if form.phone_number.errors %}
-
-                    <small class="error-text">
-                        {{ form.phone_number.errors }}
-                    </small>
-
-                {% endif %}
-
-            </div>
-
-            <!-- SUBJECT -->
-
-            <div class="form-group">
-
-                <label>
-                    Subject
-                </label>
-
-                {{ form.subject }}
-
-                {% if form.subject.errors %}
-
-                    <small class="error-text">
-                        {{ form.subject.errors }}
-                    </small>
-
-                {% endif %}
-
-            </div>
-
-            <!-- MESSAGE -->
-
-            <div class="form-group">
-
-                <label>
-                    Message
-                </label>
-
-                {{ form.message }}
-
-                {% if form.message.errors %}
-
-                    <small class="error-text">
-                        {{ form.message.errors }}
-                    </small>
-
-                {% endif %}
-
-            </div>
-
-            <!-- CAPTCHA -->
-
-            <div class="form-group">
-
-                <label>
-                    CAPTCHA
-                </label>
-
-                <div class="captcha-container">
-
-                    {{ form.captcha }}
-
-                    <button
-                        type="button"
-                        class="refresh-btn"
-                        id="refresh-captcha"
-                    >
-                        Refresh Captcha
-                    </button>
-
-                </div>
-
-                {% if form.captcha.errors %}
-
-                    <small class="error-text">
-                        {{ form.captcha.errors }}
-                    </small>
-
-                {% endif %}
-
-            </div>
-
-            <!-- SUBMIT BUTTON -->
-
-            <button type="submit" class="submit-btn">
-                Submit
-            </button>
-
-        </form>
-
-    </div>
-
-</div>
-
-
-<!-- SUCCESS POPUP -->
-
-{% if messages %}
-
-    {% for message in messages %}
-
-        {% if message.tags == 'success' %}
-
-            <div id="successPopup" class="popup-overlay">
-
-                <div class="popup-box">
-
-                    <h3>
-                        Success
-                    </h3>
-
-                    <p>
-                        {{ message }}
-                    </p>
-
-                    <button onclick="closePopup()">
-                        OK
-                    </button>
-
-                </div>
-
-            </div>
-
-        {% endif %}
-
-    {% endfor %}
-
-{% endif %}
-
-
 <style>
-
-    body{
-        background:#f5f5f5;
+    /* ========================================
+       PREMIUM CONTACT PAGE
+       Hero: Premium unique border design
+       Background: Subtle leaves pattern after hero
+       Cards: Food emojis background pattern
+       Form: Background image on left side
+    ======================================== */
+    
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
     }
-
-    .contact-container{
-        width:100%;
-        display:flex;
-        justify-content:center;
-        padding:50px 0;
+    
+    .contact-page {
+        background: #ffffff;
+        padding-top: 0;
+        position: relative;
     }
-
-    .contact-box{
-        width:500px;
-        background:white;
-        padding:40px;
-        border-radius:10px;
-        box-shadow:0px 0px 10px rgba(0,0,0,0.1);
+    
+    /* ========== SUBTLE LEAVES BACKGROUND AFTER HERO ========== */
+    .leaves-bg {
+        position: absolute;
+        top: 40%;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        pointer-events: none;
+        z-index: 0;
+        overflow: hidden;
     }
-
-    .contact-box h2{
-        text-align:center;
-        margin-bottom:10px;
+    
+    .leaf-bg-1 {
+        position: absolute;
+        bottom: 10%;
+        left: 2%;
+        font-size: 120px;
+        opacity: 0.04;
+        transform: rotate(-15deg);
+        animation: leafDrift 20s ease-in-out infinite;
     }
-
-    .subtitle{
-        text-align:center;
-        color:gray;
-        margin-bottom:30px;
+    
+    .leaf-bg-2 {
+        position: absolute;
+        top: 20%;
+        right: 3%;
+        font-size: 100px;
+        opacity: 0.04;
+        transform: rotate(25deg);
+        animation: leafDrift 25s ease-in-out infinite reverse;
     }
-
-    .form-group{
-        margin-bottom:20px;
+    
+    .leaf-bg-3 {
+        position: absolute;
+        bottom: 25%;
+        right: 8%;
+        font-size: 80px;
+        opacity: 0.03;
+        transform: rotate(45deg);
+        animation: leafDrift 18s ease-in-out infinite;
     }
-
-    .form-group label{
-        display:block;
-        margin-bottom:8px;
-        font-weight:bold;
+    
+    .leaf-bg-4 {
+        position: absolute;
+        top: 50%;
+        left: 5%;
+        font-size: 70px;
+        opacity: 0.03;
+        transform: rotate(-30deg);
+        animation: leafDrift 22s ease-in-out infinite reverse;
     }
-
+    
+    .leaf-bg-5 {
+        position: absolute;
+        bottom: 40%;
+        left: 15%;
+        font-size: 90px;
+        opacity: 0.035;
+        transform: rotate(10deg);
+        animation: leafDrift 28s ease-in-out infinite;
+    }
+    
+    @keyframes leafDrift {
+        0%, 100% { transform: translateY(0) rotate(0deg); }
+        50% { transform: translateY(-30px) rotate(10deg); }
+    }
+    
+    /* ========== HERO SECTION - STARTS FROM TOP ========== */
+    .hero-section {
+        width: 100%;
+        position: relative;
+        z-index: 2;
+        margin-bottom: 80px;
+        background: linear-gradient(120deg, #ffecd9 0%, #ffffff 100%);
+        padding: 110px 0 80px 0;
+        overflow: hidden;
+    }
+    
+    .hero-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 35px 45px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 60px;
+        position: relative;
+        background: rgba(255,255,255,0.8);
+        backdrop-filter: blur(2px);     
+        border-radius: 30px;
+        transition: all 0.4s ease;
+        overflow: hidden;
+    }
+    
+    /* PREMIUM UNIQUE BORDER DESIGN */
+    .hero-container {
+        border: 1px solid rgba(255,122,0,0.3);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.8);
+    }
+    
+    /* Premium gradient border effect */
+    .hero-container::before {
+        content: '';
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        background: linear-gradient(135deg, #ff7a00, #ffb347, #ff7a00, #ff9f3a);
+        border-radius: 32px;
+        z-index: -1;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+    }
+    
+    /* Top decorative stripe */
+    .hero-container::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 15%;
+        right: 15%;
+        height: 3px;
+        background: linear-gradient(90deg, transparent, #ff7a00, #ffb347, #ff9f3a, #ff7a00, transparent);
+        border-radius: 3px;
+    }
+    
+    /* Premium corner ornaments */
+    .premium-corner {
+        position: absolute;
+        width: 50px;
+        height: 50px;
+        pointer-events: none;
+        z-index: 2;
+    }
+    
+    .corner-tl {
+        top: -2px;
+        left: -2px;
+        border-top: 3px solid #ff7a00;
+        border-left: 3px solid #ff7a00;
+        border-radius: 25px 0 0 0;
+    }
+    
+    .corner-tr {
+        top: -2px;
+        right: -2px;
+        border-top: 3px solid #ff7a00;
+        border-right: 3px solid #ff7a00;
+        border-radius: 0 25px 0 0;
+    }
+    
+    .corner-bl {
+        bottom: -2px;
+        left: -2px;
+        border-bottom: 3px solid #ff7a00;
+        border-left: 3px solid #ff7a00;
+        border-radius: 0 0 0 25px;
+    }
+    
+    .corner-br {
+        bottom: -2px;
+        right: -2px;
+        border-bottom: 3px solid #ff7a00;
+        border-right: 3px solid #ff7a00;
+        border-radius: 0 0 25px 0;
+    }
+    
+    /* Premium diamond shape on corners */
+    .corner-diamond {
+        position: absolute;
+        width: 12px;
+        height: 12px;
+        background: #ff7a00;
+        transform: rotate(45deg);
+        z-index: 3;
+    }
+    
+    .diamond-tl {
+        top: 15px;
+        left: 15px;
+    }
+    
+    .diamond-tr {
+        top: 15px;
+        right: 15px;
+    }
+    
+    .diamond-bl {
+        bottom: 15px;
+        left: 15px;
+    }
+    
+    .diamond-br {
+        bottom: 15px;
+        right: 15px;
+    }
+    
+    /* Premium side accents */
+    .side-accent-left {
+        position: absolute;
+        left: -12px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 24px;
+        height: 80px;
+        background: linear-gradient(180deg, #ff7a00, #ffb347, #ff9f3a);
+        border-radius: 12px;
+        opacity: 0.6;
+    }
+    
+    .side-accent-right {
+        position: absolute;
+        right: -12px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 24px;
+        height: 80px;
+        background: linear-gradient(180deg, #ff7a00, #ffb347, #ff9f3a);
+        border-radius: 12px;
+        opacity: 0.6;
+    }
+    
+    /* Premium floating dots */
+    .floating-dot {
+        position: absolute;
+        width: 6px;
+        height: 6px;
+        background: #ff7a00;
+        border-radius: 50%;
+        opacity: 0.4;
+        animation: dotPulse 3s ease-in-out infinite;
+    }
+    
+    .dot-1 { top: 20px; right: 30px; animation-delay: 0s; }
+    .dot-2 { bottom: 30px; left: 40px; animation-delay: 1s; }
+    .dot-3 { top: 50%; left: 20px; animation-delay: 2s; }
+    .dot-4 { bottom: 40%; right: 25px; animation-delay: 1.5s; }
+    
+    @keyframes dotPulse {
+        0%, 100% { opacity: 0.2; transform: scale(1); }
+        50% { opacity: 0.8; transform: scale(1.5); }
+    }
+    
+    .hero-content {
+        flex: 1;
+        max-width: 550px;
+        position: relative;
+        z-index: 2;
+    }
+    
+    .hero-tag {
+        display: inline-block;
+        font-size: 13px;
+        font-weight: 600;
+        color: #ff7a00;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-bottom: 20px;
+        border-left: 3px solid #ff7a00;
+        padding-left: 12px;
+    }
+    
+    .hero-content h1 {
+        font-size: 54px;
+        font-weight: 800;
+        line-height: 1.2;
+        color: #1a1a2e;
+        margin-bottom: 20px;
+    }
+    
+    .hero-content h1 .highlight {
+        color: #ff7a00;
+        position: relative;
+    }
+    
+    .hero-desc {
+        font-size: 16px;
+        line-height: 1.7;
+        color: #5a6e7a;
+        margin-bottom: 30px;
+    }
+    
+    .hero-stats {
+        display: flex;
+        gap: 40px;
+        margin-bottom: 35px;
+    }
+    
+    .stat-item {
+        text-align: left;
+    }
+    
+    .stat-number {
+        font-size: 32px;
+        font-weight: 800;
+        color: #1a1a2e;
+        line-height: 1;
+    }
+    
+    .stat-label {
+        font-size: 13px;
+        color: #8a9aa6;
+        margin-top: 6px;
+        letter-spacing: 0.5px;
+    }
+    
+    /* Hero Right Side - Image with Contact Elements */
+    .hero-image-area {
+        flex: 1;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .image-frame {
+        position: relative;
+        width: 100%;
+        max-width: 480px;
+    }
+    
+    /* Special Orange Abstract Shape */
+    .orange-abstract-shape {
+        position: absolute;
+        top: -30px;
+        right: -40px;
+        width: 280px;
+        height: 320px;
+        background: linear-gradient(145deg, #ff7a00, #ff9f3a);
+        clip-path: polygon(20% 0%, 100% 0%, 100% 100%, 0% 80%);
+        border-radius: 0 60px 0 80px;
+        z-index: 0;
+        opacity: 0.85;
+    }
+    
+    /* Floating Contact Elements Around Image */
+    .floating-contact-icon {
+        position: absolute;
+        background: white;
+        border-radius: 50px;
+        padding: 10px 18px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        z-index: 3;
+        animation: floatContact 4s ease-in-out infinite;
+        white-space: nowrap;
+    }
+    
+    @keyframes floatContact {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+    }
+    
+    .contact-icon-1 {
+        top: -20px;
+        left: -30px;
+        animation-delay: 0s;
+    }
+    
+    .contact-icon-2 {
+        bottom: 40px;
+        right: -40px;
+        animation-delay: 1s;
+    }
+    
+    .contact-icon-3 {
+        top: 50%;
+        right: -50px;
+        animation-delay: 2s;
+    }
+    
+    .contact-icon-4 {
+        bottom: -20px;
+        left: 20px;
+        animation-delay: 1.5s;
+    }
+    
+    .floating-contact-icon i {
+        font-size: 18px;
+        color: #ff7a00;
+    }
+    
+    .floating-contact-icon span {
+        font-size: 13px;
+        font-weight: 600;
+        color: #1a1a2e;
+    }
+    
+    .main-image {
+        position: relative;
+        width: 100%;
+        border-radius: 30px;
+        box-shadow: 0 25px 45px rgba(0,0,0,0.08);
+        transition: transform 0.4s ease;
+        z-index: 1;
+    }
+    
+    .main-image:hover {
+        transform: scale(1.02);
+    }
+    
+    /* Floating Support Card */
+    .floating-card {
+        position: absolute;
+        bottom: -15px;
+        right: -15px;
+        background: white;
+        padding: 12px 20px;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        animation: floatCard 3s ease-in-out infinite;
+        z-index: 2;
+    }
+    
+    @keyframes floatCard {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-8px); }
+    }
+    
+    .floating-card i {
+        font-size: 28px;
+        color: #ff7a00;
+    }
+    
+    .floating-card span {
+        font-weight: 700;
+        color: #1a1a2e;
+        font-size: 14px;
+    }
+    
+    .floating-card small {
+        font-size: 11px;
+        color: #8a9aa6;
+    }
+    
+    /* ========== CARDS SECTION ========== */
+    .cards-section {
+        max-width: 1200px;
+        margin: 0px auto;
+        padding: 0 40px;
+        margin-bottom: 60px;
+        margin-top: -100px;
+        position: relative;
+        z-index: 2;
+    }
+    
+    .cards-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0;
+        background: #ffffff;
+        border-radius: 24px;
+        border: 1px solid #f0e6dd;
+        overflow: hidden;
+        position: relative;
+    }
+    
+    /* Food Emojis Background Pattern */
+    .cards-grid::before {
+        content: "🍕🍔🍟🌮🥗🍝🍜🥘🍲🍛🍱🍣🍤🍙🍚🍘🍥🥠🥟🍪🍩🍫🍬🍭";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        font-size: 45px;
+        opacity: 0.03;
+        pointer-events: none;
+        white-space: normal;
+        word-wrap: break-word;
+        line-height: 1.5;
+        text-align: center;
+        letter-spacing: 15px;
+        z-index: 0;
+    }
+    
+    .contact-card {
+        text-align: center;
+        padding: 35px 20px;
+        transition: all 0.3s ease;
+        background: rgba(255,255,255,0.95);
+        position: relative;
+        z-index: 1;
+        backdrop-filter: blur(0px);
+    }
+    
+    /* Permanent Leaf Decorations */
+    .contact-card .leaf-top-right {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 30px;
+        opacity: 0.15;
+        pointer-events: none;
+        transition: all 0.3s ease;
+        z-index: 2;
+    }
+    
+    .contact-card .leaf-bottom-left {
+        position: absolute;
+        bottom: 10px;
+        left: 10px;
+        font-size: 30px;
+        opacity: 0.15;
+        pointer-events: none;
+        transition: all 0.3s ease;
+        z-index: 2;
+    }
+    
+    .contact-card:hover .leaf-top-right {
+        opacity: 0.35;
+        transform: rotate(15deg) scale(1.1);
+    }
+    
+    .contact-card:hover .leaf-bottom-left {
+        opacity: 0.35;
+        transform: rotate(-10deg) scale(1.1);
+    }
+    
+    .card-icon {
+        width: 70px;
+        height: 70px;
+        background: #fef5ee;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 18px;
+        transition: 0.3s;
+        position: relative;
+        z-index: 2;
+    }
+    
+    .contact-card:hover .card-icon {
+        background: #ff7a00;
+        transform: scale(1.05);
+    }
+    
+    .card-icon i {
+        font-size: 30px;
+        color: #ff7a00;
+        transition: 0.3s;
+    }
+    
+    .contact-card:hover .card-icon i {
+        color: white;
+    }
+    
+    .contact-card h3 {
+        font-size: 18px;
+        font-weight: 700;
+        color: #1a1a2e;
+        margin-bottom: 8px;
+        position: relative;
+        z-index: 2;
+    }
+    
+    .contact-card p {
+        font-size: 14px;
+        color: #8a9aa6;
+        margin-bottom: 12px;
+        position: relative;
+        z-index: 2;
+    }
+    
+    .card-link {
+        color: #ff7a00;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        transition: 0.3s;
+        position: relative;
+        z-index: 2;
+    }
+    
+    .card-link:hover {
+        gap: 10px;
+    }
+    
+    /* Separators */
+    .contact-card:not(:last-child) {
+        border-right: 1px solid #f0e6dd;
+    }
+    
+    /* ========== FORM SECTION - USING DJANGO FORM FIELDS ========== */
+    .form-wrapper {
+        max-width: 1200px;
+        margin: 60px auto 80px;
+        padding: 0 40px;
+        position: relative;
+        z-index: 2;
+    }
+    
+    .form-container {
+        display: flex;
+        background: white;
+        border-radius: 30px;
+        overflow: hidden;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+        border: 1px solid #f0e6dd;
+        position: relative;
+    }
+    
+    /* Form Side */
+    .form-side {
+        flex: 1.2;
+        padding: 45px;
+        background: linear-gradient(135deg, rgba(255,122,0,0.03), rgba(255,122,0,0.01));
+        position: relative;
+        border-radius: 30px 0 0 30px;
+    }
+    
+    /* Subtle Food Pattern Background on Form */
+    .form-side::before {
+        content: "🍽️🍴🥄🔪🍳🥘🍲";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        font-size: 80px;
+        opacity: 0.03;
+        pointer-events: none;
+        white-space: normal;
+        word-wrap: break-word;
+        line-height: 1.2;
+        text-align: left;
+        z-index: 0;
+        font-family: monospace;
+    }
+    
+    .form-side h2 {
+        font-size: 32px;
+        font-weight: 700;
+        color: #1a1a2e;
+        margin-bottom: 8px;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .form-side h2 span {
+        color: #ff7a00;
+    }
+    
+    .form-side p {
+        color: #8a9aa6;
+        margin-bottom: 30px;
+        font-size: 14px;
+        position: relative;
+        z-index: 1;
+    }
+    
+    /* Django Form Styles */
+    .form-group {
+        margin-bottom: 20px;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #1a1a2e;
+        font-size: 14px;
+    }
+    
     .form-group input,
     .form-group textarea,
-    .form-group select{
+    .form-group select {
+        width: 100%;
+        padding: 14px 18px;
+        border: 1px solid #e8eef2;
+        border-radius: 16px;
+        font-size: 14px;
+        transition: 0.3s;
+        background: rgba(255,255,255,0.95);
+        font-family: inherit;
+    }
+    
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+        outline: none;
+        border-color: #ff7a00;
+        background: white;
+    }
+    
+    .form-group textarea {
+        min-height: 100px;
+        resize: vertical;
+    }
+    
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+    
+    /* Captcha Styling */
+    .captcha-wrapper {
+        margin: 25px 0;
+        background: rgba(255,255,255,0.9);
+        padding: 20px;
+        border-radius: 20px;
+        border: 1px solid #f0e6dd;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .captcha-container {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+    
+    .captcha-container img {
+        border-radius: 12px;
+        border: 1px solid #ffd9b3;
+        height: 55px;
+        width: auto;
+    }
+    
+    .refresh-btn {
+        background: transparent;
+        border: 1px solid #ffd9b3;
+        padding: 10px 20px;
+        border-radius: 40px;
+        color: #ff7a00;
+        font-weight: 600;
+        font-size: 13px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+    
+    .refresh-btn:hover {
+        background: #ff7a00;
+        color: white;
+        border-color: #ff7a00;
+    }
+    
+    .captcha-input-wrapper {
+        margin-top: 15px;
+    }
+    
+    .captcha-input-wrapper input {
+        width: 100%;
+        padding: 14px 18px;
+        font-size: 14px;
+        border: 1px solid #e8eef2;
+        border-radius: 16px;
+        background: white;
+    }
+    
+    .captcha-input-wrapper input:focus {
+        outline: none;
+        border-color: #ff7a00;
+    }
+    
+    .submit-btn {
+        width: 100%;
+        padding: 15px;
+        background: #ff7a00;
+        border: none;
+        border-radius: 40px;
+        font-size: 15px;
+        font-weight: 600;
+        color: white;
+        cursor: pointer;
+        transition: 0.3s;
+        margin-top: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .submit-btn:hover {
+        background: #e56a00;
+        transform: translateY(-2px);
+    }
+    
+    /* Right Side - Simple Image */
+    .form-image-side {
+        flex: 0.9;
+        position: relative;
+        background: linear-gradient(135deg, #ff7a00, #ff9f3a);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+    
+    .form-image-side img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: 0.4s;
+        opacity: 0.92;
+    }
+    
+    .form-image-side:hover img {
+        transform: scale(1.03);
+    }
+    
+    .image-overlay-simple {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 35%;
+        background: linear-gradient(transparent, rgba(0,0,0,0.2));
+    }
+    
+    .side-leaf {
+        position: absolute;
+        bottom: 15px;
+        left: 15px;
+        font-size: 40px;
+        color: rgba(255,255,255,0.25);
+        animation: leafFloat 3s ease-in-out infinite;
+        pointer-events: none;
+    }
+    
+    @keyframes leafFloat {
+        0%, 100% { transform: translateY(0) rotate(0deg); }
+        50% { transform: translateY(-8px) rotate(8deg); }
+    }
+    
+    /* Messages */
+    .message {
+        padding: 12px 16px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 14px;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .message.success {
+        background: #e8f5e9;
+        color: #2e7d32;
+    }
+    
+    .message.error {
+        background: #ffebee;
+        color: #c62828;
+    }
+    
+    .error-text {
+        color: #dc3545;
+        font-size: 12px;
+        margin-top: 5px;
+        display: block;
+    }
+    
+    /* Popup */
+    .popup-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.6);
+        backdrop-filter: blur(8px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+    }
+    
+    .popup-box {
+        background: white;
+        border-radius: 30px;
+        padding: 40px;
+        text-align: center;
+        max-width: 350px;
+        animation: popIn 0.3s ease;
+    }
+    
+    @keyframes popIn {
+        from {
+            opacity: 0;
+            transform: scale(0.8);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+    
+    .popup-icon {
+        width: 60px;
+        height: 60px;
+        background: #ff7a00;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+    }
+    
+    .popup-icon i {
+        font-size: 30px;
+        color: white;
+    }
+    
+    .popup-box h3 {
+        font-size: 22px;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+    
+    .popup-box button {
+        margin-top: 20px;
+        padding: 10px 30px;
+        background: #ff7a00;
+        border: none;
+        border-radius: 30px;
+        color: white;
+        cursor: pointer;
+        font-weight: 600;
+    }
+    
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 1024px) {
+        .hero-container {
+            flex-direction: column;
+            text-align: center;
+            gap: 40px;
+            padding: 30px 35px;
+        }
+        
+        .hero-content {
+            text-align: center;
+            max-width: 100%;
+        }
+        
+        .hero-tag {
+            display: inline-block;
+        }
+        
+        .hero-stats {
+            justify-content: center;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .side-accent-left, .side-accent-right {
+            display: none;
+        }
+        
+        .orange-abstract-shape {
+            width: 200px;
+            height: 250px;
+            right: -20px;
+        }
+        
+        .floating-contact-icon {
+            display: none;
+        }
+        
+        .cards-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        
+        .contact-card:not(:last-child) {
+            border-right: none;
+        }
+        
+        .contact-card:nth-child(2) {
+            border-right: 1px solid #f0e6dd;
+        }
+        
+        .form-container {
+            flex-direction: column;
+        }
+        
+        .form-side {
+            border-radius: 30px;
+        }
+        
+        .form-side::before {
+            font-size: 50px;
+        }
+        
+        .form-image-side {
+            min-height: 300px;
+            order: -1;
+        }
+        
+        .form-row {
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+        
+        .leaf-bg-1, .leaf-bg-2, .leaf-bg-3, .leaf-bg-4, .leaf-bg-5 {
+            font-size: 60px;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .hero-section {
+            padding: 80px 0 60px 0;
+        }
+        
+        .hero-container {
+            margin: 0 20px;
+            padding: 25px 25px;
+        }
+        
+        .hero-container::after {
+            left: 5%;
+            right: 5%;
+        }
+        
+        .premium-corner {
+            width: 35px;
+            height: 35px;
+        }
+        
+        .corner-diamond {
+            width: 8px;
+            height: 8px;
+        }
+        
+        .diamond-tl, .diamond-tr, .diamond-bl, .diamond-br {
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+        }
+        
+        .hero-content h1 {
+            font-size: 36px;
+        }
+        
+        .hero-desc {
+            font-size: 14px;
+        }
+        
+        .hero-stats {
+            gap: 25px;
+        }
+        
+        .stat-number {
+            font-size: 26px;
+        }
+        
+        .orange-abstract-shape {
+            display: none;
+        }
+        
+        .cards-section {
+            padding: 0 25px;
+        }
+        
+        .cards-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .cards-grid::before {
+            font-size: 30px;
+            letter-spacing: 8px;
+        }
+        
+        .contact-card {
+            border-bottom: 1px solid #f0e6dd;
+        }
+        
+        .contact-card:not(:last-child) {
+            border-right: none;
+        }
+        
+        .contact-card:nth-child(2) {
+            border-right: none;
+        }
+        
+        .form-wrapper {
+            padding: 0 25px;
+        }
+        
+        .form-side {
+            padding: 30px 25px;
+        }
+        
+        .form-side h2 {
+            font-size: 28px;
+        }
+        
+        .form-side::before {
+            font-size: 40px;
+        }
+        
+        .captcha-container {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        
+        .leaf-bg-1, .leaf-bg-2, .leaf-bg-3, .leaf-bg-4, .leaf-bg-5 {
+            font-size: 40px;
+            opacity: 0.02;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .hero-container {
+            margin: 0 15px;
+            padding: 20px 20px;
+        }
+        
+        .hero-content h1 {
+            font-size: 28px;
+        }
+        
+        .hero-stats {
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .cards-grid::before {
+            font-size: 20px;
+            letter-spacing: 5px;
+        }
+        
+        .form-side::before {
+            font-size: 30px;
+        }
+        
+        .leaf-bg-1, .leaf-bg-2, .leaf-bg-3, .leaf-bg-4, .leaf-bg-5 {
+            display: none;
+        }
+    }
+    
+    .fade-up {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: all 0.7s ease;
+    }
+    
+    .fade-up.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    /* FIX SIDE GAPS IN SMALL DEVICES */
+
+@media (max-width:1168px){
+
+    .hero-section{
+        padding-left:14px;
+        padding-right:14px;
+    }
+
+    .hero-container{
+
+        margin:0;
         width:100%;
-        padding:12px;
-        border:1px solid #ccc;
-        border-radius:5px;
-        font-size:14px;
-        box-sizing:border-box;
+
+        padding:22px 18px;
+
+        border-radius:24px;
     }
 
-    .submit-btn{
-        width:100%;
-        padding:14px;
-        background:black;
-        color:white;
-        border:none;
-        border-radius:5px;
-        font-size:16px;
-        cursor:pointer;
+    .cards-section,
+    .form-wrapper{
+
+        padding-left:14px;
+        padding-right:14px;
+    }
+}
+
+@media (max-width:480px){
+
+    .hero-section{
+        padding-left:10px;
+        padding-right:10px;
     }
 
-    .submit-btn:hover{
-        background:#333;
+    .hero-container{
+
+        padding:18px 14px;
+
+        border-radius:20px;
     }
 
-    .captcha-container{
-        display:flex;
-        flex-direction:column;
-        gap:10px;
+    .cards-section,
+    .form-wrapper{
+
+        padding-left:10px;
+        padding-right:10px;
     }
-
-    .captcha{
-        width:150px;
-        height:auto;
-        border:1px solid #ddd;
-        border-radius:5px;
-    }
-
-    .refresh-btn{
-        width:180px;
-        padding:10px;
-        background:#444;
-        color:white;
-        border:none;
-        border-radius:5px;
-        cursor:pointer;
-    }
-
-    .refresh-btn:hover{
-        background:black;
-    }
-
-    .message{
-        padding:12px;
-        border-radius:5px;
-        margin-bottom:20px;
-    }
-
-    .success{
-        background:#d4edda;
-        color:#155724;
-    }
-
-    .error{
-        background:#f8d7da;
-        color:#721c24;
-    }
-
-    .error-text{
-        color:red;
-        font-size:13px;
-    }
-
-    /* POPUP */
-
-    .popup-overlay{
-        position:fixed;
-        top:0;
-        left:0;
-        width:100%;
-        height:100%;
-        background:rgba(0,0,0,0.5);
-        display:flex;
-        justify-content:center;
-        align-items:center;
-        z-index:9999;
-    }
-
-    .popup-box{
-        width:350px;
-        background:white;
-        padding:30px;
-        border-radius:10px;
-        text-align:center;
-        box-shadow:0px 0px 15px rgba(0,0,0,0.2);
-    }
-
-    .popup-box h3{
-        margin-bottom:15px;
-    }
-
-    .popup-box button{
-        margin-top:20px;
-        padding:10px 20px;
-        background:black;
-        color:white;
-        border:none;
-        border-radius:5px;
-        cursor:pointer;
-    }
-
+}
 </style>
 
+<div class="contact-page">
+    
+    <!-- SUBTLE LEAVES BACKGROUND AFTER HERO -->
+    <div class="leaves-bg">
+        <div class="leaf-bg-1">🌿</div>
+        <div class="leaf-bg-2">🍃</div>
+        <div class="leaf-bg-3">🌱</div>
+        <div class="leaf-bg-4">🍀</div>
+        <div class="leaf-bg-5">🌿</div>
+    </div>
+    
+    <!-- HERO SECTION - PREMIUM UNIQUE BORDER -->
+    <div class="hero-section fade-up">
+        <div class="hero-container">
+            <!-- Premium Border Accents -->
+            <div class="premium-corner corner-tl"></div>
+            <div class="premium-corner corner-tr"></div>
+            <div class="premium-corner corner-bl"></div>
+            <div class="premium-corner corner-br"></div>
+            
+            <div class="corner-diamond diamond-tl"></div>
+            <div class="corner-diamond diamond-tr"></div>
+            <div class="corner-diamond diamond-bl"></div>
+            <div class="corner-diamond diamond-br"></div>
+            
+            <div class="side-accent-left"></div>
+            <div class="side-accent-right"></div>
+            
+            <div class="floating-dot dot-1"></div>
+            <div class="floating-dot dot-2"></div>
+            <div class="floating-dot dot-3"></div>
+            <div class="floating-dot dot-4"></div>
+            
+            <div class="hero-content">
+                <span class="hero-tag">CONTACT US</span>
+                <h1>
+                    We'd Love to<br>
+                    <span class="highlight">Hear From You</span>
+                </h1>
+                <p class="hero-desc">
+                    Have questions, feedback, or partnership ideas? Our dedicated team is here 24/7 to assist you with anything you need.
+                </p>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">24/7</div>
+                        <div class="stat-label">Support</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">100%</div>
+                        <div class="stat-label">Satisfaction</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">30min</div>
+                        <div class="stat-label">Response</div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-image-area">
+                <div class="image-frame">
+                    <div class="orange-abstract-shape"></div>
+                    
+                    <div class="floating-contact-icon contact-icon-1">
+                        <i class="fa-solid fa-phone"></i>
+                        <span>Call Us</span>
+                    </div>
+                    <div class="floating-contact-icon contact-icon-2">
+                        <i class="fa-regular fa-envelope"></i>
+                        <span>Email Us</span>
+                    </div>
+                    <div class="floating-contact-icon contact-icon-3">
+                        <i class="fa-regular fa-message"></i>
+                        <span>Chat Now</span>
+                    </div>
+                    <div class="floating-contact-icon contact-icon-4">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <span>Visit Us</span>
+                    </div>
+                    
+                    <img class="main-image" src="{% static 'images/contact.png' %}" alt="Fresh Food">
+                    <div class="floating-card">
+                        <i class="fa-solid fa-headset"></i>
+                        <div>
+                            <span>24/7 Support</span><br>
+                            <small>Always here for you</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- CARDS SECTION -->
+    <div class="cards-section fade-up">
+        <div class="cards-grid">
+            <div class="contact-card">
+                <div class="leaf-top-right">🌿</div>
+                <div class="leaf-bottom-left">🍃</div>
+                <div class="card-icon">
+                    <i class="fa-solid fa-phone-alt"></i>
+                </div>
+                <h3>Call Us</h3>
+                <p>+91 99499 59501</p>
+                <a href="tel:+919949959501" class="card-link">Call Now <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+            
+            <div class="contact-card">
+                <div class="leaf-top-right">🌿</div>
+                <div class="leaf-bottom-left">🍃</div>
+                <div class="card-icon">
+                    <i class="fa-regular fa-envelope"></i>
+                </div>
+                <h3>Email Us</h3>
+                <p>mailhungerfresh@gmail.com</p>
+                <a href="mailto:mailhungerfresh@gmail.com" class="card-link">Send Email <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+            
+            <div class="contact-card">
+                <div class="leaf-top-right">🌿</div>
+                <div class="leaf-bottom-left">🍃</div>
+                <div class="card-icon">
+                    <i class="fa-solid fa-location-dot"></i>
+                </div>
+                <h3>Visit Us</h3>
+                <p>Reg - Proddatur</p>
+                <a href="#" class="card-link">Get Direction <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+            
+            <div class="contact-card">
+                <div class="leaf-top-right">🌿</div>
+                <div class="leaf-bottom-left">🍃</div>
+                <div class="card-icon">
+                    <i class="fa-regular fa-clock"></i>
+                </div>
+                <h3>Business Hours</h3>
+                <p>Mon-Sat: 10:16 AM - 10:16 PM<br>Sun: 10:16 AM - 10:16 PM</p>
+                <a href="#" class="card-link">View Schedule <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- FORM SECTION - USING DJANGO FORM (FIXED CAPTCHA) -->
+    <div class="form-wrapper fade-up">
+        <div class="form-container">
+            <div class="form-side">
+                <h2>Send Us a <span>Message</span></h2>
+                <p>Fill the form below and we'll get back to you within 24 hours</p>
+                
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="message {{ message.tags }}">
+                            <i class="{% if message.tags == 'success' %}fa-regular fa-circle-check{% else %}fa-regular fa-circle-xmark{% endif %}"></i>
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                
+                <form method="POST">
+                    {% csrf_token %}
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Your Name</label>
+                            {{ form.name }}
+                            {% if form.name.errors %}
+                                <small class="error-text">{{ form.name.errors }}</small>
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <label>Email Address</label>
+                            {{ form.email }}
+                            {% if form.email.errors %}
+                                <small class="error-text">{{ form.email.errors }}</small>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Phone Number</label>
+                            {{ form.phone_number }}
+                            {% if form.phone_number.errors %}
+                                <small class="error-text">{{ form.phone_number.errors }}</small>
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <label>Subject</label>
+                            {{ form.subject }}
+                            {% if form.subject.errors %}
+                                <small class="error-text">{{ form.subject.errors }}</small>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Your Message</label>
+                        {{ form.message }}
+                        {% if form.message.errors %}
+                            <small class="error-text">{{ form.message.errors }}</small>
+                            {% endif %}
+                    </div>
+                    
+                    <!-- CAPTCHA - Using Django Form's Captcha Field -->
+                    <div class="captcha-wrapper">
+                        <div class="captcha-container">
+                            {{ form.captcha }}
+                        </div>
+                        {% if form.captcha.errors %}
+                            <small class="error-text">{{ form.captcha.errors }}</small>
+                        {% endif %}
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">
+                        Send Message <i class="fa-regular fa-paper-plane"></i>
+                    </button>
+                </form>
+            </div>
+            
+            <div class="form-image-side">
+                <img src="{% static 'images/contact1.png' %}" alt="Delicious Food">
+                <div class="image-overlay-simple"></div>
+                <div class="side-leaf">
+                    <i class="fa-solid fa-leaf"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+<!-- Replace your success popup section with this -->
+<!-- Success Popup - ONLY SHOWS AFTER FORM SUBMISSION -->
+{% if messages %}
+    {% for message in messages %}
+        {% if message.tags == 'success' %}
+            <div id="successPopup" class="popup-overlay" style="display: flex;">
+                <div class="popup-box">
+                    <div class="popup-icon">
+                        <i class="fa-regular fa-circle-check"></i>
+                    </div>
+                    <h3>Message Sent!</h3>
+                    <p>{{ message }}</p>
+                    <button onclick="closePopup()">Continue</button>
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+{% endif %}
 
 <script>
-
-document.addEventListener(
-    "DOMContentLoaded",
-    function () {
-
-        // REFRESH CAPTCHA
-
-        const refreshBtn = document.getElementById(
-            "refresh-captcha"
-        );
-
-        refreshBtn.addEventListener(
-            "click",
-            function () {
-
-                fetch("/captcha/refresh/", {
-
-                    method: "GET",
-
-                    headers: {
-                        "X-Requested-With": "XMLHttpRequest",
-                    }
-
-                })
-
-                .then(response => response.json())
-
-                .then(data => {
-
-                    // UPDATE CAPTCHA IMAGE
-
-                    document.querySelector(
-                        ".captcha"
-                    ).src = data.image_url;
-
-                    // UPDATE CAPTCHA HIDDEN KEY
-
-                    document.querySelector(
-                        'input[name="captcha_0"]'
-                    ).value = data.key;
-
-                    // CLEAR CAPTCHA TEXT FIELD
-
-                    document.querySelector(
-                        'input[name="captcha_1"]'
-                    ).value = "";
-
-                })
-
-                .catch(error => {
-
-                    console.log(
-                        "Captcha Refresh Error:",
-                        error
-                    );
-
-                });
-
+    // Scroll Animation
+    const fadeElements = document.querySelectorAll('.fade-up');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
             }
-        );
-
-    });
-
-
-    // CLOSE SUCCESS POPUP
-
-    function closePopup(){
-
-        document.getElementById(
-            "successPopup"
-        ).style.display = "none";
+        });
+    }, { threshold: 0.1 });
+    
+    fadeElements.forEach(el => observer.observe(el));
+    
+    // Close popup function
+    function closePopup() {
+        const popup = document.getElementById('successPopup');
+        if (popup) {
+            popup.style.display = 'none';
+        }
+        // Remove the message from session/storage so it doesn't show again
+        sessionStorage.setItem('popupClosed', 'true');
     }
-
+    
+    // Only auto-close if popup exists (after submission)
+    setTimeout(function() {
+        const popup = document.getElementById('successPopup');
+        if (popup && popup.style.display === 'flex') {
+            setTimeout(function() {
+                popup.style.display = 'none';
+            }, 5000);
+        }
+    }, 100);
+    
+    // Style captcha elements
+    setTimeout(function() {
+        const captchaImg = document.querySelector('.captcha');
+        if (captchaImg) {
+            captchaImg.style.borderRadius = '12px';
+            captchaImg.style.border = '1px solid #ffd9b3';
+            captchaImg.style.height = '55px';
+            captchaImg.style.width = 'auto';
+        }
+        
+        const captchaInput = document.querySelector('input[name="captcha_1"]');
+        if (captchaInput) {
+            captchaInput.style.width = '100%';
+            captchaInput.style.padding = '14px 18px';
+            captchaInput.style.border = '1px solid #e8eef2';
+            captchaInput.style.borderRadius = '16px';
+            captchaInput.style.marginTop = '15px';
+            captchaInput.placeholder = 'Enter the code above';
+        }
+    }, 100);
 </script>
-
 {% endblock %}

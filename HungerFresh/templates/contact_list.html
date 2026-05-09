@@ -1,76 +1,602 @@
-<!-- templates/contact/contact_list.html -->
-
 {% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Contact Messages - HungerFresh Admin{% endblock %}
 
 {% block content %}
 
-<h2>All Contacts</h2>
+<style>
+    /* ========================================
+       PREMIUM CONTACT LIST PAGE
+       Half Orange Gradient Background
+       Modern table design - No extra gaps
+       Status filters: New / Read
+    ======================================== */
+    
+    /* Remove all default margins and padding */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    
+    body {
+        background: #f5f7fb;
+        position: relative;
+    }
+    
+    /* Main Container - Tight spacing, no extra gaps */
+    .contacts-container {
+        max-width: 1400px;
+        margin: 120px auto 0;
+        padding: 0 5% 40px;
+        position: relative;
+        z-index: 2;
+    }
+    
+    /* Half Orange Background Effect */
+    .bg-orange-half {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 38%;
+        background: linear-gradient(135deg, #fff8f0 0%, #ffe8db 100%);
+        z-index: 0;
+        border-radius: 0 0 50px 50px;
+    }
+    
+    /* Decorative Orange Wave */
+    .bg-orange-wave {
+        position: fixed;
+        top: 36%;
+        left: 0;
+        width: 100%;
+        height: 80px;
+        background: linear-gradient(135deg, #ffe8db 0%, #ffecd9 50%, #ffffff 100%);
+        clip-path: polygon(0% 0%, 100% 30%, 100% 100%, 0% 100%);
+        z-index: 0;
+    }
+    
+    /* Page Header - Tight spacing */
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid rgba(255,122,0,0.15);
+        position: relative;
+        z-index: 2;
+    }
+    
+    .page-title h2 {
+        font-size: 28px;
+        font-weight: 800;
+        color: #111827;
+        margin-bottom: 4px;
+        letter-spacing: -0.5px;
+    }
+    
+    .page-title p {
+        color: #6b7280;
+        font-size: 13px;
+    }
+    
+    .page-title p i {
+        color: #ff7a00;
+        margin-right: 6px;
+    }
+    
+    .stats-badge {
+        background: linear-gradient(135deg, #ff7a00, #ff9f3a);
+        padding: 8px 18px;
+        border-radius: 50px;
+        color: white;
+        font-weight: 700;
+        font-size: 13px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 5px 15px rgba(255,122,0,0.25);
+    }
+    
+    /* Filter Bar - Compact */
+    .filter-bar {
+        background: rgba(255,255,255,0.95);
+        backdrop-filter: blur(8px);
+        border-radius: 18px;
+        padding: 12px 20px;
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+        box-shadow: 0 3px 12px rgba(0,0,0,0.04);
+        border: 1px solid rgba(255,122,0,0.1);
+        position: relative;
+        z-index: 2;
+    }
+    
+    .search-box {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: #f5f7fb;
+        padding: 6px 16px;
+        border-radius: 40px;
+    }
+    
+    .search-box i {
+        color: #9ca3af;
+        font-size: 14px;
+    }
+    
+    .search-box input {
+        border: none;
+        background: transparent;
+        padding: 6px 0;
+        width: 220px;
+        outline: none;
+        font-size: 13px;
+    }
+    
+    .filter-tabs {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+    
+    .filter-tab {
+        padding: 5px 16px;
+        border-radius: 30px;
+        font-size: 12px;
+        font-weight: 600;
+        background: #f5f7fb;
+        color: #6b7280;
+        cursor: pointer;
+        transition: 0.3s;
+        border: none;
+    }
+    
+    .filter-tab.active {
+        background: #ff7a00;
+        color: white;
+    }
+    
+    .filter-tab:hover {
+        background: #ff7a00;
+        color: white;
+    }
+    
+    /* Table Container - No extra gaps, full width */
+    .table-container {
+        background: white;
+        border-radius: 20px;
+        overflow-x: auto;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        border: 1px solid #f0f0f0;
+        position: relative;
+        z-index: 2;
+        margin-bottom: 0;
+    }
+    
+    .contact-table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 650px;
+    }
+    
+    .contact-table th {
+        text-align: left;
+        padding: 14px 16px;
+        background: #fafafc;
+        font-weight: 700;
+        font-size: 13px;
+        color: #374151;
+        border-bottom: 1px solid #e5e7eb;
+        letter-spacing: 0.3px;
+    }
+    
+    .contact-table td {
+        padding: 12px 16px;
+        border-bottom: 1px solid #f0f0f0;
+        font-size: 13px;
+        color: #4b5563;
+        vertical-align: middle;
+    }
+    
+    .contact-table tr:hover {
+        background: #fefaf7;
+    }
+    
+    .contact-table tr:last-child td {
+        border-bottom: none;
+    }
+    
+    /* Status Badges */
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 4px 10px;
+        border-radius: 40px;
+        font-size: 11px;
+        font-weight: 700;
+        width: fit-content;
+    }
+    
+    .status-badge.new {
+        background: rgba(239, 68, 68, 0.1);
+        color: #dc2626;
+    }
+    
+    .status-badge.new i {
+        color: #dc2626;
+    }
+    
+    .status-badge.read {
+        background: rgba(34, 197, 94, 0.1);
+        color: #16a34a;
+    }
+    
+    .status-badge.read i {
+        color: #16a34a;
+    }
+    
+    /* Action Buttons */
+    .action-buttons {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+    }
+    
+    .btn-action {
+        padding: 5px 12px;
+        border-radius: 30px;
+        font-size: 11px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+    
+    .btn-view {
+        background: rgba(255,122,0,0.1);
+        color: #ff7a00;
+        border: 1px solid rgba(255,122,0,0.2);
+    }
+    
+    .btn-view:hover {
+        background: #ff7a00;
+        color: white;
+        transform: translateY(-2px);
+    }
+    
+    .btn-edit {
+        background: rgba(59, 130, 246, 0.1);
+        color: #3b82f6;
+        border: 1px solid rgba(59, 130, 246, 0.2);
+    }
+    
+    .btn-edit:hover {
+        background: #3b82f6;
+        color: white;
+        transform: translateY(-2px);
+    }
+    
+    .btn-delete {
+        background: rgba(239, 68, 68, 0.1);
+        color: #dc2626;
+        border: 1px solid rgba(239, 68, 68, 0.2);
+    }
+    
+    .btn-delete:hover {
+        background: #dc2626;
+        color: white;
+        transform: translateY(-2px);
+    }
+    
+    /* Empty State */
+    .empty-state {
+        text-align: center;
+        padding: 50px 20px;
+    }
+    
+    .empty-state i {
+        font-size: 60px;
+        color: #ff7a00;
+        opacity: 0.4;
+        margin-bottom: 15px;
+    }
+    
+    .empty-state h3 {
+        font-size: 18px;
+        color: #374151;
+        margin-bottom: 6px;
+    }
+    
+    .empty-state p {
+        color: #9ca3af;
+        font-size: 13px;
+    }
+    
+    /* Pagination - Compact */
+    .pagination {
+        display: flex;
+        justify-content: center;
+        gap: 6px;
+        margin-top: 20px;
+        flex-wrap: wrap;
+        position: relative;
+        z-index: 2;
+    }
+    
+    .page-link {
+        padding: 6px 12px;
+        border-radius: 10px;
+        background: white;
+        color: #6b7280;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 500;
+        transition: 0.3s;
+        border: 1px solid #e5e7eb;
+    }
+    
+    .page-link.active {
+        background: #ff7a00;
+        color: white;
+        border-color: #ff7a00;
+    }
+    
+    .page-link:hover:not(.active) {
+        background: #fefaf7;
+        border-color: #ff7a00;
+        color: #ff7a00;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+        .contacts-container {
+            margin: 80px auto 0;
+            padding: 0 4% 30px;
+        }
+        .page-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .page-title h2 {
+            font-size: 24px;
+        }
+        .filter-bar {
+            flex-direction: column;
+            align-items: stretch;
+        }
+        .search-box {
+            justify-content: space-between;
+        }
+        .search-box input {
+            width: 100%;
+        }
+        .filter-tabs {
+            justify-content: center;
+        }
+        .action-buttons {
+            flex-direction: column;
+        }
+        .btn-action {
+            justify-content: center;
+        }
+        .bg-orange-half {
+            height: 30%;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .contacts-container {
+            margin: 70px auto 0;
+        }
+        .page-title h2 {
+            font-size: 22px;
+        }
+        .stats-badge {
+            padding: 5px 12px;
+            font-size: 11px;
+        }
+        .contact-table th, .contact-table td {
+            padding: 10px 10px;
+            font-size: 11px;
+        }
+        .btn-action {
+            padding: 3px 8px;
+            font-size: 9px;
+        }
+        .bg-orange-half {
+            height: 28%;
+        }
+    }
+    
+    /* Animation */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(8px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .contact-table tr {
+        animation: fadeIn 0.3s ease forwards;
+    }
+</style>
 
-<table>
+<!-- Half Orange Background Elements -->
+<div class="bg-orange-half"></div>
+<div class="bg-orange-wave"></div>
 
-    <tr>
+<div class="contacts-container">
+    
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="page-title">
+            <h2>
+                <i class="fa-regular fa-envelope" style="color: #ff7a00; margin-right: 8px;"></i>
+                Contact Messages
+            </h2>
+            <p><i class="fa-regular fa-clock"></i> Manage and respond to customer inquiries</p>
+        </div>
+        <div class="stats-badge">
+            <i class="fa-regular fa-message"></i>
+            <span>Total: {{ contacts|length }} messages</span>
+        </div>
+    </div>
+    
+    <!-- Filter Bar -->
+    <div class="filter-bar">
+        <div class="search-box">
+            <i class="fa-solid fa-search"></i>
+            <input type="text" placeholder="Search by name or email..." id="searchInput">
+        </div>
+        <div class="filter-tabs">
+            <button class="filter-tab active" data-filter="all">All</button>
+            <button class="filter-tab" data-filter="new">New</button>
+            <button class="filter-tab" data-filter="read">Read</button>
+        </div>
+    </div>
+    
+    <!-- Table Container - No extra gaps, touches header directly -->
+    <div class="table-container">
+        <table class="contact-table" id="contactTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                {% for contact in contacts %}
+                <tr data-status="{{ contact.status|lower }}">
+                    <td>#{{ contact.id }}</td>
+                    <td><strong>{{ contact.name }}</strong></td>
+                    <td>{{ contact.email }}</td>
+                    <td>
+                        {% if contact.status == "new" %}
+                            <span class="status-badge new">
+                                <i class="fa-regular fa-circle"></i> New
+                            </span>
+                        {% else %}
+                            <span class="status-badge read">
+                                <i class="fa-regular fa-circle-check"></i> Read
+                            </span>
+                        {% endif %}
+                    </td>
+                    <td>{{ contact.created_at|date:"M d, Y" }}</td>
+                    <td>
+                        <div class="action-buttons">
+                            <a href="{% url 'contact_detail' contact.id %}" class="btn-action btn-view">
+                                <i class="fa-regular fa-eye"></i> View
+                            </a>
+                            <a href="{% url 'contact_update' contact.id %}" class="btn-action btn-edit">
+                                <i class="fa-regular fa-pen-to-square"></i> Edit
+                            </a>
+                            <a href="{% url 'contact_delete' contact.id %}" class="btn-action btn-delete">
+                                <i class="fa-regular fa-trash-can"></i> Delete
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6">
+                        <div class="empty-state">
+                            <i class="fa-regular fa-inbox"></i>
+                            <h3>No messages yet</h3>
+                            <p>When customers contact you, their messages will appear here.</p>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- Pagination (if needed) -->
+    {% if is_paginated %}
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+            <a href="?page=1" class="page-link"><i class="fa-solid fa-angles-left"></i></a>
+            <a href="?page={{ page_obj.previous_page_number }}" class="page-link"><i class="fa-solid fa-angle-left"></i></a>
+        {% endif %}
+        
+        <span class="page-link active">{{ page_obj.number }}</span>
+        
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" class="page-link"><i class="fa-solid fa-angle-right"></i></a>
+            <a href="?page={{ page_obj.paginator.num_pages }}" class="page-link"><i class="fa-solid fa-angles-right"></i></a>
+        {% endif %}
+    </div>
+    {% endif %}
+    
+</div>
 
-        <th>ID</th>
-
-        <th>Name</th>
-
-        <th>Email</th>
-
-        <th>Phone</th>
-
-        <th>Status</th>
-
-        <th>Date</th>
-
-        <th>Actions</th>
-
-    </tr>
-
-    {% for contact in contacts %}
-
-    <tr>
-
-        <td>{{ contact.id }}</td>
-
-        <td>{{ contact.name }}</td>
-
-        <td>{{ contact.email }}</td>
-
-        <td>{{ contact.phone_number }}</td>
-
-        <td>{{ contact.status }}</td>
-
-        <td>{{ contact.created_at }}</td>
-
-        <td>
-
-            <a
-                href="{% url 'contact_detail' contact.id %}"
-                class="btn"
-            >
-                View
-            </a>
-
-            <a
-                href="{% url 'contact_update' contact.id %}"
-                class="btn"
-            >
-                Edit
-            </a>
-
-            <a
-                href="{% url 'contact_delete' contact.id %}"
-                class="btn"
-            >
-                Delete
-            </a>
-
-        </td>
-
-    </tr>
-
-    {% endfor %}
-
-</table>
+<!-- Filter Script -->
+<script>
+    // Search functionality
+    const searchInput = document.getElementById('searchInput');
+    const tableBody = document.getElementById('tableBody');
+    const rows = tableBody.querySelectorAll('tr');
+    const filterTabs = document.querySelectorAll('.filter-tab');
+    let currentFilter = 'all';
+    
+    function filterTable() {
+        const searchTerm = searchInput.value.toLowerCase();
+        let visibleCount = 0;
+        
+        rows.forEach(row => {
+            // Skip empty state row
+            if (row.querySelector('.empty-state')) return;
+            
+            const status = row.getAttribute('data-status');
+            const name = row.cells[1]?.textContent.toLowerCase() || '';
+            const email = row.cells[2]?.textContent.toLowerCase() || '';
+            
+            const matchesFilter = currentFilter === 'all' || status === currentFilter;
+            const matchesSearch = name.includes(searchTerm) || email.includes(searchTerm);
+            
+            if (matchesFilter && matchesSearch) {
+                row.style.display = '';
+                visibleCount++;
+            } else {
+                row.style.display = 'none';
+            }
+        });
+        
+        // Show/hide empty message
+        const emptyRow = Array.from(rows).find(r => r.querySelector('.empty-state'));
+        if (emptyRow) {
+            emptyRow.style.display = visibleCount === 0 ? '' : 'none';
+        }
+    }
+    
+    // Search event listener
+    searchInput.addEventListener('input', filterTable);
+    
+    // Filter tab event listeners
+    filterTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            filterTabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            currentFilter = tab.getAttribute('data-filter');
+            filterTable();
+        });
+    });
+</script>
 
 {% endblock %}

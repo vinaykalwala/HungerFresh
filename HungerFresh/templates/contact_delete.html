@@ -1,29 +1,511 @@
-<!-- templates/contact/contact_delete.html -->
-
 {% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Delete Contact - HungerFresh Admin{% endblock %}
 
 {% block content %}
 
-<h2>Delete Contact</h2>
+<style>
+    /* ========================================
+       PREMIUM CONTACT DELETE PAGE
+       Elegant confirmation design
+       Soft gradients, modern card layout
+    ======================================== */
+    
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    
+    body {
+        background: #f0f2f8;
+        position: relative;
+    }
+    
+    /* Premium Background */
+    .premium-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(145deg, #fff5ec 0%, #fff5ec 100%);
+        z-index: 0;
+    }
+    
+    /* Orange Curve Top */
+    .orange-curve {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 280px;
+        background: linear-gradient(135deg, #ff7a00 0%, #ff9f3a 50%, #ffb86b 100%);
+        clip-path: ellipse(100% 250px at 50% 0%);
+        z-index: 0;
+        opacity: 0.08;
+    }
+    
+    /* Decorative Circles */
+    .deco-circle {
+        position: fixed;
+        bottom: -100px;
+        right: -100px;
+        width: 400px;
+        height: 400px;
+        background: radial-gradient(circle, rgba(255,122,0,0.04), transparent 70%);
+        border-radius: 50%;
+        z-index: 0;
+    }
+    
+    .deco-circle-left {
+        position: fixed;
+        top: -100px;
+        left: -100px;
+        width: 300px;
+        height: 300px;
+        background: radial-gradient(circle, rgba(255,122,0,0.03), transparent 70%);
+        border-radius: 50%;
+        z-index: 0;
+    }
+    
+    /* Main Container */
+    .delete-container {
+        max-width: 700px;
+        margin: 120px auto 60px;
+        padding: 0 5%;
+        position: relative;
+        z-index: 10;
+    }
+    
+    /* Breadcrumb */
+    .breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 25px;
+        flex-wrap: wrap;
+    }
+    
+    .breadcrumb a {
+        color: #64748b;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 500;
+        transition: 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    
+    .breadcrumb a:hover {
+        color: #ff7a00;
+    }
+    
+    .breadcrumb .separator {
+        color: #cbd5e1;
+        font-size: 12px;
+    }
+    
+    .breadcrumb .current {
+        color: #ff7a00;
+        font-weight: 600;
+    }
+    
+    /* Main Card */
+    .delete-card {
+        background: white;
+        border-radius: 32px;
+        box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15);
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+    
+    /* Header with Warning Gradient */
+    .card-header-warning {
+        background: linear-gradient(135deg, #dc2626, #ef4444);
+        padding: 28px 32px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .card-header-warning::before {
+        content: '';
+        position: absolute;
+        top: -40%;
+        right: -10%;
+        width: 200px;
+        height: 200px;
+        background: rgba(255,255,255,0.1);
+        border-radius: 50%;
+    }
+    
+    .card-header-warning::after {
+        content: '';
+        position: absolute;
+        bottom: -30%;
+        left: -5%;
+        width: 150px;
+        height: 150px;
+        background: rgba(255,255,255,0.08);
+        border-radius: 50%;
+    }
+    
+    .card-header-warning h2 {
+        font-size: 26px;
+        font-weight: 800;
+        color: white;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .card-header-warning h2 i {
+        font-size: 26px;
+        background: rgba(255,255,255,0.2);
+        padding: 10px;
+        border-radius: 16px;
+    }
+    
+    .card-header-warning p {
+        font-size: 14px;
+        color: rgba(255,255,255,0.9);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-left: 48px;
+        position: relative;
+        z-index: 1;
+    }
+    
+    /* Card Body */
+    .card-body {
+        padding: 35px;
+    }
+    
+    /* Warning Icon Area */
+    .warning-icon {
+        text-align: center;
+        margin-bottom: 25px;
+    }
+    
+    .warning-icon i {
+        font-size: 70px;
+        color: #dc2626;
+        background: rgba(220, 38, 38, 0.1);
+        padding: 25px;
+        border-radius: 80px;
+        animation: pulseWarning 2s infinite;
+    }
+    
+    @keyframes pulseWarning {
+        0%, 100% {
+            transform: scale(1);
+            box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.2);
+        }
+        50% {
+            transform: scale(1.05);
+            box-shadow: 0 0 0 20px rgba(220, 38, 38, 0);
+        }
+    }
+    
+    /* Warning Message */
+    .warning-message {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    
+    .warning-message h3 {
+        font-size: 22px;
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 12px;
+    }
+    
+    .warning-message p {
+        color: #64748b;
+        font-size: 15px;
+        line-height: 1.6;
+    }
+    
+    /* Contact Info Card */
+    .contact-info-card {
+        background: linear-gradient(135deg, #fefaf7, #fff8f2);
+        border-radius: 24px;
+        padding: 22px 25px;
+        margin-bottom: 30px;
+        border: 1px solid rgba(255,122,0,0.1);
+    }
+    
+    .info-row-delete {
+        display: flex;
+        align-items: center;
+        padding: 10px 0;
+        border-bottom: 1px solid #f0f2f5;
+    }
+    
+    .info-row-delete:last-child {
+        border-bottom: none;
+    }
+    
+    .info-label-delete {
+        width: 100px;
+        font-size: 13px;
+        font-weight: 600;
+        color: #64748b;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .info-label-delete i {
+        color: #ff7a00;
+        width: 20px;
+    }
+    
+    .info-value-delete {
+        flex: 1;
+        font-size: 14px;
+        font-weight: 500;
+        color: #1e293b;
+    }
+    
+    /* Action Buttons */
+    .action-buttons {
+        display: flex;
+        gap: 16px;
+        margin-top: 10px;
+    }
+    
+    .btn-delete {
+        background: linear-gradient(135deg, #dc2626, #ef4444);
+        color: white;
+        padding: 14px 28px;
+        border: none;
+        border-radius: 50px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        flex: 1;
+        justify-content: center;
+        text-decoration: none;
+    }
+    
+    .btn-delete:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(220, 38, 38, 0.3);
+    }
+    
+    .btn-cancel {
+        background: white;
+        color: #64748b;
+        padding: 14px 28px;
+        border: 1.5px solid #e2e8f0;
+        border-radius: 50px;
+        font-size: 14px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        flex: 1;
+        justify-content: center;
+    }
+    
+    .btn-cancel:hover {
+        background: #f8fafc;
+        border-color: #ff7a00;
+        color: #ff7a00;
+        transform: translateY(-3px);
+    }
+    
+    /* Note Text */
+    .note-text {
+        text-align: center;
+        margin-top: 25px;
+        padding-top: 15px;
+        border-top: 1px solid #f0f2f5;
+        font-size: 12px;
+        color: #94a3b8;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+    }
+    
+    /* Responsive */
+    @media (max-width: 600px) {
+        .delete-container {
+            margin: 100px auto 40px;
+        }
+        .card-header-warning {
+            padding: 22px 25px;
+        }
+        .card-header-warning h2 {
+            font-size: 22px;
+        }
+        .card-header-warning p {
+            margin-left: 0;
+        }
+        .card-body {
+            padding: 25px;
+        }
+        .warning-icon i {
+            font-size: 55px;
+            padding: 20px;
+        }
+        .warning-message h3 {
+            font-size: 20px;
+        }
+        .action-buttons {
+            flex-direction: column;
+        }
+        .info-label-delete {
+            width: 85px;
+            font-size: 12px;
+        }
+        .info-value-delete {
+            font-size: 13px;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .delete-container {
+            margin: 80px auto 30px;
+        }
+        .card-header-warning h2 {
+            font-size: 20px;
+        }
+        .card-header-warning h2 i {
+            font-size: 20px;
+            padding: 8px;
+        }
+        .card-body {
+            padding: 20px;
+        }
+        .contact-info-card {
+            padding: 16px 18px;
+        }
+        .info-row-delete {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 5px;
+        }
+        .info-label-delete {
+            width: 100%;
+        }
+        .btn-delete, .btn-cancel {
+            padding: 12px 20px;
+            font-size: 13px;
+        }
+    }
+    
+    /* Animation */
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .delete-card {
+        animation: slideUp 0.5s ease forwards;
+    }
+    
+    .breadcrumb {
+        animation: slideUp 0.4s ease forwards;
+    }
+</style>
 
-<p>
+<!-- Premium Background -->
+<div class="premium-bg"></div>
+<div class="orange-curve"></div>
+<div class="deco-circle"></div>
+<div class="deco-circle-left"></div>
 
-    Are you sure you want to delete:
-
-    <strong>
-        {{ contact.name }}
-    </strong> ?
-
-</p>
-
-<form method="POST">
-
-    {% csrf_token %}
-
-    <button type="submit" class="btn">
-        Confirm Delete
-    </button>
-
-</form>
+<div class="delete-container">
+    
+   
+    
+    <!-- Main Card -->
+    <div class="delete-card">
+        <!-- Header -->
+        <div class="card-header-warning">
+            <h2>
+                <i class="fa-regular fa-trash-can"></i>
+                Delete Contact
+            </h2>
+            <p>
+                This action cannot be undone
+            </p>
+        </div>
+        
+        <!-- Body -->
+        <div class="card-body">
+            
+            <!-- Warning Icon -->
+            <div class="warning-icon">
+                <i class="fa-regular fa-circle-question"></i>
+            </div>
+            
+            <!-- Warning Message -->
+            <div class="warning-message">
+                <h3>Are you absolutely sure?</h3>
+                <p>You are about to permanently delete this contact message.
+            </div>
+            
+            <!-- Contact Information Card -->
+            <div class="contact-info-card">
+                <div class="info-row-delete">
+                    <div class="info-label-delete">
+                        <i class="fa-regular fa-user"></i> Name
+                    </div>
+                    <div class="info-value-delete">{{ contact.name|default:"—" }}</div>
+                </div>
+               
+                
+                <div class="info-row-delete">
+                    <div class="info-label-delete">
+                        <i class="fa-regular fa-heading"></i> Subject
+                    </div>
+                    <div class="info-value-delete">{{ contact.subject|default:"—"|truncatechars:50 }}</div>
+                </div>
+               
+            </div>
+            
+            <!-- Action Buttons -->
+            <form method="POST">
+                {% csrf_token %}
+                <div class="action-buttons">
+                    <button type="submit" class="btn-delete">
+                        <i class="fa-regular fa-trash-can"></i> Yes, Delete Contact
+                    </button>
+                    <a href="{% url 'contact_list' %}" class="btn-cancel">
+                        <i class="fa-regular fa-circle-xmark"></i> No, Go Back
+                    </a>
+                </div>
+            </form>
+            
+            <!-- Note -->
+            <div class="note-text">
+                <i class="fa-regular fa-lightbulb"></i>
+                Tip: You can change the status to "Read" instead of deleting
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock %}
