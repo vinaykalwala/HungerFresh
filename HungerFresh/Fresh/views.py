@@ -247,7 +247,6 @@ def contact_delete(request, pk):
         {'contact': contact}
     )
 
-@login_required
 def service_list(request):
 
     services = Service.objects.all()
@@ -297,7 +296,7 @@ def service_create(request):
 # SERVICE DETAIL
 # =========================
 
-@login_required
+
 def service_detail(request, pk):
 
     service = get_object_or_404(
