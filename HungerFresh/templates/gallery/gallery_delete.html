@@ -2,86 +2,407 @@
 
 {% block content %}
 
-<div class="delete-container">
+<div class="delete-wrapper">
 
-    <div class="delete-box">
+    <div class="delete-card">
 
-        <h2>
-            Delete Gallery
-        </h2>
+        <div class="image-side">
 
-        <p>
+            <img src="{{ gallery.image.url }}" class="gallery-image">
 
-            Are you sure you want to delete
+            <div class="overlay"></div>
 
-            <strong>
-                {{ gallery.title }}
-            </strong> ?
+            <div class="overlay-content">
 
-        </p>
+                <span class="warning-tag">
+                    DELETE CONFIRMATION
+                </span>
 
-        <img
-            src="{{ gallery.image.url }}"
-            width="250"
-            style="margin:20px 0;"
-        >
+                <h1>
+                    Remove Gallery
+                </h1>
 
-        <form method="POST">
+                <p>
+                    This action cannot be undone once deleted.
+                </p>
 
-            {% csrf_token %}
+            </div>
 
-            <button type="submit" class="delete-btn">
-                Confirm Delete
-            </button>
+        </div>
 
-            <a
-                href="{% url 'gallery_list' %}"
-                class="cancel-btn"
-            >
-                Cancel
-            </a>
+        <div class="content-side">
 
-        </form>
+            <div class="delete-icon">
+
+                🗑️
+
+            </div>
+
+            <span class="mini-title">
+                GALLERY MANAGEMENT
+            </span>
+
+            <h2>
+                Delete Gallery
+            </h2>
+
+            <p class="description">
+
+                Are you sure you want to permanently delete
+
+                <strong>
+                    {{ gallery.title }}
+                </strong>
+
+                from your gallery collection?
+
+            </p>
+
+            <div class="gallery-preview-box">
+
+                <img src="{{ gallery.image.url }}" class="small-preview">
+
+                <div>
+
+                    <h3>
+                        {{ gallery.title }}
+                    </h3>
+
+                    <span>
+                        Gallery Item
+                    </span>
+
+                </div>
+
+            </div>
+
+            <form method="POST" class="action-buttons">
+
+                {% csrf_token %}
+
+                <button type="submit" class="delete-btn">
+
+                    Confirm Delete
+
+                </button>
+
+                <a href="{% url 'gallery_list' %}" class="cancel-btn">
+                    Cancel
+
+                </a>
+
+            </form>
+
+        </div>
 
     </div>
 
 </div>
 
 <style>
-
-    .delete-container{
-        display:flex;
-        justify-content:center;
-        padding:50px 0;
+    :root {
+        --primary: #ff6b2c;
+        --primary-dark: #e85d1f;
+        --primary-light: #fff1e6;
+        --secondary: #2D2F36;
+        --text-dark: #111827;
+        --text-gray: #6C727F;
+        --border-light: rgba(0, 0, 0, 0.06);
+        --shadow-sm: 0 15px 30px rgba(0, 0, 0, 0.08);
+        --shadow-md: 0 30px 50px rgba(0, 0, 0, 0.12);
+        --transition: all 0.35s ease;
     }
 
-    .delete-box{
-        width:500px;
-        background:white;
-        padding:40px;
-        border-radius:10px;
-        text-align:center;
-        box-shadow:0px 0px 10px rgba(0,0,0,0.1);
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
     }
 
-    .delete-btn{
-        padding:12px 20px;
-        background:red;
-        color:white;
-        border:none;
-        border-radius:5px;
-        cursor:pointer;
-        margin-right:10px;
+    .delete-wrapper{
+
+    width:100%;
+
+    padding:130px 20px 90px;
+
+    display:flex;
+
+    justify-content:center;
+
+    position:relative;
+
+    overflow:hidden;
+
+    background:
+
+    radial-gradient(
+        circle at top left,
+        rgba(255,115,0,0.18),
+        transparent 28%
+    ),
+
+    radial-gradient(
+        circle at bottom right,
+        rgba(255,140,0,0.16),
+        transparent 30%
+    ),
+
+    linear-gradient(
+        135deg,
+        #fffaf5,
+        #fff4eb,
+        #fffdfb
+    );
+}
+
+    .delete-card{
+
+    width:100%;
+
+    max-width:1200px;
+
+    background:rgba(255,255,255,0.92);
+
+    backdrop-filter:blur(16px);
+
+    border-radius:36px;
+
+    overflow:hidden;
+
+    display:grid;
+
+    grid-template-columns:45% 55%;
+
+    box-shadow:
+    0 25px 60px rgba(0,0,0,0.10),
+
+    0 0 0 1px rgba(255,255,255,0.4);
+
+    border:1px solid rgba(255,255,255,0.5);
+
+    position:relative;
+}
+
+    .image-side {
+        position: relative;
+        min-height: 750px;
+        overflow: hidden;
     }
 
-    .cancel-btn{
-        padding:12px 20px;
-        background:#333;
-        color:white;
-        text-decoration:none;
-        border-radius:5px;
+    .gallery-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: 0.7s ease;
     }
 
+    .delete-card:hover .gallery-image {
+        transform: scale(1.05);
+    }
+
+    .overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top,
+                rgba(0, 0, 0, 0.88),
+                rgba(0, 0, 0, 0.25),
+                transparent);
+    }
+
+    .overlay-content {
+        position: absolute;
+        left: 40px;
+        bottom: 40px;
+        z-index: 2;
+        max-width: 450px;
+    }
+
+    .warning-tag {
+        display: inline-block;
+        padding: 12px 22px;
+        border-radius: 50px;
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(10px);
+        color: white;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        margin-bottom: 22px;
+    }
+
+    .overlay-content h1 {
+        color: white;
+        font-size: 54px;
+        line-height: 1.1;
+        margin-bottom: 15px;
+        font-weight: 800;
+    }
+
+    .overlay-content p {
+        color: #f3f4f6;
+        line-height: 1.8;
+        font-size: 15px;
+    }
+
+    .content-side {
+        padding: 60px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .delete-icon {
+        width: 80px;
+        height: 80px;
+        border-radius: 24px;
+        background: var(--primary-light);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 35px;
+        margin-bottom: 30px;
+    }
+
+    .mini-title {
+        color: var(--primary);
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 2px;
+    }
+
+    .content-side h2 {
+        font-size: 42px;
+        color: var(--text-dark);
+        margin-top: 12px;
+        margin-bottom: 20px;
+        font-weight: 800;
+    }
+
+    .description {
+        color: var(--text-gray);
+        line-height: 1.9;
+        font-size: 15px;
+        margin-bottom: 35px;
+    }
+
+    .description strong {
+        color: var(--text-dark);
+    }
+
+    .gallery-preview-box {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        padding: 18px;
+        border: 1px solid #ececec;
+        border-radius: 22px;
+        margin-bottom: 40px;
+        transition: var(--transition);
+    }
+
+    .gallery-preview-box:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-sm);
+    }
+
+    .small-preview {
+        width: 90px;
+        height: 90px;
+        object-fit: cover;
+        border-radius: 18px;
+    }
+
+    .gallery-preview-box h3 {
+        color: var(--text-dark);
+        margin-bottom: 8px;
+        font-size: 20px;
+    }
+
+    .gallery-preview-box span {
+        color: var(--text-gray);
+        font-size: 14px;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 18px;
+        flex-wrap: wrap;
+    }
+
+    .delete-btn,
+    .cancel-btn {
+        flex: 1;
+        padding: 18px;
+        border-radius: 18px;
+        border: none;
+        text-align: center;
+        text-decoration: none;
+        font-size: 15px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+
+    .delete-btn {
+        background: linear-gradient(135deg,
+                #ff4d4d,
+                #e03131);
+        color: white;
+        box-shadow: 0 15px 30px rgba(255, 77, 77, 0.2);
+    }
+
+    .delete-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 22px 40px rgba(255, 77, 77, 0.3);
+    }
+
+    .cancel-btn {
+        background: #f5f5f5;
+        color: var(--text-dark);
+    }
+
+    .cancel-btn:hover {
+        background: #ebebeb;
+        transform: translateY(-3px);
+    }
+
+    @media(max-width:1100px) {
+
+        .delete-card {
+            grid-template-columns: 1fr;
+        }
+
+        .image-side {
+            min-height: 420px;
+        }
+
+    }
+
+    @media(max-width:768px) {
+
+        .content-side {
+            padding: 35px 24px;
+        }
+
+        .overlay-content {
+            left: 25px;
+            right: 25px;
+            bottom: 30px;
+        }
+
+        .overlay-content h1 {
+            font-size: 40px;
+        }
+
+        .content-side h2 {
+            font-size: 32px;
+        }
+
+        .action-buttons {
+            flex-direction: column;
+        }
+
+    }
 </style>
 
 {% endblock %}

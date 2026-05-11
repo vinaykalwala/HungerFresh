@@ -1,8 +1,1015 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Refund Policy{% endblock %}
 
 {% block content %}
-<h1>Refund Policy</h1>
-<p>Your refund policy details go here.</p>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>HungerFresh – Premium Refund & Cancellation Policy</title>
+<!-- Google Fonts & Font Awesome 6 -->
+<link
+    href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&display=swap"
+    rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    :root {
+        --primary: #ff6b2c;
+        --primary-dark: #e85d1f;
+        --primary-light: #fff1e6;
+        --primary-glow: rgba(255, 107, 44, 0.25);
+        --secondary: #2D2F36;
+        --dark-bg: #121317;
+        --text-dark: #111827;
+        --text-gray: #6C727F;
+        --border-light: rgba(0, 0, 0, 0.05);
+        --shadow-sm: 0 20px 35px -12px rgba(0, 0, 0, 0.08);
+        --shadow-md: 0 30px 45px -18px rgba(0, 0, 0, 0.12);
+        --transition: all 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+    }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        background: #fef9f5;
+        color: var(--text-dark);
+        line-height: 1.5;
+    }
+
+    .policy-wrapper {
+        max-width: 1440px;
+        margin: 0 auto;
+        padding: 2rem 2rem 4rem;
+    }
+
+    /* ========= IMAGE & ASSET DECORATIONS ========= */
+    .hero-with-bg {
+        position: relative;
+        border-radius: 56px;
+        margin-top: 55px;
+        background:
+            linear-gradient(135deg, #fff7f1 0%, #ffffff 45%, #fff1e8 100%);
+
+        background-image:
+            radial-gradient(circle at top right, rgba(255, 107, 44, 0.08), transparent 35%);
+        padding: 4rem 3.5rem;
+        margin-bottom: 3rem;
+        overflow: hidden;
+        box-shadow: var(--shadow-md);
+        border: 1px solid rgba(255, 107, 44, 0.15);
+        min-height: 480px;
+        display: flex;
+        align-items: center;
+    }
+
+    .hero-bg-image {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        border-radius: 56px;
+        filter: saturate(105%);
+    }
+
+    .hero-bg-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: right center;
+        opacity: 1;
+    }
+
+    .hero-bg-image::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to right,
+                rgba(255, 255, 255, 0.97) 5%,
+                rgba(255, 255, 255, 0.92) 32%,
+                rgba(255, 255, 255, 0.58) 52%,
+                rgba(255, 255, 255, 0.10) 100%);
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 2;
+        width: 52%;
+    }
+
+    .hero-badge {
+        display: inline-flex;
+        background: var(--primary-light);
+        padding: 0.45rem 1.2rem;
+        border-radius: 60px;
+        font-weight: 700;
+        font-size: 0.85rem;
+        color: var(--primary-dark);
+        gap: 8px;
+        margin-bottom: 1.2rem;
+    }
+
+    .hero-content h1 {
+        font-size: 4.2rem;
+        line-height: 1.05;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        background: linear-gradient(130deg, #1E1F2C, #2D2F36);
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: transparent;
+        margin-bottom: 1rem;
+    }
+
+    .hero-desc {
+        font-size: 1.18rem;
+        color: #5f6675;
+        max-width: 540px;
+        line-height: 1.7;
+    }
+
+    .stats-row {
+        display: flex;
+        gap: 2rem;
+        margin-top: 2rem;
+        flex-wrap: wrap;
+    }
+
+    .stat {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .stat i {
+        font-size: 2rem;
+        color: var(--primary);
+        background: white;
+        padding: 10px;
+        border-radius: 32px;
+        box-shadow: 0 8px 14px -6px rgba(0, 0, 0, 0.05);
+    }
+
+    /* card designs */
+    .premium-card {
+        background: rgba(255, 255, 255, 0.78);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+        border-radius: 44px;
+        margin-bottom: 2.5rem;
+        box-shadow: var(--shadow-sm);
+        transition: var(--transition);
+        overflow: hidden;
+        border: 1px solid #fff0e6;
+    }
+
+    .premium-card:hover {
+        transform: translateY(-8px) scale(1.01);
+        box-shadow: var(--shadow-md);
+    }
+
+    .card-header-img {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        padding: 1.6rem 2rem;
+        border-bottom: 2px solid #fff0e6;
+        background: #ffffff;
+    }
+
+    .title-icon {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .title-icon i {
+        font-size: 2rem;
+        color: var(--primary);
+        background: var(--primary-light);
+        padding: 12px;
+        border-radius: 28px;
+        box-shadow: 0 0 25px rgba(255, 107, 44, 0.18);
+    }
+
+    .title-icon h2 {
+        font-size: 1.7rem;
+        font-weight: 700;
+        letter-spacing: -0.3px;
+    }
+
+    .card-badge-img {
+        background: #f7f3ef;
+        border-radius: 60px;
+        padding: 0.3rem 1rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .card-badge-img img {
+        width: 22px;
+        height: 22px;
+        object-fit: contain;
+    }
+
+    /* responsive tables with image hints */
+    .table-responsive {
+        overflow-x: auto;
+        padding: 0 1rem 0.5rem 1rem;
+    }
+
+    .elegant-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .elegant-table th {
+        text-align: left;
+        padding: 1.2rem 1rem;
+        background-color: #fdfaf7;
+        font-weight: 700;
+        color: var(--secondary);
+        font-size: 0.9rem;
+    }
+
+    .elegant-table td {
+        padding: 1rem;
+        border-bottom: 1px solid #f0eae4;
+        vertical-align: middle;
+    }
+
+    .refund-badge {
+        background: #e0f2e3;
+        color: #1f6e2f;
+        border-radius: 40px;
+        padding: 5px 12px;
+        font-weight: 600;
+        font-size: 0.8rem;
+        display: inline-block;
+    }
+
+    .charge-badge {
+        background: #ffede8;
+        color: #c2410c;
+        border-radius: 40px;
+        padding: 5px 12px;
+        font-weight: 600;
+        font-size: 0.8rem;
+    }
+
+    .warning-badge {
+        background: #fff0db;
+        color: #b45309;
+    }
+
+    /* images inside grid */
+    .scenario-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+        gap: 1.2rem;
+        padding: 1.5rem 2rem;
+    }
+
+    .scenario-card {
+        background: #ffffff;
+        border-radius: 28px;
+        padding: 1rem 1.2rem;
+        display: flex;
+        gap: 16px;
+        align-items: center;
+        box-shadow: 0 6px 12px -8px rgba(0, 0, 0, 0.05);
+        transition: 0.2s;
+        border: 1px solid #fff0e6;
+        cursor: pointer;
+    }
+
+    .scenario-card:hover {
+        transform: translateY(-5px);
+        border-color: var(--primary);
+    }
+
+    .scenario-card img {
+        width: 48px;
+        height: 48px;
+        object-fit: contain;
+    }
+
+    .scenario-text strong {
+        font-size: 1rem;
+        display: block;
+    }
+
+    .process-steps {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 1.5rem 2rem;
+        background: linear-gradient(115deg, #fffaf5 0%, #ffffff 100%);
+        border-radius: 40px;
+        margin: 0 1.5rem 1.5rem 1.5rem;
+    }
+
+    .step-item {
+        flex: 1;
+        min-width: 150px;
+        display: flex;
+        gap: 16px;
+        align-items: center;
+        background: white;
+        border-radius: 32px;
+        padding: 0.8rem 1rem;
+        box-shadow: 0 10px 20px -12px rgba(0, 0, 0, 0.05);
+    }
+
+    .step-img {
+        width: 46px;
+        height: 46px;
+        background: var(--primary-light);
+        border-radius: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .step-img img {
+        width: 26px;
+        height: 26px;
+    }
+
+    .footnote-premium {
+        background: #2D2F36;
+        border-radius: 48px;
+        padding: 2rem 2rem;
+        color: white;
+        margin-top: 2rem;
+        background-image: radial-gradient(circle at 100% 0%, rgba(255, 107, 44, 0.15) 0%, transparent 70%);
+    }
+
+    .support-strip {
+        background: #1f2430;
+        border-radius: 32px;
+        padding: 1.4rem 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+        margin-top: 2rem;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+    }
+
+    .support-strip-left {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+    }
+
+    .support-mini-icon {
+        width: 58px;
+        height: 58px;
+        border-radius: 18px;
+        background: linear-gradient(135deg, #ff6b2c, #ff914d);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.4rem;
+        flex-shrink: 0;
+    }
+
+    .support-strip h3 {
+        color: white;
+        font-size: 1.3rem;
+        margin-bottom: 4px;
+        font-weight: 700;
+    }
+
+    .support-strip p {
+        color: rgba(255, 255, 255, 0.68);
+        margin: 0;
+        font-size: 0.95rem;
+    }
+
+    .support-strip-btn {
+        background: white;
+        color: #1f2430;
+        text-decoration: none;
+        padding: 14px 24px;
+        border-radius: 50px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        transition: 0.3s;
+        white-space: nowrap;
+    }
+
+    .support-strip-btn:hover {
+        transform: translateY(-3px);
+    }
+
+    @media (max-width: 700px) {
+        .policy-wrapper {
+            padding: 1rem;
+        }
+
+        .hero-with-bg {
+            padding: 1.5rem;
+        }
+
+        .hero-content h1 {
+            font-size: 2.2rem;
+        }
+    }
+
+    .blur-circle {
+        position: fixed;
+        border-radius: 50%;
+        filter: blur(100px);
+        z-index: -1;
+    }
+
+    .blur1 {
+        width: 300px;
+        height: 300px;
+        background: #ff6b2c55;
+        top: -100px;
+        left: -100px;
+    }
+
+    .blur2 {
+        width: 350px;
+        height: 350px;
+        background: #ffcf9950;
+        bottom: -120px;
+        right: -120px;
+    }
+
+    .image-icon-small {
+        width: 20px;
+        vertical-align: middle;
+        margin-right: 6px;
+    }
+
+    ::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: linear-gradient(#ff6b2c, #ff914d);
+        border-radius: 20px;
+    }
+
+    .support-btn {
+        background: linear-gradient(135deg, #ff6b2c, #ff914d);
+        color: white;
+        padding: 14px 28px;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: 700;
+        box-shadow: 0 12px 25px rgba(255, 107, 44, 0.25);
+        transition: 0.3s;
+        display: inline-block;
+    }
+
+    .support-btn:hover {
+        transform: translateY(-3px);
+    }
+
+    /* =========================
+   MOBILE RESPONSIVE FIX
+========================= */
+
+    @media screen and (max-width:768px) {
+
+        .policy-wrapper {
+            padding: 14px;
+        }
+
+        /* HERO */
+
+        .hero-with-bg {
+
+            padding: 28px 20px;
+
+            border-radius: 32px;
+
+            min-height: auto;
+
+            margin-top: 25px;
+
+            overflow: hidden;
+        }
+
+        .hero-bg-image {
+
+            opacity: 0.25;
+        }
+
+        .hero-bg-image::after {
+
+            background:
+                linear-gradient(to bottom,
+                    rgba(255, 255, 255, 0.95),
+                    rgba(255, 255, 255, 0.88));
+        }
+
+        .hero-content {
+
+            width: 100%;
+        }
+
+        .hero-content h1 {
+
+            font-size: 2.8rem;
+
+            line-height: 1.08;
+
+            margin-bottom: 14px;
+        }
+
+        .hero-desc {
+
+            font-size: 15px;
+
+            line-height: 1.7;
+        }
+
+        .hero-badge {
+
+            font-size: 12px;
+
+            padding: 10px 16px;
+        }
+
+        /* STATS */
+
+        .stats-row {
+
+            gap: 14px;
+
+            margin-top: 24px;
+
+            flex-direction: column;
+        }
+
+        .stat {
+
+            width: 100%;
+
+            background: white;
+
+            padding: 14px;
+
+            border-radius: 20px;
+
+            box-shadow:
+                0 10px 25px rgba(0, 0, 0, 0.05);
+        }
+
+        .stat i {
+
+            font-size: 18px;
+
+            width: 48px;
+            height: 48px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* CARDS */
+
+        .premium-card {
+
+            border-radius: 28px;
+
+            margin-bottom: 22px;
+        }
+
+        .card-header-img {
+
+            padding: 18px;
+
+            gap: 15px;
+
+            align-items: flex-start;
+        }
+
+        .title-icon {
+
+            gap: 12px;
+        }
+
+        .title-icon h2 {
+
+            font-size: 1.2rem;
+
+            line-height: 1.4;
+        }
+
+        .title-icon i {
+
+            font-size: 1.2rem;
+
+            padding: 12px;
+
+            border-radius: 18px;
+        }
+
+        .card-badge-img {
+
+            font-size: 11px;
+
+            padding: 7px 12px;
+        }
+
+        /* TABLE */
+
+        .table-responsive {
+
+            overflow-x: auto;
+
+            padding-bottom: 10px;
+        }
+
+        .elegant-table {
+
+            min-width: 650px;
+        }
+
+        .elegant-table th,
+        .elegant-table td {
+
+            padding: 14px;
+
+            font-size: 13px;
+        }
+
+        /* SCENARIO */
+
+        .scenario-grid {
+
+            grid-template-columns: 1fr;
+
+            padding: 18px;
+        }
+
+        .scenario-card {
+
+            border-radius: 22px;
+        }
+
+        /* PROCESS */
+
+        .process-steps {
+
+            flex-direction: column;
+
+            padding: 18px;
+
+            margin: 18px;
+        }
+
+        .step-item {
+
+            width: 100%;
+        }
+
+        /* SUPPORT STRIP */
+
+        .support-strip {
+
+            flex-direction: column;
+
+            align-items: flex-start;
+
+            padding: 24px 20px;
+
+            border-radius: 28px;
+        }
+
+        .support-strip-left {
+
+            width: 100%;
+        }
+
+        .support-strip h3 {
+
+            font-size: 1.15rem;
+        }
+
+        .support-strip p {
+
+            font-size: 14px;
+
+            line-height: 1.6;
+        }
+
+        .support-strip-btn {
+
+            width: 100%;
+
+            justify-content: center;
+
+            margin-top: 8px;
+        }
+
+    }
+
+
+    /* EXTRA SMALL DEVICES */
+
+    @media screen and (max-width:480px) {
+
+        .hero-content h1 {
+            font-size: 2.2rem;
+        }
+
+        .hero-desc {
+            font-size: 14px;
+        }
+
+        .title-icon h2 {
+            font-size: 1rem;
+        }
+
+        .support-strip {
+            padding: 20px 16px;
+        }
+
+    }
+</style>
+
+<div class="blur-circle blur1"></div>
+<div class="blur-circle blur2"></div>
+<div class="policy-wrapper">
+
+    <!-- Hero section with image assets (food illustration) -->
+    <div class="hero-with-bg">
+        <div class="hero-bg-image">
+            <img src="{% static 'images/policy.png' %}" alt="Food Image">
+        </div>
+        <div class="hero-content">
+            <div class="hero-badge"><i class="fas fa-umbrella"></i> Buyer protection guaranteed</div>
+            <h1>Refund & <span style="color: var(--primary);">Cancellation</span> Policy</h1>
+            <p class="hero-desc">Fair, fast, and transparent resolutions for every order — from kitchen to doorstep.
+            </p>
+            <div class="stats-row">
+                <div class="stat"><i class="fas fa-tachometer-alt"></i>
+                    <div><strong>30-min</strong><br>report window</div>
+                </div>
+                <div class="stat"><i class="fas fa-camera-retro"></i>
+                    <div><strong>Photo evidence</strong><br>quick approval</div>
+                </div>
+                <div class="stat"><i class="fas fa-clock"></i>
+                    <div><strong>5-7 days</strong><br>bank refunds</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 1: Cancellation pre-delivery with icon images -->
+    <div class="premium-card">
+        <div class="card-header-img">
+            <div class="title-icon">
+                <i class="fas fa-ban"></i>
+                <h2>Cancellation <span style="font-weight: 500;">(Pre‑Delivery)</span></h2>
+            </div>
+            <div class="card-badge-img">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23ff6b2c' viewBox='0 0 24 24'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15h-2v-2h2v2zm0-4h-2V7h2v6z'/%3E%3C/svg%3E"
+                    alt="warning">
+                <span>real-time status</span>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="elegant-table">
+                <thead>
+                    <tr>
+                        <th>Order Status</th>
+                        <th>Refund Eligibility</th>
+                        <th>Cancellation Fee</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><i class="fas fa-stopwatch" style="color:var(--primary);"></i> Within 1 minute</td>
+                        <td><span class="refund-badge">100% refund</span></td>
+                        <td>None</td>
+                    </tr>
+                    <tr>
+                        <td><i class="fas fa-hourglass-half"></i> After 1min & before preparation start</td>
+                        <td><span class="refund-badge">Full refund</span></td>
+                        <td>None</td>
+                    </tr>
+                    <tr>
+                        <td><i class="fas fa-fire"></i> Merchant started prep / DP assigned</td>
+                        <td><span class="warning-badge">No refund guaranteed</span></td>
+                        <td><span class="charge-badge">100% may be charged</span></td>
+                    </tr>
+                    <tr>
+                        <td><i class="fas fa-truck-fast"></i> Out for delivery / DP at pickup</td>
+                        <td><span class="charge-badge">No refund</span></td>
+                        <td><span class="charge-badge">100% order value</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div
+            style="padding: 0.5rem 2rem 1.5rem 2rem; font-size:0.85rem; color:var(--text-gray); border-top:1px solid #f0eae4;">
+            <i class="fas fa-info-circle"></i> Cancellation before preparation = 0 penalty. After start, fees apply.
+        </div>
+    </div>
+
+    <!-- Section 2: Post-Delivery Refund + image evidence icons -->
+    <div class="premium-card">
+        <div class="card-header-img">
+            <div class="title-icon">
+                <i class="fas fa-hand-holding-usd"></i>
+                <h2>Post‑Delivery Refund Eligibility</h2>
+            </div>
+            <div class="card-badge-img">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23ff6b2c' viewBox='0 0 24 24'%3E%3Cpath d='M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 2h6v2h-6V6zm0 4h6v2h-6v-2zm-6 0h4v2H6v-2zm0 4h4v2H6v-2z'/%3E%3C/svg%3E"
+                    alt="receipt">
+                <span>photo required</span>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="elegant-table">
+                <thead>
+                    <tr>
+                        <th>Issue</th>
+                        <th>Evidence</th>
+                        <th>Refund Outcome</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><img class="image-icon-small"
+                                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23ff6b2c' viewBox='0 0 24 24'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15h-2v-2h2v2zm0-4h-2V7h2v6z'/%3E%3C/svg%3E">
+                            Incorrect item</td>
+                        <td>Photo of wrong item + receipt comparison</td>
+                        <td><span class="refund-badge">100% refund value</span></td>
+                    </tr>
+                    <tr>
+                        <td><i class="fas fa-box-open"></i> Missing item(s)</td>
+                        <td>Photo of delivery content vs receipt</td>
+                        <td><span class="refund-badge">100% missing value</span></td>
+                    </tr>
+                    <tr>
+                        <td><i class="fas fa-wine-bottle"></i> Damaged/Spilled</td>
+                        <td>Clear photo showing inedible/unusable</td>
+                        <td><span class="refund-badge">Full or partial refund</span></td>
+                    </tr>
+                    <tr>
+                        <td><i class="fas fa-skull-crossbones"></i> Quality issues</td>
+                        <td>Photo + retain item for inspection</td>
+                        <td><span class="refund-badge">100% affected items</span></td>
+                    </tr>
+                    <tr>
+                        <td><i class="fas fa-map-marked-alt"></i> Non-delivery (Prepaid)</td>
+                        <td>Partner/Merchant confirmation</td>
+                        <td><span class="refund-badge">100% entire order</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div style="background:#fdf5eb; border-radius: 30px; margin: 0 1.8rem 1.6rem 1.8rem; padding: 0.8rem 1.2rem;">
+            <i class="fas fa-bell"></i> <strong>30 minutes after delivery</strong> – report immediately via in-app
+            chat! Late reports may be declined.
+        </div>
+    </div>
+
+    <!-- Section 3: Non-Refundable Scenarios with custom image icons -->
+    <div class="premium-card">
+        <div class="card-header-img">
+            <div class="title-icon">
+                <i class="fas fa-times-octagon"></i>
+                <h2>Non‑Refundable Situations</h2>
+            </div>
+            <div class="card-badge-img">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23e85d1f' viewBox='0 0 24 24'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z'/%3E%3C/svg%3E"
+                    alt="alert">
+                <span>exceptions</span>
+            </div>
+        </div>
+        <div class="scenario-grid">
+            <div class="scenario-card"><img
+                    src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ff6b2c'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15h-2v-2h2v2zm0-4h-2V7h2v6z'/%3E%3C/svg%3E"
+                    alt="change">
+                <div class="scenario-text"><strong>Change of mind</strong><span> Taste, texture dislike if order
+                        correct</span></div>
+            </div>
+            <div class="scenario-card"><img
+                    src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23ff6b2c' viewBox='0 0 24 24'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM7.5 9.5C6.67 9.5 6 8.83 6 8s.67-1.5 1.5-1.5S9 7.17 9 8s-.67 1.5-1.5 1.5zM16 16h-2v-2h-2v-2h4v4z'/%3E%3C/svg%3E"
+                    alt="error">
+                <div class="scenario-text"><strong>Customer error</strong><span> Wrong address, selection or
+                        instructions</span></div>
+            </div>
+            <div class="scenario-card"><img
+                    src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23ff6b2c' viewBox='0 0 24 24'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15h-2v-2h2v2zm0-4h-2V7h2v6z'/%3E%3C/svg%3E"
+                    alt="refused">
+                <div class="scenario-text"><strong>Refused delivery (without cause)</strong><span> Rejecting correct
+                        order at arrival</span></div>
+            </div>
+            <div class="scenario-card"><img
+                    src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23ff6b2c' viewBox='0 0 24 24'%3E%3Cpath d='M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 2h6v2h-6V6zm0 4h6v2h-6v-2z'/%3E%3C/svg%3E"
+                    alt="delay">
+                <div class="scenario-text"><strong>Minor delays</strong><span> Traffic/weather/high demand
+                        (reasonable)</span></div>
+            </div>
+            <div class="scenario-card"><img
+                    src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23ff6b2c' viewBox='0 0 24 24'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15h-2v-2h2v2zm0-4h-2V7h2v6z'/%3E%3C/svg%3E"
+                    alt="late">
+                <div class="scenario-text"><strong>Reported too late</strong><span> >30 min after delivery
+                        marked</span></div>
+            </div>
+            <div class="scenario-card"><img
+                    src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23ff6b2c' viewBox='0 0 24 24'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15h-2v-2h2v2zm0-4h-2V7h2v6z'/%3E%3C/svg%3E"
+                    alt="consumed">
+                <div class="scenario-text"><strong>Consumption / opened groceries</strong><span> After significant
+                        use</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 4: Refund Process with images timeline -->
+    <div class="premium-card">
+        <div class="card-header-img">
+            <div class="title-icon">
+                <i class="fas fa-sync-alt"></i>
+                <h2>Refund Process & Timeline</h2>
+            </div>
+            <div class="card-badge-img">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23ff6b2c' viewBox='0 0 24 24'%3E%3Cpath d='M12 2v4l4-4-4-4v4C7.04 4 4 7.04 4 12c0 2.03.78 3.87 2.06 5.25l1.42-1.42C6.21 14.74 5.5 13.42 5.5 12c0-3.59 2.91-6.5 6.5-6.5zM18.5 12c0 3.59-2.91 6.5-6.5 6.5v-4l-4 4 4 4v-4c4.96 0 9-4.04 9-9 0-2.03-.78-3.87-2.06-5.25l-1.42 1.42c.76.63 1.48 1.78 1.48 3.33z'/%3E%3C/svg%3E"
+                    alt="timeline">
+                <span>fast approval</span>
+            </div>
+        </div>
+        <div class="process-steps">
+            <div class="step-item">
+                <div class="step-img"><img
+                        src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23ff6b2c' viewBox='0 0 24 24'%3E%3Cpath d='M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 2h6v2h-6V6zm0 4h6v2h-6v-2z'/%3E%3C/svg%3E"
+                        alt="support"></div>
+                <div><strong>Contact support</strong><br>In-app chat / phone</div>
+            </div>
+            <div class="step-item">
+                <div class="step-img"><img
+                        src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23ff6b2c' viewBox='0 0 24 24'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 13.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z'/%3E%3C/svg%3E"
+                        alt="verify"></div>
+                <div><strong>Verification</strong><br>Evidence & final decision</div>
+            </div>
+            <div class="step-item">
+                <div class="step-img"><img
+                        src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23ff6b2c' viewBox='0 0 24 24'%3E%3Cpath d='M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z'/%3E%3C/svg%3E"
+                        alt="check"></div>
+                <div><strong>Initiation</strong><br>Immediate approval</div>
+            </div>
+        </div>
+        <div style="padding: 0.2rem 2rem 2rem 2rem;">
+            <div
+                style="display: flex; flex-wrap: wrap; gap: 18px; background: #fef9f5; border-radius: 32px; padding: 1rem 1.5rem;">
+                <div><i class="fas fa-credit-card"></i> <strong>Original source:</strong> 5-7 business days</div>
+                <div><i class="fas fa-coins"></i> <strong>HungerFresh Credit:</strong> <span class="refund-badge"
+                        style="background: #e9e0d8;">within 24 hours</span></div>
+                <div><i class="fas fa-rocket"></i> Credit option faster for next order</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer CTA with premium images -->
+    <div class="support-strip">
+
+        <div class="support-strip-left">
+            <div class="support-mini-icon">
+                <i class="fas fa-headset"></i>
+            </div>
+
+            <div>
+                <h3>Need help with your order?</h3>
+                <p>
+                    Quick refunds • 24/7 live support • Fast issue resolution
+                </p>
+            </div>
+        </div>
+
+        <a href="/contact/" class="support-strip-btn">
+            Contact Support
+            <i class="fas fa-arrow-right"></i>
+        </a>
+
+    </div>
+</div>
+</div>
+
 {% endblock %}

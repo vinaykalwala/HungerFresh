@@ -2,70 +2,485 @@
 
 {% block content %}
 
-<div class="form-container">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
-    <div class="form-box">
+<div class="gallery-page">
 
-        <h2>
-            Add Gallery Item
-        </h2>
+    <div class="gallery-container">
 
-        <form
-            method="POST"
-            enctype="multipart/form-data"
-        >
+        <!-- LEFT SIDE -->
 
-            {% csrf_token %}
+        <div class="left-side">
 
-            {{ form.as_p }}
+            <span class="top-badge">
+                <i class="fa-solid fa-burger"></i>
+                FOOD UPLOAD PANEL
+            </span>
 
-            <button type="submit" class="btn">
-                Create Gallery
-            </button>
+            <h1>
+                Taste The Best
+                <span>Moments</span>
+            </h1>
 
-        </form>
+            <div class="line"></div>
+
+            <p>
+                Upload premium food images and create
+                a modern food gallery experience with
+                stylish presentation and clean visuals.
+            </p>
+
+            <div class="features">
+
+                <div class="feature-box">
+
+                    <div class="feature-icon">
+                        <i class="fa-regular fa-image"></i>
+                    </div>
+
+                    <div>
+                        <h4>High Quality</h4>
+                        <span>Upload high resolution food images</span>
+                    </div>
+
+                </div>
+
+                <div class="feature-box">
+
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-tags"></i>
+                    </div>
+
+                    <div>
+                        <h4>Easy Categorize</h4>
+                        <span>Organize your gallery smoothly</span>
+                    </div>
+
+                </div>
+
+                <div class="feature-box">
+
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-star"></i>
+                    </div>
+
+                    <div>
+                        <h4>Showcase Best</h4>
+                        <span>Show your best food creations</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+        </div>
+
+        <!-- RIGHT SIDE -->
+
+        <div class="right-side">
+
+            <div class="form-top">
+
+                <div class="icon-box">
+                    <i class="fa-solid fa-utensils"></i>
+                </div>
+
+                <div>
+                    <h2>Add Food Gallery</h2>
+                    <p>Upload food collections beautifully</p>
+                </div>
+
+            </div>
+
+            <form method="POST" enctype="multipart/form-data">
+
+                {% csrf_token %}
+
+                {{ form.as_p }}
+
+                <button type="submit" class="submit-btn">
+
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+
+                    Upload Gallery
+
+                </button>
+
+            </form>
+
+        </div>
 
     </div>
 
 </div>
 
 <style>
-
-    .form-container{
-        display:flex;
-        justify-content:center;
-        padding:40px 0;
+    :root {
+        --primary: #ff6b2c;
+        --primary-dark: #e85d1f;
+        --primary-light: #fff1e6;
+        --primary-glow: rgba(255, 107, 44, 0.25);
+        --secondary: #2D2F36;
+        --dark-bg: #121317;
+        --text-dark: #111827;
+        --text-gray: #6C727F;
+        --border-light: rgba(0, 0, 0, 0.05);
+        --shadow-sm: 0 20px 35px -12px rgba(0, 0, 0, 0.08);
+        --shadow-md: 0 30px 45px -18px rgba(0, 0, 0, 0.12);
+        --transition: all 0.35s ease;
     }
 
-    .form-box{
-        width:600px;
-        background:white;
-        padding:40px;
-        border-radius:10px;
-        box-shadow:0px 0px 10px rgba(0,0,0,0.1);
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: #fff8f5;
+    }
+
+    .gallery-page {
+
+        min-height: 100vh;
+
+        padding: 120px 20px 40px;
+
+
+        display: flex;
+
+        justify-content: center;
+
+        align-items: center;
+    }
+
+    .gallery-container {
+        width: 100%;
+        max-width: 1500px;
+        background: white;
+        border-radius: 35px;
+        overflow: hidden;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        box-shadow: var(--shadow-md);
+    }
+
+    /* LEFT */
+
+    .left-side {
+        padding: 60px;
+        position: relative;
+        overflow: hidden;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        background:
+            linear-gradient(rgba(255, 243, 232, 0.78),
+                rgba(255, 233, 214, 0.78)),
+            url('https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=1200&auto=format&fit=crop');
+
+        background-size: cover;
+        background-position: center;
+    }
+
+
+    .top-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 22px;
+        border-radius: 40px;
+        background: var(--primary-light);
+        color: var(--primary);
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 35px;
+    }
+
+    .left-side h1 {
+        font-size: 72px;
+        line-height: 1.1;
+        color: var(--text-dark);
+        margin-bottom: 20px;
+        font-weight: 800;
+    }
+
+    .left-side h1 span {
+        color: var(--primary);
+        display: block;
+    }
+
+    .line {
+        width: 80px;
+        height: 5px;
+        background: var(--primary);
+        border-radius: 10px;
+        margin-bottom: 30px;
+    }
+
+    .left-side p {
+        color: var(--text-gray);
+        font-size: 17px;
+        line-height: 1.9;
+        max-width: 520px;
+        margin-bottom: 40px;
+    }
+
+    .features {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+        margin-bottom: 40px;
+    }
+
+    .feature-box {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+    }
+
+    .feature-icon {
+        min-width: 70px;
+        height: 70px;
+        border-radius: 20px;
+        background: var(--primary-light);
+        color: var(--primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+    }
+
+    .feature-box h4 {
+        color: var(--text-dark);
+        margin-bottom: 6px;
+        font-size: 22px;
+    }
+
+    .feature-box span {
+        color: var(--text-gray);
+        font-size: 15px;
+    }
+
+    .food-image {
+        width: 100%;
+        max-width: 520px;
+        height: 420px;
+        object-fit: cover;
+        border-radius: 30px;
+        margin-top: 40px;
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+
+        position: relative;
+        right: auto;
+        bottom: auto;
+    }
+
+    /* RIGHT */
+
+    .right-side {
+        padding: 60px;
+        background: white;
+    }
+
+    .form-top {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        margin-bottom: 40px;
+        padding-bottom: 25px;
+        border-bottom: 1px solid #f1f1f1;
+    }
+
+    .icon-box {
+        width: 85px;
+        height: 85px;
+        border-radius: 28px;
+        background: var(--primary-light);
+        color: var(--primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 32px;
+    }
+
+    .form-top h2 {
+        font-size: 42px;
+        color: var(--text-dark);
+        margin-bottom: 6px;
+    }
+
+    .form-top p {
+        color: var(--text-gray);
+        font-size: 16px;
+    }
+
+    form p {
+        margin-bottom: 24px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 10px;
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--secondary);
     }
 
     input,
     textarea,
-    select{
-        width:100%;
-        padding:12px;
-        margin-bottom:20px;
-        border:1px solid #ccc;
-        border-radius:5px;
-        box-sizing:border-box;
+    select {
+        width: 100%;
+        padding: 18px 20px;
+        border: 1px solid #ececec;
+        border-radius: 16px;
+        background: #fff;
+        outline: none;
+        font-size: 15px;
+        transition: var(--transition);
     }
 
-    .btn{
-        width:100%;
-        padding:14px;
-        background:black;
-        color:white;
-        border:none;
-        border-radius:5px;
-        cursor:pointer;
+    textarea {
+        min-height: 130px;
+        resize: none;
     }
 
+    input:focus,
+    textarea:focus,
+    select:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 5px var(--primary-glow);
+    }
+
+    input[type="file"] {
+        padding: 16px;
+        cursor: pointer;
+    }
+
+    .submit-btn {
+        width: 100%;
+        padding: 18px;
+        border: none;
+        border-radius: 18px;
+        background: linear-gradient(135deg,
+                var(--primary),
+                var(--primary-dark));
+        color: white;
+        font-size: 17px;
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 12px;
+        transition: var(--transition);
+        box-shadow: 0 20px 35px rgba(255, 107, 44, 0.25);
+    }
+
+    .submit-btn:hover {
+        transform: translateY(-4px);
+    }
+
+    @media(max-width:1200px) {
+
+        .gallery-container {
+            grid-template-columns: 1fr;
+        }
+
+        .food-image {
+            position: relative;
+            right: auto;
+            bottom: auto;
+            width: 100%;
+            max-width: 450px;
+            margin-top: 30px;
+        }
+
+    }
+
+    @media(max-width:768px) {
+
+        .left-side,
+        .right-side {
+            padding: 35px 24px;
+        }
+
+        .left-side h1 {
+            font-size: 48px;
+        }
+
+        .form-top {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .form-top h2 {
+            font-size: 34px;
+        }
+
+    }
+
+    .left-side>* {
+
+        position: relative;
+
+        z-index: 2;
+    }
+
+    @media(max-width:768px) {
+
+        .gallery-page {
+
+            padding: 0px 12px 20px;
+        }
+
+        .gallery-container {
+
+            border-radius: 24px;
+
+            margin-top: 0;
+        }
+
+        .left-side,
+        .right-side {
+
+            padding: 35px 22px;
+        }
+
+        .left-side h1 {
+
+            font-size: 46px;
+
+            line-height: 1.1;
+        }
+
+        .form-top {
+
+            flex-direction: column;
+
+            align-items: flex-start;
+
+            gap: 16px;
+        }
+
+        .form-top h2 {
+
+            font-size: 32px;
+        }
+
+        .top-badge {
+
+            font-size: 12px;
+
+            padding: 10px 18px;
+        }
+    }
 </style>
 
 {% endblock %}
