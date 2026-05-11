@@ -1,21 +1,574 @@
-<!-- templates/contact/contact_update.html -->
-
 {% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Update Contact - HungerFresh Admin{% endblock %}
 
 {% block content %}
 
-<h2>Update Contact</h2>
+<style>
+    /* ========================================
+       PREMIUM PROFESSIONAL CONTACT UPDATE PAGE
+       Light orange background at top
+       Summary cards in 2 per row
+       Clean and elegant design
+    ======================================== */
+    
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    
+    body {
+        background: #f5f7fb;
+        position: relative;
+    }
+    
+    /* Light Orange Background at Top Only */
+    .light-orange-top {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 300px;
+        background: linear-gradient(135deg, #fff5ec 0%, #ffe8d9 50%, #fff0e6 100%);
+        z-index: 0;
+    }
+    
+    /* Subtle Wave at Bottom of Orange Section */
+    .orange-wave-bottom {
+        position: fixed;
+        top: 300px;
+        left: 0;
+        width: 100%;
+        height: 50px;
+        background: linear-gradient(135deg, #ffe8d9 0%, #fff5ec 50%, #f5f7fb 100%);
+        clip-path: polygon(0% 0%, 100% 100%, 100% 0%, 0% 100%);
+        opacity: 0.6;
+        z-index: 0;
+    }
+    
+    /* Main Container */
+    .update-container {
+        max-width: 1000px;
+        margin: 120px auto 60px;
+        padding: 0 5% 40px;
+        position: relative;
+        z-index: 10;
+    }
+    
+    /* Card Style */
+    .form-card {
+        background: white;
+        border-radius: 28px;
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.1);
+        overflow: hidden;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(0,0,0,0.05);
+    }
+    
+    .form-card:hover {
+        transform: translateY(-2px);
+    }
+    
+    /* Card Header */
+    .card-header {
+        background: white;
+        padding: 28px 32px;
+        border-bottom: 1px solid #f0f2f5;
+    }
+    
+    .card-header h2 {
+        font-size: 26px;
+        font-weight: 700;
+        color: #1a1a2e;
+        margin-bottom: 6px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+    
+    .card-header h2 i {
+        font-size: 26px;
+        color: #ff7a00;
+        background: rgba(255,122,0,0.1);
+        padding: 10px;
+        border-radius: 16px;
+    }
+    
+    .card-header p {
+        font-size: 14px;
+        color: #6c757d;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-left: 48px;
+    }
+    
+    /* Card Body */
+    .card-body {
+        padding: 32px;
+    }
+    
+    /* Contact Summary - 2 Cards Per Row */
+    .summary-section {
+        margin-bottom: 28px;
+    }
+    
+    .summary-title {
+        font-size: 13px;
+        font-weight: 600;
+        color: #ff7a00;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .summary-title i {
+        font-size: 14px;
+    }
+    
+    .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
+    
+    .summary-card {
+        background: #f8fafc;
+        border-radius: 18px;
+        padding: 18px 20px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        border: 1px solid #eef2f6;
+        transition: all 0.2s ease;
+    }
+    
+    .summary-card:hover {
+        background: white;
+        border-color: rgba(255,122,0,0.2);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+    
+    .summary-icon {
+        width: 46px;
+        height: 46px;
+        background: white;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    }
+    
+    .summary-icon i {
+        font-size: 20px;
+        color: #ff7a00;
+    }
+    
+    .summary-info h4 {
+        font-size: 11px;
+        color: #8b9cb0;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        margin-bottom: 4px;
+    }
+    
+    .summary-info p {
+        font-size: 14px;
+        font-weight: 600;
+        color: #1e293b;
+    }
+    
+    /* Form Styling */
+    .update-form {
+        display: flex;
+        flex-direction: column;
+        gap: 22px;
+    }
+    
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .form-group label {
+        font-weight: 600;
+        font-size: 13px;
+        color: #334155;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .form-group label i {
+        color: #ff7a00;
+        font-size: 14px;
+        width: 18px;
+    }
+    
+    .form-group label .required {
+        color: #e74c3c;
+        font-size: 11px;
+    }
+    
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        width: 100%;
+        padding: 12px 16px;
+        border: 1.5px solid #e2e8f0;
+        border-radius: 14px;
+        font-size: 14px;
+        transition: all 0.2s ease;
+        font-family: inherit;
+        background: #ffffff;
+    }
+    
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+        outline: none;
+        border-color: #ff7a00;
+        box-shadow: 0 0 0 3px rgba(255,122,0,0.08);
+    }
+    
+    .form-group textarea {
+        resize: vertical;
+        min-height: 120px;
+        line-height: 1.5;
+    }
+    
+    /* Read-only fields */
+    .form-group input[readonly],
+    .form-group textarea[readonly] {
+        background: #fafbfc;
+        border-color: #eef2f6;
+        color: #475569;
+        cursor: default;
+    }
+    
+    /* Status Select */
+    .status-select {
+        font-weight: 500;
+        cursor: pointer;
+    }
+    
+    /* Alert Info */
+    .alert-info {
+        background: #fefce8;
+        border-left: 4px solid #eab308;
+        padding: 14px 18px;
+        border-radius: 14px;
+        margin-bottom: 28px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 13px;
+        color: #854d0e;
+    }
+    
+    .alert-info i {
+        color: #eab308;
+        font-size: 16px;
+    }
+    
+    /* Error Messages */
+    .errorlist {
+        list-style: none;
+        background: #fef2f2;
+        border-left: 4px solid #ef4444;
+        padding: 10px 15px;
+        border-radius: 12px;
+        margin-top: 6px;
+    }
+    
+    .errorlist li {
+        color: #dc2626;
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    
+    /* Action Buttons */
+    .form-actions {
+        display: flex;
+        gap: 16px;
+        margin-top: 20px;
+        padding-top: 24px;
+        border-top: 1px solid #eef2f6;
+    }
+    
+    .btn-update {
+        background: linear-gradient(135deg, #ff7a00, #e56a00);
+        color: white;
+        padding: 12px 28px;
+        border: none;
+        border-radius: 40px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        flex: 1;
+        justify-content: center;
+    }
+    
+    .btn-update:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(255,122,0,0.25);
+    }
+    
+    .btn-cancel {
+        background: white;
+        color: #64748b;
+        padding: 12px 28px;
+        border: 1.5px solid #e2e8f0;
+        border-radius: 40px;
+        font-size: 14px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        flex: 1;
+        justify-content: center;
+    }
+    
+    .btn-cancel:hover {
+        background: #f8fafc;
+        border-color: #ff7a00;
+        color: #ff7a00;
+        transform: translateY(-2px);
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+        .update-container {
+            margin: 80px auto 40px;
+        }
+        .card-header {
+            padding: 22px 24px;
+        }
+        .card-header h2 {
+            font-size: 22px;
+        }
+        .card-header p {
+            margin-left: 0;
+        }
+        .card-body {
+            padding: 24px;
+        }
+        .summary-grid {
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+        .form-actions {
+            flex-direction: column;
+        }
+        .light-orange-top {
+            height: 200px;
+        }
+        .orange-wave-bottom {
+            top: 200px;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .update-container {
+            margin: 70px auto 30px;
+        }
+        .card-header h2 {
+            font-size: 20px;
+        }
+        .card-header h2 i {
+            font-size: 20px;
+            padding: 8px;
+        }
+        .card-body {
+            padding: 18px;
+        }
+        .summary-card {
+            padding: 14px 16px;
+        }
+        .form-group label {
+            font-size: 12px;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 10px 14px;
+            font-size: 13px;
+        }
+        .btn-update, .btn-cancel {
+            padding: 10px 20px;
+            font-size: 13px;
+        }
+        .light-orange-top {
+            height: 150px;
+        }
+        .orange-wave-bottom {
+            top: 150px;
+        }
+    }
+    
+    /* Animation */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .form-card {
+        animation: fadeInUp 0.4s ease forwards;
+    }
+</style>
 
-<form method="POST">
+<!-- Light Orange Background at Top Only -->
+<div class="light-orange-top"></div>
+<div class="orange-wave-bottom"></div>
 
-    {% csrf_token %}
-
-    {{ form.as_p }}
-
-    <button type="submit" class="btn">
-        Update
-    </button>
-
-</form>
+<div class="update-container">
+    
+    <div class="form-card">
+        <!-- Card Header -->
+        <div class="card-header">
+            <h2>
+                <i class="fa-regular fa-pen-to-square"></i>
+                Update Contact
+            </h2>
+            <p>
+                <i class="fa-regular fa-info-circle"></i>
+                Update message status to track communication
+            </p>
+        </div>
+        
+        <!-- Card Body -->
+        <div class="card-body">
+            
+            <!-- Info Alert -->
+            <div class="alert-info">
+                <i class="fa-solid fa-circle-info"></i>
+                <span><strong>Note:</strong> Customer details are read-only. Only the status can be changed.</span>
+            </div>
+            
+            <!-- Contact Summary - 2 Cards Per Row -->
+            <div class="summary-section">
+                <div class="summary-title">
+                    <i class="fa-regular fa-circle-user"></i>
+                    Customer Information
+                </div>
+                <div class="summary-grid">
+                    <div class="summary-card">
+                        <div class="summary-icon">
+                            <i class="fa-regular fa-user"></i>
+                        </div>
+                        <div class="summary-info">
+                            <h4>Full Name</h4>
+                            <p>{{ form.name.value|default:"—" }}</p>
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-icon">
+                            <i class="fa-regular fa-envelope"></i>
+                        </div>
+                        <div class="summary-info">
+                            <h4>Email Address</h4>
+                            <p>{{ form.email.value|default:"—" }}</p>
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-icon">
+                            <i class="fa-solid fa-phone"></i>
+                        </div>
+                        <div class="summary-info">
+                            <h4>Phone Number</h4>
+                            <p>{{ form.phone_number.value|default:"—" }}</p>
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-icon">
+                            <i class="fa-regular fa-calendar"></i>
+                        </div>
+                        <div class="summary-info">
+                            <h4>Received Date</h4>
+                            <p>{{ form.instance.created_at|date:"M d, Y"|default:"—" }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <form method="POST" class="update-form">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label for="id_subject">
+                        <i class="fa-regular fa-heading"></i> Subject
+                    </label>
+                    <input type="text" name="subject" id="id_subject" value="{{ form.subject.value|default:'' }}" readonly>
+                </div>
+                
+                <div class="form-group">
+                    <label for="id_message">
+                        <i class="fa-regular fa-message"></i> Message
+                    </label>
+                    <textarea name="message" id="id_message" readonly>{{ form.message.value|default:'' }}</textarea>
+                </div>
+                
+                <!-- Status Field - Editable -->
+                <div class="form-group">
+                    <label for="id_status">
+                        <i class="fa-regular fa-circle-check"></i> Status <span class="required">*</span>
+                    </label>
+                    <select name="status" id="id_status" class="status-select">
+                        <option value="new" {% if form.status.value == 'new' %}selected{% endif %}>
+                            🔴 New - Unread (Needs attention)
+                        </option>
+                        <option value="read" {% if form.status.value == 'read' %}selected{% endif %}>
+                            🟢 Read - Message viewed
+                        </option>
+                    </select>
+                    <small style="color: #94a3b8; font-size: 11px; margin-top: 5px; display: block;">
+                        <i class="fa-regular fa-lightbulb"></i> Update status to track your response progress
+                    </small>
+                </div>
+                
+                {% if form.errors %}
+                    <div class="errorlist">
+                        {% for field, errors in form.errors.items %}
+                            {% for error in errors %}
+                                <li><i class="fa-solid fa-circle-exclamation"></i> {{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn-update">
+                        <i class="fa-regular fa-floppy-disk"></i> Save Changes
+                    </button>
+                    <a href="{% url 'contact_list' %}" class="btn-cancel">
+                        <i class="fa-regular fa-circle-xmark"></i> Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

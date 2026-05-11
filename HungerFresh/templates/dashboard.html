@@ -1,59 +1,766 @@
-<h2>Quick Links</h2>
+{% extends 'base.html' %}
+{% load static %}
 
-<ul>
+{% block title %}Dashboard - HungerFresh Admin{% endblock %}
 
-    <li>
-        <a href="{% url 'contact_list' %}">
-            View Contact Messages
-        </a>
-    </li>
+{% block content %}
 
-    <li>
-        <a href="{% url 'service_list' %}">
-            View Services
-        </a>
-    </li>
+<style>
+    /* ========================================
+       PREMIUM DASHBOARD DESIGN
+       No white space - Clean premium layout
+       VIEW: Light Orange Background | ADD: White Background
+    ======================================== */
+    
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    
+    .dashboard-container {
+        min-height: 100vh;
+        background: #f5f7fb;
+    }
+    
+    /* Remove any default body spacing */
+    body {
+        margin: 0;
+        padding: 0;
+    }
+    
+    /* ========== BANNER SECTION WITH BACKGROUND IMAGE ========== */
+    .dashboard-banner {
+        position: relative;
+    background:url('{% static "images/orangebg.jpg" %}');
+        background-size: cover;
+        background-position: center 30%;
+        background-attachment: fixed;
+        padding: 80px 5% 100px;
+        border-radius: 0 0 48px 48px;
+        margin-bottom: 40px;
+        position: relative;
+        overflow: hidden;
+        
+    }
+    
+    .banner-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle at 20% 40%, rgba(255,122,0,0.15), transparent 70%);
+        pointer-events: none;
+    }
+    
+    .banner-content {
+        position: relative;
+        z-index: 3;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    
+    .welcome-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+      
+        backdrop-filter: blur(10px);
+        padding: 8px 20px;
+        border-radius: 60px;
+        font-size: 13px;
+        font-weight: 600;
+        color: rgba(255,255,255,0.95);
+        margin-bottom: 24px;
+    }
+    
+    .banner-content h1 {
+        font-size: 48px;
+        font-weight: 800;
+        color:#4e4e4e;
+        margin-bottom: 12px;
+        letter-spacing: -1px;
+    }
+    
+    .banner-content h1 span {
+        color: #ff7a00;
+    }
+    
+    .banner-content p {
+        font-size: 16px;
+        color:#4e4e4e;
+        max-width: 500px;
+        line-height: 1.6;
+    }
+    
+    /* ========== STATS CARDS SECTION ========== */
+    .stats-section {
+        max-width: 1400px;
+        margin: -70px auto 50px;
+        padding: 0 5%;
+        position: relative;
+        z-index: 10;
+    }
+    
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 28px;
+    }
+    
+    .stats-card {
+        background: transparent;
+        transition: transform 0.3s ease;
+    }
+    
+    .stats-card:hover {
+        transform: translateY(-6px);
+    }
+    
+    .card-content {
+        background: white;
+        border-radius: 32px;
+        padding: 28px 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        transition: box-shadow 0.3s ease;
+        border: 1px solid rgba(0,0,0,0.03);
+    }
+    
+    .stats-card:hover .card-content {
+        box-shadow: 0 20px 40px rgba(255,122,0,0.12);
+    }
+    
+    /* Contact Stats Card - Orange Gradient Emphasis */
+    .stats-card.contact-stats .card-content {
+        background: linear-gradient(135deg, #ff7a00, #ff9f3a);
+    }
+    
+    .stats-card.contact-stats .stat-number {
+        color: white;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .stats-card.contact-stats .stat-label {
+        color: rgba(255,255,255,0.9);
+    }
+    
+    .stats-card.contact-stats .stat-icon {
+        background: rgba(255,255,255,0.2);
+    }
+    
+    .stats-card.contact-stats .stat-icon i {
+        color: white;
+    }
+    
+    .stats-info {
+        flex: 1;
+    }
+    
+    .stat-number {
+        font-size: 42px;
+        font-weight: 800;
+        color: #111827;
+        line-height: 1.1;
+        margin-bottom: 8px;
+    }
+    
+    .stat-label {
+        font-size: 14px;
+        font-weight: 500;
+        color: #6b7280;
+        letter-spacing: 0.3px;
+    }
+    
+    .stat-icon {
+        width: 60px;
+        height: 60px;
+        background: rgba(255,122,0,0.1);
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .stat-icon i {
+        font-size: 30px;
+        color: #ff7a00;
+    }
+    
+    /* ========== QUICK LINKS SECTION - VIEW & ADD SEPARATED ========== */
+    .quick-links-section {
+        max-width: 1400px;
+        margin: 0 auto 0;
+        padding: 0 5% 40px;
+    }
+    
+    .links-wrapper {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+    }
+    
+    /* Column Styles */
+    .links-column {
+        border-radius: 32px;
+        overflow: hidden;
+    }
+    
+    .column-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 24px;
+        padding-bottom: 12px;
+        border-bottom: 2px solid rgba(0,0,0,0.06);
+    }
+    
+    .column-header .header-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .column-header .header-icon i {
+        font-size: 24px;
+    }
+    
+    .column-header h3 {
+        font-size: 22px;
+        font-weight: 700;
+        color: #111827;
+    }
+    
+    .column-header p {
+        font-size: 13px;
+        color: #6b7280;
+        margin-top: 4px;
+    }
+    
+    /* VIEW Column - Light Orange Background */
+    .view-column {
+        background: linear-gradient(135deg, #fff8f0, #fff2e6);
+        padding: 28px;
+        border-radius: 32px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.03);
+    }
+    
+    .view-column .column-header .header-icon {
+        background: rgba(255,122,0,0.15);
+    }
+    
+    .view-column .column-header .header-icon i {
+        color: #ff7a00;
+    }
+    
+    /* ADD Column - White Background */
+    .add-column {
+        background: white;
+        padding: 28px;
+        border-radius: 32px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.03);
+        border: 1px solid #f0f0f0;
+    }
+    
+    .add-column .column-header .header-icon {
+        background: rgba(34,197,94,0.1);
+    }
+    
+    .add-column .column-header .header-icon i {
+        color: #22c55e;
+    }
+    
+    /* Card List Styles */
+    .card-list {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+    
+    /* Link Card Base */
+    .link-card {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 18px 20px;
+        border-radius: 24px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(0,0,0,0.04);
+    }
+    
+    .link-card:hover {
+        transform: translateX(8px);
+    }
+    
+    /* VIEW Cards - Light Orange Theme */
+    .view-column .link-card {
+        background: white;
+        border-left: 4px solid #ff7a00;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    }
+    
+    .view-column .link-card:hover {
+        background: white;
+        box-shadow: 0 10px 25px rgba(255,122,0,0.12);
+        border-left-width: 6px;
+    }
+    
+    /* ADD Cards - White with Green Border */
+    .add-column .link-card {
+        background: #fafafa;
+        border-left: 4px solid #22c55e;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+    }
+    
+    .add-column .link-card:hover {
+        background: white;
+        box-shadow: 0 10px 25px rgba(34,197,94,0.1);
+        border-left-width: 6px;
+    }
+    
+    .link-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: 0.3s;
+    }
+    
+    .view-column .link-icon {
+        background: rgba(255,122,0,0.1);
+    }
+    
+    .view-column .link-icon i {
+        color: #ff7a00;
+        font-size: 22px;
+    }
+    
+    .add-column .link-icon {
+        background: rgba(34,197,94,0.1);
+    }
+    
+    .add-column .link-icon i {
+        color: #22c55e;
+        font-size: 22px;
+    }
+    
+    .link-card:hover .link-icon {
+        transform: scale(1.05);
+    }
+    
+    .view-column .link-card:hover .link-icon {
+        background: #ff7a00;
+    }
+    
+    .view-column .link-card:hover .link-icon i {
+        color: white;
+    }
+    
+    .add-column .link-card:hover .link-icon {
+        background: #22c55e;
+    }
+    
+    .add-column .link-card:hover .link-icon i {
+        color: white;
+    }
+    
+    .link-info {
+        flex: 1;
+    }
+    
+    .link-info h4 {
+        font-size: 16px;
+        font-weight: 700;
+        color: #111827;
+        margin-bottom: 4px;
+    }
+    
+    .link-info p {
+        font-size: 12px;
+        color: #6b7280;
+    }
+    
+    .link-arrow {
+        font-size: 18px;
+        transition: 0.3s;
+        opacity: 0.6;
+    }
+    
+    .view-column .link-arrow {
+        color: #ff7a00;
+    }
+    
+    .add-column .link-arrow {
+        color: #22c55e;
+    }
+    
+    .link-card:hover .link-arrow {
+        transform: translateX(5px);
+        opacity: 1;
+    }
+    
+    .action-badge {
+        font-size: 10px;
+        font-weight: 700;
+        padding: 3px 10px;
+        border-radius: 20px;
+        margin-left: 8px;
+    }
+    
+    .action-badge.view {
+        background: rgba(255,122,0,0.12);
+        color: #ff7a00;
+    }
+    
+    .action-badge.add {
+        background: rgba(34,197,94,0.12);
+        color: #22c55e;
+    }
+    
+    /* ========== RESPONSIVE DESIGN ========== */
+    @media (max-width: 1024px) {
+        .stats-grid {
+            gap: 20px;
+        }
+        .banner-content h1 {
+            font-size: 38px;
+        }
+        .stat-number {
+            font-size: 34px;
+        }
+        .links-wrapper {
+            gap: 25px;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .dashboard-banner {
+            padding: 60px 5% 80px;
+            background-attachment: scroll;
+        }
+        .banner-content h1 {
+            font-size: 30px;
+        }
+        .stats-grid {
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+        .card-content {
+            padding: 20px;
+        }
+        .stat-number {
+            font-size: 32px;
+        }
+        .links-wrapper {
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+        .view-column, .add-column {
+            padding: 20px;
+        }
+        .link-card {
+            padding: 14px 16px;
+        }
+        .column-header h3 {
+            font-size: 20px;
+        }
+        .quick-links-section {
+            padding: 0 5% 30px;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .banner-content h1 {
+            font-size: 26px;
+        }
+        .welcome-badge {
+            font-size: 11px;
+            padding: 6px 14px;
+        }
+        .stat-number {
+            font-size: 28px;
+        }
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+        }
+        .stat-icon i {
+            font-size: 24px;
+        }
+        .link-info h4 {
+            font-size: 14px;
+        }
+        .link-icon {
+            width: 42px;
+            height: 42px;
+        }
+        .link-icon i {
+            font-size: 18px;
+        }
+        .quick-links-section {
+            padding: 0 5% 20px;
+        }
+    }
+    
+    /* Animation */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .stats-card, .view-column, .add-column {
+        animation: fadeInUp 0.5s ease forwards;
+    }
+    
+    .stats-card:nth-child(1) { animation-delay: 0.1s; }
+    .stats-card:nth-child(2) { animation-delay: 0.2s; }
+    .stats-card:nth-child(3) { animation-delay: 0.3s; }
+    .view-column { animation-delay: 0.2s; }
+    .add-column { animation-delay: 0.3s; }
+</style>
 
-    <li>
-        <a href="{% url 'service_create' %}">
-            Add Service
-        </a>
-    </li>
+<div class="dashboard-container">
+    
+    <!-- BANNER SECTION WITH BACKGROUND IMAGE -->
+    <div class="dashboard-banner">
+        <div class="banner-overlay"></div>
+        <div class="banner-content">
+            <div class="welcome-badge">
+            </div>
+            <h1>Welcome back, <span>Admin</span></h1>
+            <p>Manage your food delivery platform, track inquiries, and keep everything fresh.</p>
+        </div>
+    </div>
 
-    <li>
-        <a href="{% url 'gallery_list' %}">
-            View Gallery
-        </a>
-    </li>
+    <!-- STATS CARDS SECTION -->
+    <div class="stats-section">
+        <div class="stats-grid">
+            <!-- Total Contacts Card -->
+            <div class="stats-card">
+                <div class="card-content">
+                    <div class="stats-info">
+                        <div class="stat-number">{{ total_contacts|default:"0" }}</div>
+                        <div class="stat-label">Total Contacts</div>
+                    </div>
+                    <div class="stat-icon">
+                        <i class="fa-regular fa-envelope"></i>
+                    </div>
+                </div>
+            </div>
 
-    <li>
-        <a href="{% url 'gallery_create' %}">
-            Add Gallery Image
-        </a>
-    </li>
+            <!-- New Contacts Card -->
+            <div class="stats-card">
+                <div class="card-content">
+                    <div class="stats-info">
+                        <div class="stat-number">{{ new_contacts|default:"0" }}</div>
+                        <div class="stat-label">New Contacts</div>
+                    </div>
+                    <div class="stat-icon">
+                        <i class="fa-regular fa-message"></i>
+                    </div>
+                </div>
+            </div>
 
-    <li>
-        <a href="{% url 'offer_list' %}">
-            View Offers
-        </a>
-    </li>
+            <!-- Read Contacts Card (Orange Emphasis) -->
+            <div class="stats-card contact-stats">
+                <div class="card-content">
+                    <div class="stats-info">
+                        <div class="stat-number">{{ read_contacts|default:"0" }}</div>
+                        <div class="stat-label">Read Contacts</div>
+                    </div>
+                    <div class="stat-icon">
+                        <i class="fa-regular fa-circle-check"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <li>
-        <a href="{% url 'offer_create' %}">
-            Add Offer
-        </a>
-    </li>
+    <!-- QUICK LINKS SECTION - VIEW (Left - Light Orange) & ADD (Right - White) - NO WHITE SPACE AT BOTTOM -->
+    <div class="quick-links-section">
+        <div class="links-wrapper">
+            
+            <!-- VIEW COLUMN - Light Orange Background -->
+            <div class="links-column view-column">
+                <div class="column-header">
+                    <div class="header-icon">
+                        <i class="fa-regular fa-eye"></i>
+                    </div>
+                    <div>
+                        <h3>View & Manage</h3>
+                        <p>Browse and manage existing content</p>
+                    </div>
+                </div>
+                <div class="card-list">
+                    <!-- Contact Messages -->
+                    <a href="{% url 'contact_list' %}" class="link-card">
+                        <div class="link-icon">
+                            <i class="fa-regular fa-envelope-open"></i>
+                        </div>
+                        <div class="link-info">
+                            <h4>Contact Messages <span class="action-badge view">VIEW</span></h4>
+                            <p>View & manage customer inquiries</p>
+                        </div>
+                        <div class="link-arrow">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </div>
+                    </a>
 
-    <li>
-        <a href="{% url 'latest_update_list' %}">
-            View Latest Updates
-        </a>
-    </li>
+                    <!-- View Services -->
+                    <a href="{% url 'service_list' %}" class="link-card">
+                        <div class="link-icon">
+                            <i class="fa-solid fa-list-ul"></i>
+                        </div>
+                        <div class="link-info">
+                            <h4>View Services <span class="action-badge view">VIEW</span></h4>
+                            <p>Browse all service listings</p>
+                        </div>
+                        <div class="link-arrow">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </div>
+                    </a>
 
-    <li>
-        <a href="{% url 'latest_update_create' %}">
-            Add Latest Update
-        </a>
-    </li>
+                    <!-- View Gallery -->
+                    <a href="{% url 'gallery_list' %}" class="link-card">
+                        <div class="link-icon">
+                            <i class="fa-regular fa-images"></i>
+                        </div>
+                        <div class="link-info">
+                            <h4>View Gallery <span class="action-badge view">VIEW</span></h4>
+                            <p>Manage gallery images</p>
+                        </div>
+                        <div class="link-arrow">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </div>
+                    </a>
 
-</ul>
+                    <!-- View Offers -->
+                    <a href="{% url 'offer_list' %}" class="link-card">
+                        <div class="link-icon">
+                            <i class="fa-solid fa-tag"></i>
+                        </div>
+                        <div class="link-info">
+                            <h4>View Offers <span class="action-badge view">VIEW</span></h4>
+                            <p>See all promotional offers</p>
+                        </div>
+                        <div class="link-arrow">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </div>
+                    </a>
+
+                    <!-- View Latest Updates -->
+                    <a href="{% url 'latest_update_list' %}" class="link-card">
+                        <div class="link-icon">
+                            <i class="fa-regular fa-newspaper"></i>
+                        </div>
+                        <div class="link-info">
+                            <h4>View Latest Updates <span class="action-badge view">VIEW</span></h4>
+                            <p>Manage news & announcements</p>
+                        </div>
+                        <div class="link-arrow">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- ADD COLUMN - White Background -->
+            <div class="links-column add-column">
+                <div class="column-header">
+                    <div class="header-icon">
+                        <i class="fa-solid fa-plus-circle"></i>
+                    </div>
+                    <div>
+                        <h3>Add New Content</h3>
+                        <p>Create and upload fresh content</p>
+                    </div>
+                </div>
+                <div class="card-list">
+                    <!-- Add Service -->
+                    <a href="{% url 'service_create' %}" class="link-card">
+                        <div class="link-icon">
+                            <i class="fa-solid fa-plus-circle"></i>
+                        </div>
+                        <div class="link-info">
+                            <h4>Add Service <span class="action-badge add">ADD</span></h4>
+                            <p>Create a new service</p>
+                        </div>
+                        <div class="link-arrow">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </div>
+                    </a>
+
+                    <!-- Add Gallery Image -->
+                    <a href="{% url 'gallery_create' %}" class="link-card">
+                        <div class="link-icon">
+                            <i class="fa-solid fa-image"></i>
+                        </div>
+                        <div class="link-info">
+                            <h4>Add Gallery Image <span class="action-badge add">ADD</span></h4>
+                            <p>Upload new image to gallery</p>
+                        </div>
+                        <div class="link-arrow">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </div>
+                    </a>
+
+                    <!-- Add Offer -->
+                    <a href="{% url 'offer_create' %}" class="link-card">
+                        <div class="link-icon">
+                            <i class="fa-solid fa-gift"></i>
+                        </div>
+                        <div class="link-info">
+                            <h4>Add Offer <span class="action-badge add">ADD</span></h4>
+                            <p>Create a new offer/promotion</p>
+                        </div>
+                        <div class="link-arrow">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </div>
+                    </a>
+
+                    <!-- Add Latest Update -->
+                    <a href="{% url 'latest_update_create' %}" class="link-card">
+                        <div class="link-icon">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </div>
+                        <div class="link-info">
+                            <h4>Add Latest Update <span class="action-badge add">ADD</span></h4>
+                            <p>Post a new update/news</p>
+                        </div>
+                        <div class="link-arrow">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // Subtle hover effect enhancement
+    const cards = document.querySelectorAll('.link-card, .stats-card');
+    cards.forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            this.style.transition = 'all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1)';
+        });
+    });
+</script>
+
+{% endblock %}

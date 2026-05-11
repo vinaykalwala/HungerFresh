@@ -667,7 +667,11 @@
 <header id="mainHeader">
     <nav class="navbar">
         <div class="logo">
-            <img src="{% static 'images/hungerfreshlogo.png' %}" alt="Logo">
+            <a href="{% url 'login' %}" class="logo">
+
+    <img src="{% static 'images/hungerfreshlogo.png' %}" alt="Logo">
+
+</a>
         </div>
 
         <div class="menu-btn" id="mobileMenuBtn">
@@ -677,10 +681,20 @@
         <div class="nav-links" id="navLinks">
             <a href="{% url 'home' %}">Home</a>
             <a href="{% url 'about' %}">About</a>
-            <a href="#">Services</a>
-            <a href="#">Gallery</a>
+            <a href="{% url 'service_list' %}">Services</a>
+            <a href="{% url 'gallery_page' %}">Gallery</a>
             <a href="{% url 'contact_create' %}">Contact</a>
+              {% if user.is_authenticated %}
 
+        <a href="{% url 'dashboard' %}">
+            Dashboard
+        </a>
+
+        <a href="{% url 'logout' %}">
+            Logout
+        </a>
+
+    {% endif %}
             <div class="dropdown" id="premiumDropdown">
                 <a href="#" class="join-btn" id="joinBtn">
                     Join Us

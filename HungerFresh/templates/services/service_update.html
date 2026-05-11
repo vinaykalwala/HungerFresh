@@ -1,80 +1,321 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
 
-<div class="form-container">
+<!-- ========================
+     COOL & ANIMATED CSS
+     ======================== -->
+<style>
+    :root {
+        --orange: #FF6600;
+        --orange-dark: #E65A00;
+        --orange-glow: rgba(255,102,0,0.25);
+        --white: #ffffff;
+        --bg-light: rgba(255,255,255,0.7);
+        --text-dark: #1f1f1f;
+        --text-gray: #666;
+    }
 
-    <div class="form-box">
+    /* ========== FULLSCREEN ANIMATED BACKGROUND ========== */
+    .update-bg {
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        background: radial-gradient(circle at 20% 30%, #fff3e6 0%, #ffe8d6 40%, #ffd9bf 100%);
+        overflow: hidden;
+    }
+    /* Floating orbs */
+    .orb {
+        position: absolute;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--orange), var(--orange-dark));
+        opacity: 0.08;
+        animation: floatOrb 15s infinite ease-in-out;
+        pointer-events: none;
+    }
+    .orb:nth-child(1) { width: 400px; height: 400px; top: -10%; left: -5%; animation-delay: 0s; }
+    .orb:nth-child(2) { width: 300px; height: 300px; bottom: -10%; right: -5%; animation-delay: -5s; }
+    .orb:nth-child(3) { width: 250px; height: 250px; top: 40%; left: 40%; animation-delay: -10s; }
+    @keyframes floatOrb {
+        0%, 100% { transform: translate(0, 0) scale(1); }
+        25% { transform: translate(30px, -20px) scale(1.1); }
+        50% { transform: translate(-20px, 30px) scale(0.9); }
+        75% { transform: translate(-30px, -15px) scale(1.05); }
+    }
 
-        <h2>Update Service</h2>
+    /* ========== MAIN LAYOUT ========== */
+    .update-page {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 100px 20px 60px;
+        box-sizing: border-box;
+        position: relative;
+        z-index: 1;
+    }
 
-        <form
-            method="POST"
-            enctype="multipart/form-data"
-        >
+    /* ========== 3D CARD WITH GLASS EFFECT ========== */
+    .glam-card {
+        perspective: 1200px;
+        width: 100%;
+        max-width: 850px;
+    }
+    .card-inner {
+        background: rgba(255,255,255,0.65);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-radius: 32px;
+        border: 1px solid rgba(255,255,255,0.8);
+        box-shadow: 0 30px 60px rgba(0,0,0,0.1), 0 10px 30px var(--orange-glow);
+        padding: 50px 45px;
+        transform: rotateY(0deg) rotateX(0deg);
+        transition: transform 0.4s ease, box-shadow 0.4s ease;
+        animation: cardEntry 0.8s cubic-bezier(0.2, 0.9, 0.3, 1);
+    }
+    .card-inner:hover {
+        transform: rotateY(2deg) rotateX(1deg) scale(1.01);
+        box-shadow: 0 40px 80px rgba(0,0,0,0.15), 0 15px 40px var(--orange-glow);
+    }
+    @keyframes cardEntry {
+        from { opacity: 0; transform: translateY(40px) scale(0.95); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
+    }
 
-            {% csrf_token %}
+    /* ========== TITLE WITH ANIMATION ========== */
+    .form-title {
+        font-size: clamp(2rem, 5vw, 2.8rem);
+        font-weight: 800;
+        text-align: center;
+        margin: 0 0 35px;
+        background: linear-gradient(135deg, var(--orange-dark), var(--orange));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        animation: titleGlow 2s infinite alternate;
+    }
+    @keyframes titleGlow {
+        0% { filter: drop-shadow(0 0 3px rgba(255,102,0,0.3)); }
+        100% { filter: drop-shadow(0 0 10px rgba(255,102,0,0.6)); }
+    }
 
-            {{ form.as_p }}
+    /* ========== FORM ELEMENTS ========== */
+    .service-form p {
+        margin-bottom: 25px;
+        position: relative;
+    }
+    .service-form label {
+        display: block;
+        font-weight: 600;
+        font-size: 0.95rem;
+        color: var(--text-dark);
+        margin-bottom: 8px;
+        transition: all 0.3s;
+    }
+    /* Inputs & Textareas */
+    .service-form input[type="text"],
+    .service-form input[type="file"],
+    .service-form textarea,
+    .service-form select {
+        width: 100%;
+        padding: 16px 20px;
+        font-size: 1rem;
+        border: 2px solid rgba(255,255,255,0.9);
+        border-radius: 16px;
+        background: rgba(255,255,255,0.5);
+        backdrop-filter: blur(6px);
+        transition: all 0.3s ease;
+        outline: none;
+        color: var(--text-dark);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+        font-family: inherit;
+    }
+    .service-form textarea {
+        min-height: 130px;
+        resize: vertical;
+    }
+    /* Hover/Focus magic */
+    .service-form input[type="text"]:hover,
+    .service-form textarea:hover,
+    .service-form select:hover {
+        background: rgba(255,255,255,0.7);
+        border-color: rgba(255,102,0,0.4);
+    }
+    .service-form input[type="text"]:focus,
+    .service-form textarea:focus,
+    .service-form select:focus {
+        background: white;
+        border-color: var(--orange);
+        box-shadow: 0 0 0 8px rgba(255,102,0,0.08), 0 4px 20px rgba(255,102,0,0.1);
+        transform: translateY(-2px);
+    }
+    /* File input custom */
+    .service-form input[type="file"] {
+        padding: 14px 20px;
+        background: rgba(255,102,0,0.05);
+        border: 2px dashed var(--orange);
+        cursor: pointer;
+    }
+    .service-form input[type="file"]:hover {
+        background: rgba(255,102,0,0.1);
+    }
+    /* Select styling */
+    .service-form select {
+        appearance: none;
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23FF6600' stroke-width='2'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right 20px center;
+        background-size: 18px;
+        padding-right: 50px;
+    }
 
-            {% if service.image %}
+    /* ========== CURRENT IMAGE PREVIEW ========== */
+    .img-preview-box {
+        text-align: center;
+        margin: 30px 0 20px;
+        padding: 20px;
+        background: rgba(255,240,230,0.5);
+        border-radius: 20px;
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(255,102,0,0.15);
+    }
+    .img-preview-box img {
+        max-width: 100%;
+        max-height: 200px;
+        border-radius: 12px;
+        box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+        transition: transform 0.3s;
+    }
+    .img-preview-box img:hover {
+        transform: scale(1.02);
+    }
 
-                <img
-                    src="{{ service.image.url }}"
-                    width="150"
-                    style="margin-bottom:20px;"
-                >
+    /* ========== SUBMIT BUTTON ========== */
+    .btn-cool {
+        width: 100%;
+        background: linear-gradient(135deg, var(--orange), var(--orange-dark));
+        color: white;
+        border: none;
+        padding: 18px;
+        border-radius: 60px;
+        font-weight: 700;
+        font-size: 1.2rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 10px 30px var(--orange-glow);
+        position: relative;
+        overflow: hidden;
+        margin-top: 15px;
+    }
+    .btn-cool:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 20px 40px rgba(255,102,0,0.4);
+    }
+    /* Ripple effect on click */
+    .btn-cool:active::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: rgba(255,255,255,0.3);
+        animation: ripple 0.4s linear;
+    }
+    @keyframes ripple {
+        0% { transform: scale(0); opacity: 1; }
+        100% { transform: scale(2.5); opacity: 0; }
+    }
 
-            {% endif %}
+    /* ========== MESSAGES ========== */
+    .glam-message {
+        padding: 14px 22px;
+        border-radius: 14px;
+        margin-bottom: 20px;
+        background: rgba(220,252,231,0.9);
+        color: #166534;
+        font-weight: 500;
+        backdrop-filter: blur(8px);
+        animation: slideDown 0.4s ease;
+    }
+    @keyframes slideDown {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
 
-            <button type="submit" class="btn">
-                Update Service
-            </button>
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 768px) {
+        .card-inner {
+            padding: 35px 25px;
+        }
+        .form-title {
+            font-size: 1.8rem;
+        }
+    }
+    @media (max-width: 480px) {
+        .update-page {
+            padding: 80px 15px 40px;
+        }
+        .service-form input[type="text"],
+        .service-form textarea,
+        .service-form select {
+            padding: 14px 16px;
+        }
+    }
+</style>
 
-        </form>
-
-    </div>
-
+<!-- ========================
+     ANIMATED BACKGROUND
+     ======================== -->
+<div class="update-bg">
+    <div class="orb"></div>
+    <div class="orb"></div>
+    <div class="orb"></div>
 </div>
 
-<style>
+<!-- ========================
+     COOL UPDATE FORM
+     ======================== -->
+<div class="update-page">
+    <div class="glam-card">
+        <div class="card-inner">
 
-    .form-container{
-        display:flex;
-        justify-content:center;
-        padding:40px 0;
-    }
+            <h2 class="form-title">✨ Update Service ✨</h2>
 
-    .form-box{
-        width:600px;
-        background:white;
-        padding:40px;
-        border-radius:10px;
-        box-shadow:0px 0px 10px rgba(0,0,0,0.1);
-    }
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="glam-message">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
 
-    input,
-    textarea,
-    select{
-        width:100%;
-        padding:12px;
-        margin-top:5px;
-        margin-bottom:20px;
-        border:1px solid #ccc;
-        border-radius:5px;
-        box-sizing:border-box;
-    }
+            <form method="POST" enctype="multipart/form-data" class="service-form">
+                {% csrf_token %}
 
-    .btn{
-        width:100%;
-        padding:14px;
-        background:black;
-        color:white;
-        border:none;
-        border-radius:5px;
-        cursor:pointer;
-    }
+                <!-- Render form fields with custom styling -->
+                {% for field in form %}
+                    <p>
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.help_text %}
+                            <small style="color: var(--text-gray); display:block; margin-top:5px;">{{ field.help_text }}</small>
+                        {% endif %}
+                        {% if field.errors %}
+                            <small style="color:#dc3545; display:block; margin-top:5px;">{{ field.errors|striptags }}</small>
+                        {% endif %}
+                    </p>
+                {% endfor %}
 
-</style>
+                <!-- Current image if exists -->
+                {% if service.image %}
+                    <div class="img-preview-box">
+                        <p style="font-weight:600; margin:0 0 8px;">📸 Current Image</p>
+                        <img src="{{ service.image.url }}" alt="Service image">
+                    </div>
+                {% endif %}
+
+                <button type="submit" class="btn-cool">🚀 Update Service</button>
+            </form>
+
+        </div>
+    </div>
+</div>
 
 {% endblock %}
