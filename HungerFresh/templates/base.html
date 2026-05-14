@@ -1,56 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <title>{% block title %}HungerFresh{% endblock %}</title>
 
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
 
     <!-- Font Awesome -->
-    <link rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
-{% load static %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    {% load static %}
     <style>
-
-        *{
-            margin:0;
-            padding:0;
-            box-sizing:border-box;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        html{
-            scroll-behavior:smooth;
+        html {
+            scroll-behavior: smooth;
         }
 
-        body{
-            font-family:'Poppins',sans-serif;
-            background:#ffffff;
-            color:#111827;
-            overflow-x:hidden;
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #ffffff;
+            color: #111827;
+            overflow-x: hidden;
         }
 
-        a{
-            text-decoration:none;
+        a {
+            text-decoration: none;
         }
 
-        ul{
-            list-style:none;
+        ul {
+            list-style: none;
         }
 
         /* =========================
             PREMIUM COLOR THEME
         ========================== */
-        :root{
-            --orange:#ff7a00;
-            --dark-orange:#ff5e00;
-            --light-orange:#fff4eb;
-            --black:#111827;
-            --gray:#6b7280;
-            --light:#f9fafb;
-            --white:#ffffff;
+        :root {
+            --orange: #ff7a00;
+            --dark-orange: #ff5e00;
+            --light-orange: #fff4eb;
+            --black: #111827;
+            --gray: #6b7280;
+            --light: #f9fafb;
+            --white: #ffffff;
             --primary-glow: rgba(255, 122, 0, 0.25);
             --transition: all 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
         }
@@ -58,17 +59,23 @@
         /* =========================
             HEADER - PREMIUM TRANSPARENT + SCROLL EFFECT
         ========================== */
-        header{
-            width:100%;
-            position:fixed;
-            top:0;
-            left:0;
-            z-index:1000;
+        header {
+            width: 100%;
+            position: fixed;
+            top: 52px;
+            ;
+            left: 0;
+            z-index: 1000;
             transition: var(--transition);
             background: transparent;
-            backdrop-filter: blur(0px);
+            backdrop-filter: blur(16px);
             border-bottom: 1px solid transparent;
             overflow: visible;
+        }
+
+        .navbar {
+
+            min-height: 78px;
         }
 
         /* SCROLLED STATE - COLORFUL & SOLID */
@@ -79,14 +86,14 @@
             box-shadow: 0 10px 35px -12px rgba(0, 0, 0, 0.08);
         }
 
-        .navbar{
-            width:92%;
-            max-width:1400px;
-            margin:auto;
-            display:flex;
-            align-items:center;
-            justify-content:space-between;
-            padding:20px 0;
+        .navbar {
+            width: 92%;
+            max-width: 1400px;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 0;
             transition: padding 0.3s ease;
             position: relative;
         }
@@ -96,24 +103,24 @@
         }
 
         /* LOGO */
-        .logo{
-            display:flex;
-            align-items:center;
-            gap:12px;
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
             position: relative;
             z-index: 2;
         }
 
-        .logo img{
-            width:75px;
-            height:55px;
-            object-fit:contain;
+        .logo img {
+            width: 75px;
+            height: 55px;
+            object-fit: contain;
             transition: var(--transition);
         }
 
-        .logo-text{
-            font-size:30px;
-            font-weight:800;
+        .logo-text {
+            font-size: 30px;
+            font-weight: 800;
             background: linear-gradient(135deg, #111827 30%, var(--orange) 80%);
             background-clip: text;
             -webkit-background-clip: text;
@@ -128,144 +135,144 @@
             -webkit-background-clip: text;
         }
 
-        .logo-text span{
+        .logo-text span {
             background: none;
             -webkit-background-clip: unset;
             color: var(--orange);
         }
 
         /* NAV LINKS - PREMIUM FONT STYLING */
-        .nav-links{
-            display:flex;
-            align-items:center;
-            gap:42px;
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 42px;
         }
 
-        .nav-links a{
-            color:var(--black);
-            font-size:16px;
-            font-weight:600;
-            position:relative;
-            transition:0.3s ease;
+        .nav-links a {
+            color: var(--black);
+            font-size: 16px;
+            font-weight: 600;
+            position: relative;
+            transition: 0.3s ease;
             font-family: 'Inter', sans-serif;
-            letter-spacing:-0.2px;
+            letter-spacing: -0.2px;
         }
 
         /* transparent header text adjustment */
         header:not(.scrolled) .nav-links a {
             color: #111827;
-            text-shadow: 0 0 5px rgba(255,255,255,0.3);
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
         }
 
         header.scrolled .nav-links a {
             color: #1f2937;
         }
 
-        .nav-links a:hover{
-            color:var(--orange);
+        .nav-links a:hover {
+            color: var(--orange);
             letter-spacing: -0.1px;
         }
 
-        .nav-links a::after{
-            content:'';
-            position:absolute;
-            left:0;
-            bottom:-8px;
-            width:0%;
-            height:2.5px;
-            background:var(--orange);
-            border-radius:10px;
-            transition:0.3s ease;
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -8px;
+            width: 0%;
+            height: 2.5px;
+            background: var(--orange);
+            border-radius: 10px;
+            transition: 0.3s ease;
         }
 
-        .nav-links a:hover::after{
-            width:100%;
+        .nav-links a:hover::after {
+            width: 100%;
         }
 
         /* JOIN BUTTON - premium gradient */
-        .join-btn{
-            background:linear-gradient(135deg,var(--orange),var(--dark-orange));
-            color:white !important;
-            padding:12px 28px;
-            border-radius:40px;
-            box-shadow:0 8px 25px rgba(255,122,0,0.25);
+        .join-btn {
+            background: linear-gradient(135deg, var(--orange), var(--dark-orange));
+            color: white !important;
+            padding: 12px 28px;
+            border-radius: 40px;
+            box-shadow: 0 8px 25px rgba(255, 122, 0, 0.25);
             transition: var(--transition);
             display: inline-flex;
             align-items: center;
             gap: 8px;
             white-space: nowrap;
-            font-weight:700;
-            letter-spacing:0.3px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
         }
 
-        .join-btn:hover{
-            transform:translateY(-3px);
-            box-shadow:0 14px 28px -8px var(--orange);
-            letter-spacing:0.5px;
+        .join-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 14px 28px -8px var(--orange);
+            letter-spacing: 0.5px;
         }
 
-        .join-btn::after{
-            display:none;
+        .join-btn::after {
+            display: none;
         }
 
         /* DROPDOWN - RIGHT ALIGNED */
-        .dropdown{
-            position:relative;
+        .dropdown {
+            position: relative;
             overflow: visible;
         }
 
-        .dropdown-menu{
-            position:absolute;
-            top:55px;
+        .dropdown-menu {
+            position: absolute;
+            top: 55px;
             right: 0;
             left: auto;
-            width:260px;
-            background:rgba(255,255,255,0.98);
-            backdrop-filter:blur(12px);
-            border-radius:20px;
-            box-shadow:0 25px 45px -12px rgba(0,0,0,0.2);
-            padding:10px;
-            opacity:0;
-            visibility:hidden;
-            transform:translateY(12px);
-            transition:0.3s;
-            border:1px solid rgba(255,122,0,0.2);
-            z-index:10000;
+            width: 260px;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.2);
+            padding: 10px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(12px);
+            transition: 0.3s;
+            border: 1px solid rgba(255, 122, 0, 0.2);
+            z-index: 10000;
             overflow: visible;
         }
 
-        .dropdown:hover .dropdown-menu{
-            opacity:1;
-            visibility:visible;
-            transform:translateY(0);
+        .dropdown:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
         }
 
-        .dropdown-menu a{
-            display:block;
-            padding:12px 18px;
-            border-radius:14px;
-            color:var(--black);
-            font-weight:500;
-            transition:0.2s;
-            font-size:14px;
+        .dropdown-menu a {
+            display: block;
+            padding: 12px 18px;
+            border-radius: 14px;
+            color: var(--black);
+            font-weight: 500;
+            transition: 0.2s;
+            font-size: 14px;
             font-family: 'Inter', sans-serif;
-            letter-spacing:-0.1px;
+            letter-spacing: -0.1px;
             white-space: nowrap;
         }
 
-        .dropdown-menu a:hover{
-            background:linear-gradient(135deg, var(--light-orange), #ffe8dc);
-            color:var(--orange);
-            transform:translateX(5px);
+        .dropdown-menu a:hover {
+            background: linear-gradient(135deg, var(--light-orange), #ffe8dc);
+            color: var(--orange);
+            transform: translateX(5px);
         }
 
         /* MOBILE MENU */
-        .menu-btn{
-            display:none;
-            font-size:28px;
-            color:var(--black);
-            cursor:pointer;
-            background: rgba(255,255,240,0.5);
+        .menu-btn {
+            display: none;
+            font-size: 28px;
+            color: var(--black);
+            cursor: pointer;
+            background: rgba(255, 255, 240, 0.5);
             width: 48px;
             height: 48px;
             align-items: center;
@@ -275,10 +282,10 @@
             z-index: 2;
         }
 
-       
+
 
         /* PREMIUM FOOTER */
-        footer{
+        footer {
             background: linear-gradient(145deg, #0F0F13 0%, #181A20 100%);
             color: #eef2ff;
             padding: 70px 0 25px;
@@ -287,35 +294,35 @@
             position: relative;
         }
 
-        .footer-container{
-            width:92%;
-            max-width:1400px;
-            margin:auto;
+        .footer-container {
+            width: 92%;
+            max-width: 1400px;
+            margin: auto;
         }
 
-        .footer-top{
-            display:grid;
-            grid-template-columns:2fr 1fr 1fr;
-            gap:60px;
+        .footer-top {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 60px;
         }
 
-        .footer-logo{
-            display:flex;
-            align-items:center;
-            gap:14px;
-            margin-bottom:25px;
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 25px;
         }
 
-        .footer-logo img{
-            width:60px;
-            height:60px;
-            filter: drop-shadow(0 4px 10px rgba(255,122,0,0.3));
+        .footer-logo img {
+            width: 60px;
+            height: 60px;
+            filter: drop-shadow(0 4px 10px rgba(255, 122, 0, 0.3));
             border-radius: 18px;
         }
 
-        .footer-logo h2{
-            font-size:34px;
-            font-weight:800;
+        .footer-logo h2 {
+            font-size: 34px;
+            font-weight: 800;
             background: linear-gradient(120deg, #fff, #ffb485);
             background-clip: text;
             -webkit-background-clip: text;
@@ -323,17 +330,17 @@
             font-family: 'Inter', sans-serif;
         }
 
-        .footer-logo h2 span{
+        .footer-logo h2 span {
             color: var(--orange);
             background: none;
             -webkit-background-clip: unset;
         }
 
-        .footer-about p{
+        .footer-about p {
             color: #B9C1D4;
-            line-height:1.8;
-            font-size:15px;
-            max-width:500px;
+            line-height: 1.8;
+            font-size: 15px;
+            max-width: 500px;
             font-family: 'Inter', sans-serif;
         }
 
@@ -344,7 +351,7 @@
             flex-direction: column;
             gap: 12px;
         }
-        
+
         .badge-title {
             font-size: 14px;
             font-weight: 600;
@@ -354,43 +361,43 @@
             font-family: 'Inter', sans-serif;
             margin-bottom: 4px;
         }
-        
+
         .badge-container {
             display: flex;
             gap: 14px;
             flex-wrap: wrap;
         }
-        
+
         .store-badge {
             display: inline-flex;
             align-items: center;
             gap: 10px;
-            background: rgba(255,255,255,0.08);
+            background: rgba(255, 255, 255, 0.08);
             backdrop-filter: blur(8px);
             padding: 8px 18px;
             border-radius: 50px;
             transition: all 0.3s ease;
-            border: 1px solid rgba(255,122,0,0.3);
+            border: 1px solid rgba(255, 122, 0, 0.3);
             text-decoration: none;
         }
-        
+
         .store-badge:hover {
             transform: translateY(-3px);
-            background: rgba(255,122,0,0.2);
+            background: rgba(255, 122, 0, 0.2);
             border-color: var(--orange);
-            box-shadow: 0 8px 20px rgba(255,122,0,0.2);
+            box-shadow: 0 8px 20px rgba(255, 122, 0, 0.2);
         }
-        
+
         .store-badge i {
             font-size: 26px;
             color: var(--orange);
         }
-        
+
         .badge-text {
             display: flex;
             flex-direction: column;
         }
-        
+
         .badge-small {
             font-size: 10px;
             font-weight: 500;
@@ -398,7 +405,7 @@
             letter-spacing: 0.3px;
             font-family: 'Inter', sans-serif;
         }
-        
+
         .badge-large {
             font-size: 16px;
             font-weight: 700;
@@ -406,7 +413,7 @@
             font-family: 'Inter', sans-serif;
             letter-spacing: -0.2px;
         }
-        
+
         /* Alternative Google Play & App Store image badges (modern style) */
         .modern-badge {
             display: inline-flex;
@@ -417,20 +424,20 @@
             border-radius: 12px;
             transition: all 0.3s ease;
             text-decoration: none;
-            border: 1px solid rgba(255,122,0,0.25);
+            border: 1px solid rgba(255, 122, 0, 0.25);
         }
-        
+
         .modern-badge:hover {
             transform: translateY(-3px);
             background: #252833;
             border-color: var(--orange);
         }
-        
+
         .modern-badge i {
             font-size: 28px;
             color: var(--orange);
         }
-        
+
         .modern-badge span {
             font-weight: 700;
             color: white;
@@ -440,19 +447,19 @@
         }
 
         .footer-links h3,
-        .footer-contact h3{
-            font-size:22px;
-            font-weight:700;
-            margin-bottom:28px;
+        .footer-contact h3 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 28px;
             position: relative;
             display: inline-block;
             color: white;
             font-family: 'Inter', sans-serif;
-            letter-spacing:-0.3px;
+            letter-spacing: -0.3px;
         }
 
         .footer-links h3:after,
-        .footer-contact h3:after{
+        .footer-contact h3:after {
             content: '';
             width: 40px;
             height: 3px;
@@ -463,17 +470,17 @@
             border-radius: 5px;
         }
 
-        .footer-links a{
+        .footer-links a {
             display: flex;
             align-items: center;
             gap: 10px;
             margin-bottom: 16px;
             color: #B2BBCF;
-            transition:0.3s;
-            font-weight:500;
+            transition: 0.3s;
+            font-weight: 500;
             font-family: 'Inter', sans-serif;
-            font-size:15px;
-            letter-spacing:-0.2px;
+            font-size: 15px;
+            letter-spacing: -0.2px;
         }
 
         .footer-links a i {
@@ -482,363 +489,610 @@
             transition: 0.2s;
         }
 
-        .footer-links a:hover{
-            color:var(--orange);
-            transform:translateX(8px);
+        .footer-links a:hover {
+            color: var(--orange);
+            transform: translateX(8px);
         }
 
-        .footer-contact p{
-            display:flex;
-            align-items:center;
-            gap:12px;
-            margin-bottom:18px;
+        .footer-contact p {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 18px;
             color: #B9C5DA;
-            line-height:1.6;
+            line-height: 1.6;
             font-family: 'Inter', sans-serif;
-            font-size:15px;
+            font-size: 15px;
         }
 
-        .footer-contact i{
-            color:var(--orange);
+        .footer-contact i {
+            color: var(--orange);
             width: 24px;
             font-size: 18px;
         }
 
-        .social-icons{
-            display:flex;
-            gap:15px;
-            margin-top:28px;
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 28px;
         }
 
-        .social-icons a{
-            width:45px;
-            height:45px;
-            border-radius:50%;
-            background: rgba(255,122,0,0.15);
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            color:var(--orange);
-            font-size:18px;
-            transition:0.3s;
-            border: 1px solid rgba(255,122,0,0.3);
+        .social-icons a {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: rgba(255, 122, 0, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--orange);
+            font-size: 18px;
+            transition: 0.3s;
+            border: 1px solid rgba(255, 122, 0, 0.3);
         }
 
-        .social-icons a:hover{
-            background:var(--orange);
-            color:white !important;
-            transform:translateY(-5px);
+        .social-icons a:hover {
+            background: var(--orange);
+            color: white !important;
+            transform: translateY(-5px);
             border-color: transparent;
-            box-shadow: 0 8px 20px rgba(255,122,0,0.4);
+            box-shadow: 0 8px 20px rgba(255, 122, 0, 0.4);
         }
 
-        .footer-bottom{
-            border-top: 1px solid rgba(255,255,255,0.1);
-            margin-top:60px;
-            padding-top:25px;
-            text-align:center;
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 60px;
+            padding-top: 25px;
+            text-align: center;
         }
 
-        .footer-bottom p{
+        .footer-bottom p {
             color: #9CA3AF;
-            font-size:14px;
-            line-height:1.7;
+            font-size: 14px;
+            line-height: 1.7;
             font-family: 'Inter', sans-serif;
         }
 
+        /* PAGE CONTENT */
+        .container {
+            margin-top: 145px;
+        }
+
         /* RESPONSIVE */
-        @media(max-width:992px){
-            .footer-top{
-                grid-template-columns:1fr;
+        @media(max-width:992px) {
+            .footer-top {
+                grid-template-columns: 1fr;
                 gap: 45px;
             }
 
-            .nav-links{
-                position:fixed;
-                top:80px;
-                left:-100%;
-                width:80%;
-                max-width:340px;
-                height:calc(100vh - 80px);
-                background:rgba(255,255,255,0.98);
-                backdrop-filter:blur(18px);
-                flex-direction:column;
-                align-items:flex-start;
-                padding:35px 30px;
-                display:flex;
-                box-shadow:10px 0 40px rgba(0,0,0,0.1);
-                transition:0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-                gap:25px;
-                z-index:999;
-                border-right:1px solid #f1f1f1;
+            .nav-links {
+                position: fixed;
+                top: 80px;
+                left: -100%;
+                width: 80%;
+                max-width: 340px;
+                height: calc(100vh - 80px);
+                background: rgba(255, 255, 255, 0.98);
+                backdrop-filter: blur(18px);
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 35px 30px;
+                display: flex;
+                box-shadow: 10px 0 40px rgba(0, 0, 0, 0.1);
+                transition: 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+                gap: 25px;
+                z-index: 999;
+                border-right: 1px solid #f1f1f1;
             }
 
-            .nav-links.active{
-                left:0;
-                display:flex;
+            .nav-links.active {
+                left: 0;
+                display: flex;
             }
 
             .nav-links a {
                 font-size: 17px;
             }
 
-            .menu-btn{
-                display:flex;
-                align-items:center;
-                justify-content:center;
+            .menu-btn {
+                display: flex;
+                align-items: center;
+                justify-content: center;
             }
 
-            .dropdown-menu{
-                position:static;
-                width:100%;
-                margin-top:10px;
-                opacity:1;
-                visibility:visible;
-                transform:none;
-                box-shadow:none;
+            .dropdown-menu {
+                position: static;
+                width: 100%;
+                margin-top: 10px;
+                opacity: 1;
+                visibility: visible;
+                transform: none;
+                box-shadow: none;
                 background: transparent;
                 backdrop-filter: none;
                 border: none;
                 padding-left: 15px;
-                display:none;
+                display: none;
                 right: auto;
                 left: 0;
             }
 
-            .dropdown-menu a{
+            .dropdown-menu a {
                 white-space: normal;
                 font-size: 15px;
             }
 
-            .dropdown:hover .dropdown-menu{
-                display:none;
+            .dropdown:hover .dropdown-menu {
+                display: none;
             }
-            
-            .dropdown.active .dropdown-menu{
-                display:block;
+
+            .dropdown.active .dropdown-menu {
+                display: block;
             }
-            
+
             .navbar {
                 width: 92%;
             }
-            
+
             .badge-container {
                 justify-content: flex-start;
             }
         }
 
-        @media(max-width:600px){
-            .logo-text{
-                font-size:22px;
+        @media(max-width:600px) {
+            .logo-text {
+                font-size: 22px;
             }
-            .footer-logo h2{
-                font-size:26px;
+
+            .footer-logo h2 {
+                font-size: 26px;
             }
+
             .container {
                 margin-top: 90px;
             }
+
             .logo img {
                 width: 55px;
                 height: 40px;
             }
-            .join-btn{
+
+            .join-btn {
                 padding: 8px 20px;
                 font-size: 14px;
             }
+
             .nav-links {
                 gap: 18px;
             }
+
             .store-badge {
                 padding: 6px 14px;
             }
+
             .store-badge i {
                 font-size: 22px;
             }
+
             .badge-large {
                 font-size: 14px;
             }
         }
+
+        @media(max-width:600px) {
+
+            .top-header {
+
+                padding: 8px 0;
+            }
+
+            .top-header-container {
+
+                flex-direction: column;
+
+                align-items: flex-start;
+
+                gap: 10px;
+            }
+
+            .top-left {
+
+                gap: 14px;
+            }
+
+            .top-left span {
+
+                font-size: 11px;
+            }
+
+            .top-right {
+
+                width: 100%;
+
+                max-width: 100%;
+            }
+
+            .marquee-wrapper {
+
+                width: 100%;
+            }
+
+            .marquee-wrapper marquee {
+
+                font-size: 11px;
+            }
+
+            header {
+
+                top: 76px;
+            }
+
+            .container {
+
+                margin-top: 165px;
+            }
+        }
+
+        /* =========================
+    TOP HEADER
+========================= */
+
+        .top-header {
+
+            width: 100%;
+
+            background:
+                linear-gradient(135deg,
+                    #ff7a00,
+                    #ff5e00);
+
+            padding: 10px 0;
+
+            position: fixed;
+
+            top: 0;
+            left: 0;
+
+            z-index: 1005;
+
+            box-shadow:
+                0 10px 25px rgba(255, 122, 0, 0.18);
+        }
+
+        .top-header-container {
+
+            width: 95%;
+
+            max-width: 1600px;
+
+            margin: auto;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 20px;
+        }
+
+        .top-left {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 30px;
+
+            flex-wrap: wrap;
+        }
+
+        .top-left span {
+
+            color: white;
+
+            font-size: 14px;
+
+            font-weight: 600;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            font-family: 'Inter', sans-serif;
+        }
+
+        .top-left i {
+
+            color: #fff3e8;
+        }
+
+        .top-right {
+
+            flex: 1;
+
+            max-width: 780px;
+
+            width: 100%;
+        }
+
+        .marquee-wrapper {
+
+            background:
+                rgba(255, 255, 255, 0.12);
+
+            border: 1px solid rgba(255, 255, 255, 0.15);
+
+            backdrop-filter: blur(10px);
+
+
+            overflow: hidden;
+            width: 100%;
+
+            padding: 8px 24px;
+
+            border-radius: 50px;
+        }
+.marquee-wrapper marquee {
+
+    color: white;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.4px;
+
+    white-space: nowrap;
+
+    padding-right: 100px;
+}
     </style>
 </head>
 
 <body>
+    <!-- TOP HEADER -->
 
-<!-- HEADER - PREMIUM TRANSPARENT -->
-<header id="mainHeader">
-    <nav class="navbar">
-        <div class="logo">
-            <a href="{% url 'login' %}" class="logo">
+    <div class="top-header">
 
-    <img src="{% static 'images/hungerfreshlogo.png' %}" alt="Logo">
+        <div class="top-header-container">
 
-</a>
+            <div class="top-left">
+
+                <span>
+                    <i class="fa-solid fa-bolt"></i>
+                    Fast Delivery Across City
+                </span>
+
+                <span>
+                    <i class="fa-solid fa-phone"></i>
+                    +91 9949959501
+                </span>
+
+            </div>
+
+            <div class="top-right">
+
+                <div class="marquee-wrapper">
+<marquee
+    behavior="scroll"
+    direction="left"
+    scrollamount="5"
+    loop="infinite"
+>
+
+    🚀 Low delivery charges compared to all other platforms • Fresh Food • Fast Delivery • Premium Quality Meals •
+    🚀 Low delivery charges compared to all other platforms • Fresh Food • Fast Delivery • Premium Quality Meals •
+    🚀 Low delivery charges compared to all other platforms • Fresh Food • Fast Delivery • Premium Quality Meals •
+
+</marquee>
+
+                </div>
+
+            </div>
+
         </div>
 
-        <div class="menu-btn" id="mobileMenuBtn">
-            <i class="fa-solid fa-bars"></i>
-        </div>
+    </div>
 
-        <div class="nav-links" id="navLinks">
-            <a href="{% url 'home' %}">Home</a>
-            <a href="{% url 'about' %}">About</a>
-            <a href="{% url 'service_list' %}">Services</a>
-            <a href="{% url 'gallery_page' %}">Gallery</a>
-            <a href="{% url 'contact_create' %}">Contact</a>
-              {% if user.is_authenticated %}
+    <!-- HEADER - PREMIUM TRANSPARENT -->
+    <header id="mainHeader">
+        <nav class="navbar">
+            <div class="logo">
+                <a href="{% url 'login' %}" class="logo">
 
-        <a href="{% url 'dashboard' %}">
-            Dashboard
-        </a>
+                    <img src="{% static 'images/hungerfreshlogo.png' %}" alt="Logo">
 
-        <a href="{% url 'logout' %}">
-            Logout
-        </a>
-
-    {% endif %}
-            <div class="dropdown" id="premiumDropdown">
-                <a href="#" class="join-btn" id="joinBtn">
-                    Join Us
-                    <i class="fa-solid fa-angle-down"></i>
                 </a>
-                <div class="dropdown-menu">
-                    <a href="#">Vendor Registration</a>
-                    <a href="#">Delivery Partner Registration</a>
+            </div>
+
+            <div class="menu-btn" id="mobileMenuBtn">
+                <i class="fa-solid fa-bars"></i>
+            </div>
+
+            <div class="nav-links" id="navLinks">
+                <a href="{% url 'home' %}">Home</a>
+                <a href="{% url 'about' %}">About</a>
+                <a href="{% url 'service_list' %}">Services</a>
+                <a href="{% url 'gallery_page' %}">Gallery</a>
+                <a href="{% url 'contact_create' %}">Contact</a>
+                {% if user.is_authenticated %}
+
+                <a href="{% url 'dashboard' %}">
+                    Dashboard
+                </a>
+
+                <a href="{% url 'logout' %}">
+                    Logout
+                </a>
+
+                {% endif %}
+                <div class="dropdown" id="premiumDropdown">
+                    <a href="#" class="join-btn" id="joinBtn">
+                        Join Us
+                        <i class="fa-solid fa-angle-down"></i>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a href="#">Vendor Registration</a>
+                        <a href="#">Delivery Partner Registration</a>
+                    </div>
                 </div>
             </div>
-        </div>
-    </nav>
-</header>
+        </nav>
+    </header>
 
-<!-- PAGE CONTENT -->
-<div class="container">
-    {% block content %}
-    {% endblock %}
-</div>
+    <!-- PAGE CONTENT -->
+    <div class="container">
+        {% block content %}
+        {% endblock %}
+    </div>
 
-<!-- PREMIUM FOOTER WITH APP STORE BADGES -->
-<footer>
-    <div class="footer-container">
-        <div class="footer-top">
-            <div class="footer-about">
-                <div class="footer-logo">
-                    <img src="{% static 'images/hunger.png' %}" alt="Logo">
-                    <h2>Hunger<span>Fresh</span></h2>
+    <!-- PREMIUM FOOTER WITH APP STORE BADGES -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-top">
+                <div class="footer-about">
+                    <div class="footer-logo">
+                        <img src="{% static 'images/hunger.png' %}" alt="Logo">
+                        <h2>Hunger<span>Fresh</span></h2>
+                    </div>
+                    <p>
+                        Instantly Sourced, Chef-Prepared Meals.
+                        Fast delivery of fresh, high-quality,
+                        locally sourced food for a delicious,
+                        healthy experience.
+                    </p>
+
+                    <!-- APP STORE BADGES - Replace with your actual links -->
+                    <div class="app-badges">
+                        <div class="badge-title">Download App</div>
+                        <div class="badge-container">
+                            <!-- Google Play Badge - Add your link here -->
+                            <a href="#" class="modern-badge" id="googlePlayLink" target="_blank">
+                                <i class="fa-brands fa-google-play"></i>
+                                <span>Google Play</span>
+                            </a>
+                            <!-- App Store Badge - Add your link here -->
+                            <a href="#" class="modern-badge" id="appStoreLink" target="_blank">
+                                <i class="fa-brands fa-apple"></i>
+                                <span>App Store</span>
+                            </a>
+                        </div>
+                    </div>
                 </div>
-                <p>
-                    Instantly Sourced, Chef-Prepared Meals.
-                    Fast delivery of fresh, high-quality,
-                    locally sourced food for a delicious,
-                    healthy experience.
-                </p>
-                
-                <!-- APP STORE BADGES - Replace with your actual links -->
-                <div class="app-badges">
-                    <div class="badge-title">Download App</div>
-                    <div class="badge-container">
-                        <!-- Google Play Badge - Add your link here -->
-                        <a href="#" class="modern-badge" id="googlePlayLink" target="_blank">
-                            <i class="fa-brands fa-google-play"></i>
-                            <span>Google Play</span>
-                        </a>
-                        <!-- App Store Badge - Add your link here -->
-                        <a href="#" class="modern-badge" id="appStoreLink" target="_blank">
-                            <i class="fa-brands fa-apple"></i>
-                            <span>App Store</span>
-                        </a>
+
+                <div class="footer-links">
+                    <h3>Support</h3>
+                    <a href="{% url 'privacy_policy' %}"><i class="fa-regular fa-circle-right"></i> Privacy Policy</a>
+                    <a href="{% url 'terms_conditions' %}"><i class="fa-regular fa-circle-right"></i> Terms &
+                        Conditions</a>
+                    <a href="{% url 'refund_policy' %}"><i class="fa-regular fa-circle-right"></i> Refund Policy</a>
+                    <a href="{% url 'contact_create' %}"><i class="fa-regular fa-circle-right"></i> Contact Us</a>
+                </div>
+
+                <div class="footer-contact">
+                    <h3>Contact Info</h3>
+                    <p><i class="fa-solid fa-location-dot"></i> Reg - Proddatur</p>
+                    <p><i class="fa-solid fa-envelope"></i> mailhungerfresh@gmail.com</p>
+                    <p><i class="fa-solid fa-phone"></i> +91 9949959501</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                        <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
                     </div>
                 </div>
             </div>
 
-            <div class="footer-links">
-                <h3>Support</h3>
-                <a href="{% url 'privacy_policy' %}"><i class="fa-regular fa-circle-right"></i> Privacy Policy</a>
-                <a href="{% url 'terms_conditions' %}"><i class="fa-regular fa-circle-right"></i> Terms & Conditions</a>
-                <a href="{% url 'refund_policy' %}"><i class="fa-regular fa-circle-right"></i> Refund Policy</a>
-                <a href="{% url 'contact_create' %}"><i class="fa-regular fa-circle-right"></i> Contact Us</a>
-            </div>
-
-            <div class="footer-contact">
-                <h3>Contact Info</h3>
-                <p><i class="fa-solid fa-location-dot"></i> Reg - Proddatur</p>
-                <p><i class="fa-solid fa-envelope"></i> mailhungerfresh@gmail.com</p>
-                <p><i class="fa-solid fa-phone"></i> +91 9949959501</p>
-                <div class="social-icons">
-                    <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
-                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
-                    <a href="#"><i class="fa-brands fa-youtube"></i></a>
-                    <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
-                </div>
+            <div class="footer-bottom">
+                <p>
+                    © 2026 HungerFresh – Fresh Food, Delivered Fast.
+                    All rights reserved by HungerFresh.
+                </p>
             </div>
         </div>
+    </footer>
 
-        <div class="footer-bottom">
-            <p>
-                © 2026 HungerFresh – Fresh Food, Delivered Fast.
-                All rights reserved by HungerFresh.
-            </p>
-        </div>
-    </div>
-</footer>
+    <script>
+        // Original toggleMenu function preserved
+        function toggleMenu() {
+            document.getElementById("navLinks").classList.toggle("active");
+        }
 
-<script>
-    // Original toggleMenu function preserved
-    function toggleMenu() {
-        document.getElementById("navLinks").classList.toggle("active");
-    }
-    
-    // Mobile button handler
-    const mobileBtn = document.getElementById('mobileMenuBtn');
-    if (mobileBtn) {
-        mobileBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            toggleMenu();
-            const icon = this.querySelector('i');
-            const navLinks = document.getElementById('navLinks');
-            if (navLinks.classList.contains('active')) {
-                icon.classList.remove('fa-bars');
-                icon.classList.add('fa-times');
+        // Mobile button handler
+        const mobileBtn = document.getElementById('mobileMenuBtn');
+        if (mobileBtn) {
+            mobileBtn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                toggleMenu();
+                const icon = this.querySelector('i');
+                const navLinks = document.getElementById('navLinks');
+                if (navLinks.classList.contains('active')) {
+                    icon.classList.remove('fa-bars');
+                    icon.classList.add('fa-times');
+                } else {
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                }
+            });
+        }
+
+        // PREMIUM HEADER SCROLL EFFECT
+        const header = document.getElementById('mainHeader');
+        function handleScroll() {
+            if (window.scrollY > 20) {
+                header.classList.add('scrolled');
             } else {
-                icon.classList.remove('fa-times');
-                icon.classList.add('fa-bars');
+                header.classList.remove('scrolled');
             }
-        });
-    }
-    
-    // PREMIUM HEADER SCROLL EFFECT
-    const header = document.getElementById('mainHeader');
-    function handleScroll() {
-        if (window.scrollY > 20) {
-            header.classList.add('scrolled');
-        } else {
-            header.classList.remove('scrolled');
         }
-    }
-    window.addEventListener('scroll', handleScroll);
-    handleScroll();
-    
-    // Mobile dropdown handling
-    const dropdown = document.querySelector('.dropdown');
-    const joinBtn = document.querySelector('.join-btn');
-    
-    function handleMobileDropdown(e) {
-        if (window.innerWidth <= 992) {
-            e.preventDefault();
-            dropdown.classList.toggle('active');
-        }
-    }
-    
-    if (joinBtn && dropdown) {
-        joinBtn.addEventListener('click', handleMobileDropdown);
-    }
-    
-    // Close mobile menu when clicking on any nav link
-    const allLinks = document.querySelectorAll('.nav-links a');
-    allLinks.forEach(link => {
-        link.addEventListener('click', function() {
+        window.addEventListener('scroll', handleScroll);
+        handleScroll();
+
+        // Mobile dropdown handling
+        const dropdown = document.querySelector('.dropdown');
+        const joinBtn = document.querySelector('.join-btn');
+
+        function handleMobileDropdown(e) {
             if (window.innerWidth <= 992) {
+                e.preventDefault();
+                dropdown.classList.toggle('active');
+            }
+        }
+
+        if (joinBtn && dropdown) {
+            joinBtn.addEventListener('click', handleMobileDropdown);
+        }
+
+        // Close mobile menu when clicking on any nav link
+        const allLinks = document.querySelectorAll('.nav-links a');
+        allLinks.forEach(link => {
+            link.addEventListener('click', function () {
+                if (window.innerWidth <= 992) {
+                    const navMenu = document.getElementById('navLinks');
+                    if (navMenu.classList.contains('active')) {
+                        toggleMenu();
+                        const icon = document.querySelector('#mobileMenuBtn i');
+                        if (icon) {
+                            icon.classList.remove('fa-times');
+                            icon.classList.add('fa-bars');
+                        }
+                    }
+                    if (dropdown && dropdown.classList.contains('active')) {
+                        dropdown.classList.remove('active');
+                    }
+                }
+            });
+        });
+
+        // On resize, reset states
+        window.addEventListener('resize', function () {
+            if (window.innerWidth > 992) {
                 const navMenu = document.getElementById('navLinks');
                 if (navMenu.classList.contains('active')) {
-                    toggleMenu();
+                    navMenu.classList.remove('active');
                     const icon = document.querySelector('#mobileMenuBtn i');
                     if (icon) {
                         icon.classList.remove('fa-times');
@@ -848,46 +1102,27 @@
                 if (dropdown && dropdown.classList.contains('active')) {
                     dropdown.classList.remove('active');
                 }
-            }
-        });
-    });
-    
-    // On resize, reset states
-    window.addEventListener('resize', function() {
-        if (window.innerWidth > 992) {
-            const navMenu = document.getElementById('navLinks');
-            if (navMenu.classList.contains('active')) {
-                navMenu.classList.remove('active');
-                const icon = document.querySelector('#mobileMenuBtn i');
-                if (icon) {
-                    icon.classList.remove('fa-times');
-                    icon.classList.add('fa-bars');
+            } else {
+                if (joinBtn && dropdown) {
+                    joinBtn.onclick = function (e) {
+                        e.preventDefault();
+                        dropdown.classList.toggle('active');
+                    };
                 }
             }
-            if (dropdown && dropdown.classList.contains('active')) {
-                dropdown.classList.remove('active');
-            }
-        } else {
-            if (joinBtn && dropdown) {
-                joinBtn.onclick = function(e) {
-                    e.preventDefault();
-                    dropdown.classList.toggle('active');
-                };
-            }
-        }
-    });
-    
-    // Set your app store links here - Replace # with your actual app links
-    const googlePlayBtn = document.getElementById('googlePlayLink');
-    const appStoreBtn = document.getElementById('appStoreLink');
-    
-    // Example: Uncomment and add your actual app links
-    // googlePlayBtn.href = "https://play.google.com/store/apps/details?id=your.app.id";
-    // appStoreBtn.href = "https://apps.apple.com/app/idYourAppId";
-    
-    // Additional style injections
-    const style = document.createElement('style');
-    style.textContent = `
+        });
+
+        // Set your app store links here - Replace # with your actual app links
+        const googlePlayBtn = document.getElementById('googlePlayLink');
+        const appStoreBtn = document.getElementById('appStoreLink');
+
+        // Example: Uncomment and add your actual app links
+        // googlePlayBtn.href = "https://play.google.com/store/apps/details?id=your.app.id";
+        // appStoreBtn.href = "https://apps.apple.com/app/idYourAppId";
+
+        // Additional style injections
+        const style = document.createElement('style');
+        style.textContent = `
         header:not(.scrolled) .join-btn {
             background: linear-gradient(135deg, rgba(255,122,0,0.95), rgba(255,94,0,0.95));
             backdrop-filter: blur(2px);
@@ -906,11 +1141,12 @@
             transition: all 0.25s ease;
         }
     `;
-    document.head.appendChild(style);
-    
-    // Optional: Add click handler to update links dynamically if needed
-    console.log('App badges ready - add your Google Play and App Store links to #googlePlayLink and #appStoreLink');
-</script>
+        document.head.appendChild(style);
+
+        // Optional: Add click handler to update links dynamically if needed
+        console.log('App badges ready - add your Google Play and App Store links to #googlePlayLink and #appStoreLink');
+    </script>
 
 </body>
+
 </html>
