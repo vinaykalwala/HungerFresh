@@ -695,159 +695,6 @@
     }
 
 }
-    </style>
-</head>
-
-<body>
-
-<!-- HEADER - PREMIUM TRANSPARENT -->
-<header id="mainHeader">
-    <nav class="navbar">
-        <div class="logo">
-            <a href="{% url 'login' %}" class="logo">
-                <img src="{% static 'images/hungerfreshlogo.png' %}" alt="Logo">
-            </a>
-        </div>
-
-        <div class="menu-btn" id="mobileMenuBtn">
-            <i class="fa-solid fa-bars"></i>
-        </div>
-
-        <div class="nav-links" id="navLinks">
-            <a href="{% url 'home' %}">Home</a>
-            <a href="{% url 'about' %}">About</a>
-            <a href="{% url 'service_list' %}">Services</a>
-            <a href="{% url 'gallery_page' %}">Gallery</a>
-            <a href="{% url 'diet_plan' %}">Diet Plan</a>
-            <a href="{% url 'contact_create' %}">Contact</a>
-            
-            <div class="dropdown">
-                <a href="#">
-                    Order Now
-                    <i class="fa-solid fa-angle-down"></i>
-                </a>
-                <div class="dropdown-menu">
-                    <a href="https://play.google.com/store/apps/details?id=com.hungerfresh.user" target="_blank">
-                        <i class="fa-brands fa-google-play"></i>
-                        Play Store
-                    </a>
-                    <a href="https://apps.apple.com/app/hungerfresh/id6749384951" target="_blank">
-                        <i class="fa-brands fa-apple"></i>
-                        App Store
-                    </a>
-                </div>
-            </div>
-
-            {% if user.is_authenticated %}
-                <a href="{% url 'dashboard' %}">Dashboard</a>
-                <a href="{% url 'logout' %}">Logout</a>
-            {% endif %}
-            
-            <div class="dropdown" id="premiumDropdown">
-                <a href="#" class="join-btn" id="joinBtn">
-                    Join Us
-                    <i class="fa-solid fa-angle-down"></i>
-                </a>
-                <div class="dropdown-menu">
-                    <a href="#">Vendor Registration</a>
-                    <a href="#">Delivery Partner Registration</a>
-                </div>
-            </div>
-        </div>
-    </nav>
-</header>
-
-<!-- PAGE CONTENT -->
-<div class="container">
-    {% block content %}
-    {% endblock %}
-</div>
-
-<!-- PREMIUM FOOTER WITH APP STORE BADGES -->
-<footer>
-    <div class="footer-container">
-        <div class="footer-top">
-            <div class="footer-about">
-                <div class="footer-logo">
-                    <img src="{% static 'images/hunger.png' %}" alt="Logo">
-                    <h2>Hunger<span>Fresh</span></h2>
-                </div>
-                <p>
-                    Instantly Sourced, Chef-Prepared Meals.
-                    Fast delivery of fresh, high-quality,
-                    locally sourced food for a delicious,
-                    healthy experience.
-                </p>
-                
-                <!-- APP STORE BADGES - Updated with correct links -->
-                <div class="app-badges">
-                    <div class="badge-title">Download App</div>
-                    <div class="badge-container">
-                        <!-- Google Play Badge -->
-                        <a href="https://play.google.com/store/apps/details?id=com.hungerfresh.user" class="modern-badge" id="googlePlayLink" target="_blank" rel="noopener noreferrer">
-                            <i class="fa-brands fa-google-play"></i>
-                            <span>Google Play</span>
-                        </a>
-                        <!-- App Store Badge -->
-                        <a href="https://apps.apple.com/app/hungerfresh/id6749384951" class="modern-badge" id="appStoreLink" target="_blank" rel="noopener noreferrer">
-                            <i class="fa-brands fa-apple"></i>
-                            <span>App Store</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="footer-links">
-                <h3>Support</h3>
-                <a href="{% url 'privacy_policy' %}"><i class="fa-regular fa-circle-right"></i> Privacy Policy</a>
-                <a href="{% url 'terms_conditions' %}"><i class="fa-regular fa-circle-right"></i> Terms & Conditions</a>
-                <a href="{% url 'refund_policy' %}"><i class="fa-regular fa-circle-right"></i> Refund Policy</a>
-                <a href="{% url 'contact_create' %}"><i class="fa-regular fa-circle-right"></i> Contact Us</a>
-            </div>
-
-            <div class="footer-contact">
-                <h3>Contact Info</h3>
-                <p><i class="fa-solid fa-location-dot"></i> Reg - Proddatur</p>
-                <p><i class="fa-solid fa-envelope"></i> mailhungerfresh@gmail.com</p>
-                <p><i class="fa-solid fa-phone"></i> +91 9949959501</p>
-                <div class="social-icons">
-                    <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
-                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
-                    <a href="#"><i class="fa-brands fa-youtube"></i></a>
-                    <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
-                </div>
-            </div>
-        </div>
-
-        <div class="footer-bottom">
-            <p>
-                © 2026 HungerFresh – Fresh Food, Delivered Fast.
-                All rights reserved by HungerFresh.
-            </p>
-        </div>
-    </div>
-</footer>
-<!-- SINGLE ROW DELIVERY CARD - REAPPEARS ON REFRESH -->
-<div class="delivery-single-card" id="deliverySingleCard">
-    <button class="close-single-card" id="closeSingleCard">✕</button>
-    
-    <div class="single-row-content">
-        <!-- Moving Bike (No Circle) -->
-        <div class="moving-bike">
-            <i class="fa-solid fa-motorcycle"></i>
-        </div>
-        
-        <!-- Scrolling Text -->
-        <div class="scrolling-single">
-            <div class="scroll-text-run">
-                <span>✦ Lowest Delivery Charges ✦ Compared to Other Platforms ✦</span>
-                <span>✦ Lowest Delivery Charges ✦ Compared to Other Platforms ✦</span>
-            </div>
-        </div>
-    </div>
-</div>
-
-<style>
 /* SINGLE ROW DELIVERY CARD */
 .delivery-single-card {
     position: fixed;
@@ -1015,7 +862,159 @@
         right: -6px;
     }
 }
-</style>
+    </style>
+</head>
+
+<body>
+
+<!-- HEADER - PREMIUM TRANSPARENT -->
+<header id="mainHeader">
+    <nav class="navbar">
+        <div class="logo">
+            <a href="{% url 'login' %}" class="logo">
+                <img src="{% static 'images/hungerfreshlogo.png' %}" alt="Logo">
+            </a>
+        </div>
+
+        <div class="menu-btn" id="mobileMenuBtn">
+            <i class="fa-solid fa-bars"></i>
+        </div>
+
+        <div class="nav-links" id="navLinks">
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'about' %}">About</a>
+            <a href="{% url 'service_list' %}">Services</a>
+            <a href="{% url 'gallery_page' %}">Gallery</a>
+            <a href="{% url 'diet_plan' %}">Diet Plan</a>
+            <a href="{% url 'contact_create' %}">Contact</a>
+            
+            <div class="dropdown">
+                <a href="#">
+                    Order Now
+                    <i class="fa-solid fa-angle-down"></i>
+                </a>
+                <div class="dropdown-menu">
+                    <a href="https://play.google.com/store/apps/details?id=com.hungerfresh.user" target="_blank">
+                        <i class="fa-brands fa-google-play"></i>
+                        Play Store
+                    </a>
+                    <a href="https://apps.apple.com/app/hungerfresh/id6749384951" target="_blank">
+                        <i class="fa-brands fa-apple"></i>
+                        App Store
+                    </a>
+                </div>
+            </div>
+
+            {% if user.is_authenticated %}
+                <a href="{% url 'dashboard' %}">Dashboard</a>
+                <a href="{% url 'logout' %}">Logout</a>
+            {% endif %}
+            
+            <div class="dropdown" id="premiumDropdown">
+                <a href="#" class="join-btn" id="joinBtn">
+                    Join Us
+                    <i class="fa-solid fa-angle-down"></i>
+                </a>
+                <div class="dropdown-menu">
+                    <a href="#">Vendor Registration</a>
+                    <a href="#">Delivery Partner Registration</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<!-- PAGE CONTENT -->
+<div class="container">
+    {% block content %}
+    {% endblock %}
+</div>
+
+<!-- PREMIUM FOOTER WITH APP STORE BADGES -->
+<footer>
+    <div class="footer-container">
+        <div class="footer-top">
+            <div class="footer-about">
+                <div class="footer-logo">
+                    <img src="{% static 'images/hunger.png' %}" alt="Logo">
+                    <h2>Hunger<span>Fresh</span></h2>
+                </div>
+                <p>
+                    Instantly Sourced, Chef-Prepared Meals.
+                    Fast delivery of fresh, high-quality,
+                    locally sourced food for a delicious,
+                    healthy experience.
+                </p>
+                
+                <!-- APP STORE BADGES - Updated with correct links -->
+                <div class="app-badges">
+                    <div class="badge-title">Download App</div>
+                    <div class="badge-container">
+                        <!-- Google Play Badge -->
+                        <a href="https://play.google.com/store/apps/details?id=com.hungerfresh.user" class="modern-badge" id="googlePlayLink" target="_blank" rel="noopener noreferrer">
+                            <i class="fa-brands fa-google-play"></i>
+                            <span>Google Play</span>
+                        </a>
+                        <!-- App Store Badge -->
+                        <a href="https://apps.apple.com/app/hungerfresh/id6749384951" class="modern-badge" id="appStoreLink" target="_blank" rel="noopener noreferrer">
+                            <i class="fa-brands fa-apple"></i>
+                            <span>App Store</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-links">
+                <h3>Support</h3>
+                <a href="{% url 'privacy_policy' %}"><i class="fa-regular fa-circle-right"></i> Privacy Policy</a>
+                <a href="{% url 'terms_conditions' %}"><i class="fa-regular fa-circle-right"></i> Terms & Conditions</a>
+                <a href="{% url 'refund_policy' %}"><i class="fa-regular fa-circle-right"></i> Refund Policy</a>
+                <a href="{% url 'contact_create' %}"><i class="fa-regular fa-circle-right"></i> Contact Us</a>
+            </div>
+
+            <div class="footer-contact">
+                <h3>Contact Info</h3>
+                <p><i class="fa-solid fa-location-dot"></i> Reg - Proddatur</p>
+                <p><i class="fa-solid fa-envelope"></i> mailhungerfresh@gmail.com</p>
+                <p><i class="fa-solid fa-phone"></i> +91 9949959501</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                    <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>
+                © 2026 HungerFresh – Fresh Food, Delivered Fast.
+                All rights reserved by HungerFresh.
+            </p>
+        </div>
+    </div>
+</footer>
+<!-- SINGLE ROW DELIVERY CARD - REAPPEARS ON REFRESH -->
+<div class="delivery-single-card" id="deliverySingleCard">
+    <button class="close-single-card" id="closeSingleCard">✕</button>
+    
+    <div class="single-row-content">
+        <!-- Moving Bike (No Circle) -->
+        <div class="moving-bike">
+            <i class="fa-solid fa-motorcycle"></i>
+        </div>
+        
+        <!-- Scrolling Text -->
+        <div class="scrolling-single">
+            <div class="scroll-text-run">
+                <span>✦ Lowest Delivery Charges ✦ Compared to Other Platforms ✦</span>
+                <span>✦ Lowest Delivery Charges ✦ Compared to Other Platforms ✦</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 <script>
     const deliverySingleCard = document.getElementById('deliverySingleCard');
