@@ -2,7 +2,308 @@
 {% load static %}
 
 {% block content %}
+
+<!-- ============================================ -->
+<!-- PROFESSIONAL SERVICES MANAGEMENT PAGE        -->
+<!-- Premium Design (Matching Gallery Page Style) -->
+<!-- Fully Responsive | Preserves all functionality -->
+<!-- ============================================ -->
+
+<div class="services-dashboard">
+
+    <!-- Hero / Header Section with Gradient (Same as Gallery) -->
+    <div class="dashboard-header">
+        <div class="header-left">
+            <h1 class="dashboard-title"><span style="color: var(--primary);">Services</span> Management</h1>
+            <p class="dashboard-subtitle">Manage, organize, and showcase your professional services with elegance</p>
+        </div>
+        {% if user.is_staff or user.is_superuser %}
+        <div class="header-right">
+            <a href="{% url 'service_create' %}" class="btn-create">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                    <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2" />
+                </svg>
+                <span>Add New Service</span>
+            </a>
+        </div>
+        {% endif %}
+    </div>
+    <!-- Premium Table/Grid Container (Matching Gallery Style) -->
+    <div class="premium-services-wrapper">
+        <div class="table-toolbar">
+            <div class="search-filter">
+                <div class="search-box">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <circle cx="11" cy="11" r="8" />
+                        <path d="M21 21l-4.35-4.35" />
+                    </svg>
+                    <input type="text" placeholder="Search services by title or category..." id="serviceSearch">
+                </div>
+            </div>
+            <div class="view-options">
+                <button class="view-btn active" data-view="grid" title="Grid View">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <rect x="3" y="3" width="7" height="7" />
+                        <rect x="14" y="3" width="7" height="7" />
+                        <rect x="3" y="14" width="7" height="7" />
+                        <rect x="14" y="14" width="7" height="7" />
+                    </svg>
+                </button>
+                <button class="view-btn" data-view="list" title="List View">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <line x1="3" y1="6" x2="21" y2="6" />
+                        <line x1="3" y1="12" x2="21" y2="12" />
+                        <line x1="3" y1="18" x2="21" y2="18" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Services Grid View (Default) -->
+        <div class="services-grid-container" id="servicesGridView">
+            <div class="services-grid">
+                {% for service in services %}
+                <div class="service-card-premium" data-service-title="{{ service.title|lower }}" data-service-category="{{ service.category|default:''|lower }}">
+                    {% if service.image %}
+                    <div class="service-image-frame">
+                        <img src="{{ service.image.url }}" alt="{{ service.title }}">
+                        <div class="image-overlay">
+                            <button class="quick-view-btn" data-id="{{ service.id }}">🔍 Quick View</button>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="service-image-frame placeholder">
+                        <div class="placeholder-content">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                                <circle cx="8.5" cy="8.5" r="1.5"/>
+                                <path d="M21 15l-5-4-3 3-4-4-5 5"/>
+                            </svg>
+                        </div>
+                        <div class="image-overlay">
+                            <button class="quick-view-btn" data-id="{{ service.id }}">🔍 Quick View</button>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="service-info">
+                        <div class="service-header">
+                            <h4 class="service-title">{{ service.title }}</h4>
+                            {% if service.is_active %}
+                            <div class="status-chip active">
+                                <span class="status-dot"></span>
+                                Active
+                            </div>
+                            {% else %}
+                            <div class="status-chip inactive">
+                                <span class="status-dot"></span>
+                                Inactive
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        {% if service.category %}
+                        <div class="service-category">
+                            <span class="category-chip">
+                                <span class="chip-dot"></span>
+                                {{ service.category }}
+                            </span>
+                        </div>
+                        {% endif %}
+                        
+                        <p class="service-description">
+                            {{ service.short_description|default:service.description|truncatechars:100 }}
+                        </p>
+                        
+                        <div class="service-meta">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polyline points="12 6 12 12 16 14"/>
+                            </svg>
+                            <span>Added {{ service.created_at|timesince }} ago</span>
+                        </div>
+                        {% if user.is_staff or user.is_superuser %}
+                        <div class="action-group-premium">
+                            <a href="{% url 'service_detail' service.id %}" class="action-icon view" title="View Details">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <circle cx="12" cy="12" r="3" />
+                                    <path d="M22 12c-2.667 4.667-6 7-10 7s-7.333-2.333-10-7c2.667-4.667 6-7 10-7s7.333 2.333 10 7z" />
+                                </svg>
+                            </a>
+                            <a href="{% url 'service_update' service.id %}" class="action-icon edit" title="Edit Service">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path d="M17 3l4 4-11 11H6v-4L17 3z" />
+                                    <path d="M12 7l5 5" />
+                                </svg>
+                            </a>
+                            <a href="{% url 'service_delete' service.id %}" class="action-icon delete" title="Delete Service">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path d="M4 7h16M10 11v6M14 11v6M5 7l1 13a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-13M9 3h6" />
+                                </svg>
+                            </a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% empty %}
+                <div class="empty-state-premium">
+                    <div class="empty-illustration">
+                        <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
+                            <circle cx="60" cy="60" r="50" fill="var(--primary-light)" opacity="0.5" />
+                            <path d="M60 35v25M60 85V75M35 60h25M85 60H75" stroke="var(--primary)" stroke-width="2.5" stroke-linecap="round" />
+                            <rect x="45" y="45" width="30" height="30" rx="4" stroke="var(--primary)" stroke-width="2" fill="none" />
+                            <circle cx="60" cy="60" r="4" fill="var(--primary)" />
+                        </svg>
+                    </div>
+                    <h3>No services yet</h3>
+                    <p>Start building your service catalog by adding your first service.</p>
+                    <a href="{% url 'service_create' %}" class="empty-cta">+ Add New Service</a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Services List View (Hidden by default) -->
+        <div class="services-list-container" id="servicesListView" style="display: none;">
+            <div class="premium-table-container">
+                <table class="premium-table">
+                    <thead>
+                        <tr>
+                            <th class="col-id">ID</th>
+                            <th class="col-image">Image</th>
+                            <th class="col-title">Title</th>
+                            <!-- <th class="col-category">Category</th> -->
+                            <th class="col-status">Status</th>
+                            <th class="col-actions">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for service in services %}
+                        <tr class="table-row" data-service-title="{{ service.title|lower }}" data-service-category="{{ service.category|default:''|lower }}">
+                            <td class="cell-id">
+                                <span class="id-badge">#{{ service.id }}</span>
+                            </td>
+                            <td class="cell-image">
+                                <div class="image-preview-card">
+                                    <div class="image-frame-list">
+                                        {% if service.image %}
+                                        <img src="{{ service.image.url }}" alt="{{ service.title }}">
+                                        {% else %}
+                                        <div class="no-image-placeholder">📷</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="cell-title">
+                                <div class="title-info">
+                                    <h4>{{ service.title }}</h4>
+                                    <span class="date-meta">Added {{ service.created_at|timesince }} ago</span>
+                                </div>
+                            </td>
+                            <!-- <td class="cell-category">
+                                {% if service.category %}
+                                <span class="category-chip">
+                                    <span class="chip-dot"></span>
+                                    {{ service.category }}
+                                </span>
+                                {% else %}
+                                <span class="category-chip">Uncategorized</span>
+                                {% endif %}
+                            </td> -->
+                            <td class="cell-status">
+                                {% if service.is_active %}
+                                <div class="status-chip active">
+                                    <span class="status-dot"></span>
+                                    Active
+                                </div>
+                                {% else %}
+                                <div class="status-chip inactive">
+                                    <span class="status-dot"></span>
+                                    Inactive
+                                </div>
+                                {% endif %}
+                            </td>
+                            <td class="cell-actions">
+                                <div class="action-group-premium">
+                                    <a href="{% url 'service_detail' service.id %}" class="action-icon view" title="View Details">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                            <circle cx="12" cy="12" r="3" />
+                                            <path d="M22 12c-2.667 4.667-6 7-10 7s-7.333-2.333-10-7c2.667-4.667 6-7 10-7s7.333 2.333 10 7z" />
+                                        </svg>
+                                    </a>
+                                    <a href="{% url 'service_update' service.id %}" class="action-icon edit" title="Edit Service">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                            <path d="M17 3l4 4-11 11H6v-4L17 3z" />
+                                            <path d="M12 7l5 5" />
+                                        </svg>
+                                    </a>
+                                    <a href="{% url 'service_delete' service.id %}" class="action-icon delete" title="Delete Service">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                            <path d="M4 7h16M10 11v6M14 11v6M5 7l1 13a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-13M9 3h6" />
+                                        </svg>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr class="empty-table-row">
+                            <td colspan="6">
+                                <div class="premium-empty-state">
+                                    <h3>No services available</h3>
+                                    <p>Get started by creating your first service.</p>
+                                    <a href="{% url 'service_create' %}" class="empty-cta">+ Add Service</a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Premium Pagination -->
+        {% if services.has_other_pages %}
+        <div class="premium-pagination">
+            <div class="pagination-info">
+                Showing {{ services.start_index }} to {{ services.end_index }} of {{ services.paginator.count }} items
+            </div>
+            <div class="pagination-controls">
+                {% if services.has_previous %}
+                <a href="?page={{ services.previous_page_number }}" class="page-nav">← Previous</a>
+                {% endif %}
+                {% for num in services.paginator.page_range %}
+                {% if services.number == num %}
+                <span class="page-number active">{{ num }}</span>
+                {% else %}
+                <a href="?page={{ num }}" class="page-number">{{ num }}</a>
+                {% endif %}
+                {% endfor %}
+                {% if services.has_next %}
+                <a href="?page={{ services.next_page_number }}" class="page-nav">Next →</a>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
 <style>
+    :root {
+        --primary: #ff6b2c;
+        --primary-dark: #e85d1f;
+        --primary-light: #fff1e6;
+        --primary-glow: rgba(255, 107, 44, 0.25);
+        --secondary: #2D2F36;
+        --dark-bg: #121317;
+        --text-dark: #111827;
+        --text-gray: #6C727F;
+        --border-light: rgba(0, 0, 0, 0.05);
+        --shadow-sm: 0 20px 35px -12px rgba(0, 0, 0, 0.08);
+        --shadow-md: 0 30px 45px -18px rgba(0, 0, 0, 0.12);
+        --transition: all 0.35s ease;
+    }
+
     * {
         margin: 0;
         padding: 0;
@@ -10,677 +311,686 @@
     }
 
     body {
-        background: #f8f9fa;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        background: linear-gradient(135deg, #f5f7fa 0%, #f0f2f5 100%);
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
     }
 
-    /* ========== HERO SECTION ========== */
-    .hero-section {
-        background: linear-gradient(135deg, rgba(255,122,0,0.95) 0%, rgba(255,102,0,0.9) 100%),
-                    url('{% static "images/s-bg.webp" %}');
-        background-size: cover;
-        background-position: center;
-        background-attachment: fixed;
-        color: white;
-        text-align: center;
-        padding: 140px 20px 100px;
+    .services-dashboard {
+        max-width: 1500px;
+        margin: 90px auto 0;
+        padding: 10px 30px 40px;
+        position: relative;
+    }
+
+    /* Dashboard Header - Same as Gallery */
+    .dashboard-header {
         position: relative;
         overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        gap: 28px;
+        padding: 70px 55px;
+        border-radius: 36px;
+        margin-bottom: 28px;
+        background: linear-gradient(90deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.45) 40%, rgba(0, 0, 0, 0.2) 100%),
+                    url("{% static 'images/banner-food.png' %}");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
+        animation: floatCard 5s ease-in-out infinite;
     }
 
-    .hero-section::before {
+    .dashboard-header::before {
         content: '';
         position: absolute;
-        top: -50%;
-        right: -10%;
-        width: 600px;
-        height: 600px;
-        background: rgba(255,255,255,0.1);
+        width: 300px;
+        height: 300px;
+        background: rgba(255, 255, 255, 0.08);
         border-radius: 50%;
-        animation: float 20s ease-in-out infinite;
+        top: -120px;
+        right: -100px;
     }
 
-    .hero-section::after {
-        content: '';
-        position: absolute;
-        bottom: -40%;
-        left: -10%;
-        width: 500px;
-        height: 500px;
-        background: rgba(255,255,255,0.08);
-        border-radius: 50%;
-        animation: float 25s ease-in-out infinite reverse;
+    @keyframes floatCard {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-4px); }
     }
 
-    @keyframes float {
-        0%, 100% { transform: translate(0, 0) rotate(0deg); }
-        50% { transform: translate(-30px, -30px) rotate(180deg); }
+    .header-right {
+        align-self: flex-start;
+        margin-top: 5px;
     }
 
-    .hero-content {
-        max-width: 900px;
-        margin: 0 auto;
-        position: relative;
-        z-index: 2;
-    }
-
-    .hero-badge {
-        display: inline-block;
-        background: rgba(255,255,255,0.2);
-        backdrop-filter: blur(10px);
-        padding: 10px 28px;
-        border-radius: 50px;
-        font-size: 14px;
-        font-weight: 600;
-        margin-bottom: 25px;
-        border: 1px solid rgba(255,255,255,0.3);
-    }
-
-    .hero-content h1 {
-        font-size: clamp(2.5rem, 6vw, 3.8rem);
-        margin-bottom: 20px;
-        line-height: 1.2;
+    .dashboard-title {
+        font-size: 64px;
         font-weight: 800;
-        text-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        color: white;
+        line-height: 1;
+        margin-bottom: 18px;
+        letter-spacing: -3px;
+        text-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
     }
 
-    .hero-content h1 span {
-        color: #fff3e0;
-        display: block;
+    .dashboard-subtitle {
+        font-size: 18px;
+        line-height: 1.7;
+        color: rgba(255, 255, 255, 0.88);
+        max-width: 620px;
     }
 
-    .hero-content p {
-        font-size: clamp(1.1rem, 2.5vw, 1.3rem);
-        line-height: 1.8;
-        margin-bottom: 35px;
-        opacity: 0.95;
-        max-width: 700px;
-        margin-left: auto;
-        margin-right: auto;
+    .btn-create {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 28px;
+        border-radius: 16px;
+        background: linear-gradient(135deg, #ff7b2c, #ff5e00);
+        color: white;
+        text-decoration: none;
+        font-weight: 700;
+        box-shadow: 0 10px 25px rgba(255, 107, 44, 0.35);
+        transition: 0.4s ease;
     }
 
-    .hero-buttons {
+    .btn-create:hover {
+        background: var(--primary-dark);
+        transform: translateY(-3px);
+        box-shadow: 0 12px 24px var(--primary-glow);
+    }
+
+    /* Stats Cards Premium */
+    .stats-grid-premium {
         display: flex;
         justify-content: center;
-        gap: 20px;
+        gap: 28px;
+        margin-bottom: 48px;
         flex-wrap: wrap;
     }
 
-    .hero-btn {
-        padding: 16px 36px;
-        background: white;
-        color: #ff6600;
-        text-decoration: none;
-        border-radius: 50px;
-        font-weight: 700;
-        font-size: 1.05rem;
-        transition: all 0.3s ease;
-        box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .hero-btn:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 12px 35px rgba(0,0,0,0.3);
-    }
-
-    .hero-btn.secondary-btn {
-        background: transparent;
-        color: white;
-        border: 2px solid white;
-    }
-
-    .hero-btn.secondary-btn:hover {
-        background: white;
-        color: #ff6600;
-    }
-
-    /* ========== STATS SECTION ========== */
-    .stats-section {
-        background: white;
-        padding: 50px 20px;
-        margin-top: -60px;
+    .stat-card {
         position: relative;
-        z-index: 10;
-        box-shadow: 0 -10px 40px rgba(0,0,0,0.08);
-    }
-
-    .stats-grid {
-        max-width: 1200px;
-        margin: 0 auto;
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 30px;
-    }
-
-    .stat-item {
-        text-align: center;
-        padding: 20px;
-    }
-
-    .stat-number {
-        font-size: 2.8rem;
-        font-weight: 800;
-        color: #ff6600;
-        line-height: 1;
-        margin-bottom: 8px;
-    }
-
-    .stat-label {
-        font-size: 1rem;
-        color: #666;
-        font-weight: 500;
-    }
-
-    /* ========== SERVICES SECTION ========== */
-    .services-section {
-        padding: 80px 20px;
-        max-width: 1400px;
-        margin: 0 auto;
-    }
-
-    .section-header {
-        text-align: center;
-        margin-bottom: 50px;
-    }
-
-    .section-header h2 {
-        font-size: clamp(2rem, 4vw, 2.8rem);
-        color: #1a1a1a;
-        margin-bottom: 12px;
-        font-weight: 800;
-    }
-
-    .section-header h2 span {
-        color: #ff6600;
-    }
-
-    .section-header p {
-        font-size: 1.15rem;
-        color: #666;
-        max-width: 600px;
-        margin: 0 auto;
-    }
-
-    .services-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-        gap: 30px;
-    }
-
-    .service-card {
-        background: white;
-        border-radius: 16px;
         overflow: hidden;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-        transition: all 0.3s ease;
-        border: 1px solid #f0f0f0;
+        flex: 1;
+        min-width: 240px;
+        max-width: 340px;
+        border-radius: 30px;
+        padding: 30px 32px;
+        display: flex;
+        align-items: center;
+        gap: 22px;
+        background: linear-gradient(135deg, #fff7f2, #ffffff);
+        border: 1px solid rgba(255, 107, 44, 0.12);
+        box-shadow: 0 12px 30px rgba(255, 107, 44, 0.10);
+        transition: 0.4s ease;
     }
 
-    .service-card:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 12px 35px rgba(255,102,0,0.15);
+    .stat-card:hover {
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 25px 45px rgba(255, 107, 44, 0.22);
     }
 
-    .service-image {
-        width: 100%;
-        height: 240px;
-        object-fit: cover;
-        background: linear-gradient(135deg, #fff5eb, #ffe8d6);
-    }
-
-    .service-image-placeholder {
-        width: 100%;
-        height: 240px;
-        background: linear-gradient(135deg, #fff5eb, #ffe8d6);
+    .stat-icon {
+        width: 56px;
+        height: 56px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 4rem;
-        color: #ff6600;
+        border-radius: 20px;
+        background: var(--primary-light);
+        color: var(--primary);
     }
 
-    .service-content {
-        padding: 25px;
+    .stat-value {
+        font-size: 54px;
+        font-weight: 800;
+        line-height: 1;
+        background: linear-gradient(135deg, #ff6b2c, #ff9248);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+
+    .stat-label {
+        font-size: 14px;
+        color: #7b8190;
+        font-weight: 600;
+        letter-spacing: 1px;
+        margin-top: 4px;
+    }
+
+    /* Premium Services Wrapper */
+    .premium-services-wrapper {
+        background: white;
+        border-radius: 32px;
+        overflow: hidden;
+        border: 1px solid rgba(255, 107, 44, 0.1);
+        box-shadow: 0 20px 50px rgba(255, 107, 44, 0.08);
+    }
+
+    .table-toolbar {
+        padding: 20px 28px;
+        background: white;
+        border-bottom: 1px solid var(--border-light);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 16px;
+    }
+
+    .search-box {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        background: white;
+        padding: 14px 24px;
+        border-radius: 60px;
+        border: 2px solid #ffe3d3;
+        box-shadow: 0 8px 18px rgba(255, 107, 44, 0.08);
+        width: 420px;
+        transition: 0.3s ease;
+    }
+
+    .search-box input {
+        border: none;
+        background: transparent;
+        font-size: 15px;
+        width: 100%;
+        outline: none;
+        color: var(--text-dark);
+    }
+
+    .search-box:focus-within {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px var(--primary-glow);
+    }
+
+    .view-options {
+        display: flex;
+        gap: 8px;
+    }
+
+    .view-btn {
+        padding: 8px 12px;
+        background: transparent;
+        border: 1px solid var(--border-light);
+        border-radius: 12px;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+
+    .view-btn.active {
+        background: var(--primary-light);
+        border-color: var(--primary);
+        color: var(--primary);
+    }
+
+    /* Services Grid */
+    .services-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+        gap: 28px;
+        padding: 32px;
+    }
+
+    .service-card-premium {
+        background: white;
+        border-radius: 24px;
+        overflow: hidden;
+        border: 1px solid var(--border-light);
+        transition: var(--transition);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    }
+
+    .service-card-premium:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 20px 35px -12px rgba(255, 107, 44, 0.2);
+        border-color: var(--primary-light);
+    }
+
+    .service-image-frame {
+        width: 100%;
+        height: 220px;
+        overflow: hidden;
+        position: relative;
+        background: linear-gradient(135deg, #fff5eb, #ffe8d6);
+    }
+
+    .service-image-frame img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+
+    .service-card-premium:hover .service-image-frame img {
+        transform: scale(1.08);
+    }
+
+    .service-image-frame.placeholder {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .placeholder-content {
+        color: var(--primary);
+        opacity: 0.5;
+    }
+
+    .image-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: var(--transition);
+    }
+
+    .service-image-frame:hover .image-overlay {
+        opacity: 1;
+    }
+
+    .quick-view-btn {
+        background: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 30px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+
+    .quick-view-btn:hover {
+        background: var(--primary);
+        color: white;
+    }
+
+    .service-info {
+        padding: 22px;
     }
 
     .service-header {
         display: flex;
         justify-content: space-between;
-        align-items: flex-start;
-        margin-bottom: 15px;
-        gap: 15px;
+        align-items: center;
+        margin-bottom: 12px;
+        flex-wrap: wrap;
+        gap: 10px;
     }
 
     .service-title {
-        font-size: 1.4rem;
-        color: #1a1a1a;
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--text-dark);
         margin: 0;
-        font-weight: 700;
-        line-height: 1.3;
     }
 
-    .status-badge {
-        padding: 6px 14px;
-        border-radius: 20px;
-        font-size: 0.75rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        flex-shrink: 0;
+    .status-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 5px 12px;
+        border-radius: 40px;
+        font-size: 12px;
+        font-weight: 600;
     }
 
-    .status-active {
-        background: #d1fae5;
-        color: #065f46;
+    .status-chip.active {
+        background: #e8f5e9;
+        color: #2e7d32;
     }
 
-    .status-inactive {
-        background: #fee2e2;
-        color: #991b1b;
+    .status-chip.inactive {
+        background: #ffebee;
+        color: #c62828;
+    }
+
+    .status-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: currentColor;
+    }
+
+    .service-category {
+        margin-bottom: 12px;
+    }
+
+    .category-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 4px 12px;
+        background: var(--primary-light);
+        border-radius: 40px;
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--primary-dark);
+    }
+
+    .chip-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--primary);
     }
 
     .service-description {
-        color: #666;
-        line-height: 1.7;
-        margin-bottom: 20px;
-        font-size: 0.95rem;
+        color: var(--text-gray);
+        font-size: 14px;
+        line-height: 1.6;
+        margin-bottom: 16px;
     }
 
     .service-meta {
         display: flex;
         align-items: center;
-        gap: 8px;
-        color: #999;
-        font-size: 0.85rem;
+        gap: 6px;
+        color: #9ca3af;
+        font-size: 12px;
         margin-bottom: 20px;
-        padding-bottom: 20px;
-        border-bottom: 1px dashed #e5e5e5;
     }
 
-    .service-meta i {
-        color: #ff6600;
-    }
-
-    .service-actions {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
+    .action-group-premium {
+        display: flex;
         gap: 10px;
     }
 
-    .service-btn {
-        padding: 10px;
-        border: none;
-        border-radius: 8px;
-        font-weight: 600;
-        font-size: 0.9rem;
-        cursor: pointer;
-        text-decoration: none;
-        text-align: center;
-        transition: all 0.3s ease;
+    .action-icon {
         display: flex;
         align-items: center;
         justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        transition: var(--transition);
+        text-decoration: none;
+    }
+
+    .action-icon.view {
+        background: linear-gradient(135deg, #42a5f5, #1976d2);
+        color: white;
+    }
+
+    .action-icon.edit {
+        background: linear-gradient(135deg, #ff9f43, #ff6b2c);
+        color: white;
+    }
+
+    .action-icon.delete {
+        background: linear-gradient(135deg, #ff6b81, #e53935);
+        color: white;
+    }
+
+    .action-icon:hover {
+        transform: translateY(-3px);
+    }
+
+    /* List View Table Styles */
+    .premium-table-container {
+        overflow-x: auto;
+    }
+
+    .premium-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+    .premium-table th {
+        padding: 20px 20px;
+        text-align: left;
+        font-size: 13px;
+        font-weight: 600;
+        text-transform: uppercase;
+        color: var(--text-gray);
+        border-bottom: 1px solid var(--border-light);
+    }
+
+    .premium-table td {
+        padding: 20px 20px;
+        border-bottom: 1px solid var(--border-light);
+        vertical-align: middle;
+    }
+
+    .table-row:hover {
+        background: linear-gradient(90deg, #fff8f3, #ffffff);
+    }
+
+    .id-badge {
+        font-weight: 600;
+        background: #f3f4f6;
+        padding: 4px 12px;
+        border-radius: 30px;
+        font-size: 13px;
+    }
+
+    .image-frame-list {
+        width: 60px;
+        height: 60px;
+        border-radius: 16px;
+        overflow: hidden;
+        background: var(--primary-light);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .image-frame-list img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .no-image-placeholder {
+        font-size: 24px;
+    }
+
+    .title-info h4 {
+        font-size: 15px;
+        font-weight: 600;
+        margin-bottom: 4px;
+    }
+
+    .date-meta {
+        font-size: 11px;
+        color: var(--text-gray);
+    }
+
+    /* Empty State */
+    .empty-state-premium, .premium-empty-state {
+        text-align: center;
+        padding: 80px 32px;
+    }
+
+    .empty-illustration {
+        margin-bottom: 24px;
+    }
+
+    .empty-state-premium h3, .premium-empty-state h3 {
+        font-size: 24px;
+        font-weight: 600;
+        margin-bottom: 12px;
+    }
+
+    .empty-cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 28px;
+        background: var(--primary);
+        color: white;
+        text-decoration: none;
+        border-radius: 40px;
+        font-weight: 600;
+        transition: var(--transition);
+    }
+
+    .empty-cta:hover {
+        background: var(--primary-dark);
+        transform: translateY(-2px);
+    }
+
+    /* Pagination */
+    .premium-pagination {
+        padding: 20px 28px;
+        border-top: 1px solid var(--border-light);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 16px;
+    }
+
+    .pagination-controls {
+        display: flex;
         gap: 6px;
     }
 
-    .btn-view {
-        background: #fff7ed;
-        color: #ff6600;
-    }
-
-    .btn-view:hover {
-        background: #ff6600;
-        color: white;
-    }
-
-    .btn-edit {
-        background: #fef3c7;
-        color: #d97706;
-    }
-
-    .btn-edit:hover {
-        background: #d97706;
-        color: white;
-    }
-
-    .btn-delete {
-        background: #fee2e2;
-        color: #dc2626;
-    }
-
-    .btn-delete:hover {
-        background: #dc2626;
-        color: white;
-    }
-
-    .add-service-btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-        background: linear-gradient(135deg, #ff6600, #ff8533);
-        color: white;
-        padding: 14px 32px;
-        border-radius: 50px;
-        text-decoration: none;
-        font-weight: 700;
-        margin-top: 40px;
-        box-shadow: 0 8px 25px rgba(255,102,0,0.3);
-        transition: all 0.3s ease;
-    }
-
-    .add-service-btn:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 12px 35px rgba(255,102,0,0.4);
-    }
-
-    .empty-state {
-        text-align: center;
-        padding: 80px 20px;
-        background: white;
-        border-radius: 16px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-    }
-
-    .empty-state-icon {
-        font-size: 5rem;
-        color: #ddd;
-        margin-bottom: 20px;
-    }
-
-    .empty-state h3 {
-        font-size: 1.8rem;
-        color: #333;
-        margin-bottom: 10px;
-    }
-
-    .empty-state p {
-        color: #666;
-        font-size: 1.1rem;
-    }
-
-    /* ========== MESSAGES ========== */
-    .messages-container {
-        max-width: 1200px;
-        margin: 0 auto 30px;
-        padding: 0 20px;
-    }
-
-    .message {
-        padding: 16px 24px;
+    .page-nav, .page-number {
+        padding: 8px 14px;
         border-radius: 12px;
-        margin-bottom: 12px;
-        font-weight: 500;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        animation: slideIn 0.4s ease;
+        text-decoration: none;
+        font-size: 14px;
+        transition: var(--transition);
+        color: var(--text-gray);
     }
 
-    @keyframes slideIn {
-        from {
-            opacity: 0;
-            transform: translateY(-20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+    .page-number.active {
+        background: var(--primary);
+        color: white;
     }
 
-    .message-success {
-        background: #d1fae5;
-        color: #065f46;
-        border: 1px solid #a7f3d0;
+    /* Responsive */
+    @media (max-width: 1024px) {
+        .services-dashboard { padding: 20px; }
+        .dashboard-title { font-size: 42px; }
+        .services-grid { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
     }
 
-    .message-error {
-        background: #fee2e2;
-        color: #991b1b;
-        border: 1px solid #fecaca;
-    }
-
-    .message-info {
-        background: #dbeafe;
-        color: #1e40af;
-        border: 1px solid #bfdbfe;
-    }
-
-    /* ========== RESPONSIVE ========== */
     @media (max-width: 768px) {
-        .hero-section {
-            padding: 100px 20px 80px;
-        }
-
-        .hero-content h1 {
-            font-size: 2.2rem;
-        }
-
-        .hero-content p {
-            font-size: 1.05rem;
-        }
-
-        .hero-buttons {
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .hero-btn {
-            width: 100%;
-            max-width: 280px;
-            justify-content: center;
-        }
-
-        .stats-section {
-            margin-top: -40px;
-            padding: 40px 20px;
-        }
-
-        .stat-number {
-            font-size: 2.2rem;
-        }
-
-        .services-section {
-            padding: 60px 20px;
-        }
-
-        .services-grid {
-            grid-template-columns: 1fr;
-            gap: 25px;
-        }
-
-        .service-actions {
-            grid-template-columns: 1fr;
-        }
-
-        .section-header h2 {
-            font-size: 2rem;
-        }
+        .dashboard-header { padding: 45px 28px; }
+        .dashboard-title { font-size: 32px; letter-spacing: -1px; }
+        .dashboard-subtitle { font-size: 14px; }
+        .stats-grid-premium { flex-direction: column; align-items: center; }
+        .stat-card { width: 100%; max-width: 100%; }
+        .search-box { width: 100%; }
+        .services-grid { padding: 20px; gap: 20px; }
+        .table-toolbar { flex-direction: column; align-items: stretch; }
+        .btn-create { width: 100%; justify-content: center; }
+        .premium-table th, .premium-table td { padding: 12px; }
     }
 
     @media (max-width: 480px) {
-        .hero-content h1 {
-            font-size: 1.9rem;
-        }
-
-        .stat-number {
-            font-size: 2rem;
-        }
-
-        .service-content {
-            padding: 20px;
-        }
-
-        .service-title {
-            font-size: 1.2rem;
-        }
+        .services-dashboard { padding: 10px 16px 30px; }
+        .dashboard-title { font-size: 28px; }
+        .service-title { font-size: 16px; }
+        .action-group-premium { flex-wrap: wrap; }
     }
 </style>
 
-<!-- HERO SECTION -->
-<section class="hero-section">
-    <div class="hero-content">
-        <div class="hero-badge">
-            <i class="fa-solid fa-briefcase"></i> Professional Services
-        </div>
-        <h1>
-            Our <span>Services</span>
-        </h1>
-        <p>
-            Discover what we offer to make your life easier
-        </p>
-        <div class="hero-buttons">
-            {% if user.is_staff or user.is_superuser %}
-            <a href="{% url 'service_create' %}" class="hero-btn">
-                <i class="fa-solid fa-plus"></i> Add New Service
-            </a>
-            {% endif %}
-            <a href="#services" class="hero-btn secondary-btn">
-                <i class="fa-solid fa-arrow-down"></i> Explore Services
-            </a>
-        </div>
-    </div>
-</section>
+<!-- Search & View Toggle Functionality -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Search functionality
+        const searchInput = document.getElementById('serviceSearch');
+        if (searchInput) {
+            searchInput.addEventListener('keyup', function() {
+                const filter = this.value.toLowerCase();
+                
+                // Filter Grid View
+                const gridCards = document.querySelectorAll('#servicesGridView .service-card-premium');
+                gridCards.forEach(card => {
+                    const title = card.getAttribute('data-service-title') || card.querySelector('.service-title')?.innerText.toLowerCase() || '';
+                    const category = card.getAttribute('data-service-category') || '';
+                    if (title.includes(filter) || category.includes(filter)) {
+                        card.style.display = '';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+                
+                // Filter List View
+                const listRows = document.querySelectorAll('#servicesListView .table-row');
+                listRows.forEach(row => {
+                    const title = row.getAttribute('data-service-title') || row.querySelector('.title-info h4')?.innerText.toLowerCase() || '';
+                    const category = row.getAttribute('data-service-category') || '';
+                    if (title.includes(filter) || category.includes(filter)) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            });
+        }
+        
+        // Grid/List View Toggle
+        const viewBtns = document.querySelectorAll('.view-btn');
+        const gridView = document.getElementById('servicesGridView');
+        const listView = document.getElementById('servicesListView');
+        
+        viewBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const view = this.getAttribute('data-view');
+                
+                // Update active state
+                viewBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Toggle views
+                if (view === 'grid') {
+                    gridView.style.display = 'block';
+                    listView.style.display = 'none';
+                } else {
+                    gridView.style.display = 'none';
+                    listView.style.display = 'block';
+                }
+            });
+        });
+        
+        // Quick view button handlers (optional modal preview)
+        const quickViewBtns = document.querySelectorAll('.quick-view-btn');
+        quickViewBtns.forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const serviceId = this.getAttribute('data-id');
+                if (serviceId) {
+                    window.location.href = "{% url 'service_detail' 0 %}".replace('0', serviceId);
+                }
+            });
+        });
+        
+        // Auto-hide any flash messages if they exist
+        const messages = document.querySelectorAll('.message');
+        messages.forEach(msg => {
+            setTimeout(() => {
+                msg.style.transition = 'opacity 0.4s ease';
+                msg.style.opacity = '0';
+                setTimeout(() => msg.remove(), 400);
+            }, 5000);
+        });
+    });
+</script>
 
-<!-- STATS SECTION -->
-{% if user.is_staff or user.is_superuser %}
-<div class="stats-section">
-    <div class="stats-grid">
-        <div class="stat-item">
-            <div class="stat-number">{{ services.count }}</div>
-            <div class="stat-label">Total Services</div>
-        </div>
-        <div class="stat-item">
-            <div class="stat-number">{{ services|length }}</div>
-            <div class="stat-label">Active Services</div>
-        </div>
-        <div class="stat-item">
-            <div class="stat-number">24/7</div>
-            <div class="stat-label">Available</div>
-        </div>
-    </div>
-</div>
-{% endif %}
-
-<!-- MESSAGES -->
+<!-- Messages Block (if any from Django) -->
 {% if messages %}
-<div class="messages-container">
+<div style="max-width: 1500px; margin: 20px auto 0; padding: 0 30px;">
     {% for message in messages %}
-    <div class="message {% if message.tags == 'success' %}message-success{% elif message.tags == 'error' %}message-error{% else %}message-info{% endif %}">
-        <i class="fa-solid {% if message.tags == 'success' %}fa-circle-check{% elif message.tags == 'error' %}fa-circle-exclamation{% else %}fa-info-circle{% endif %}"></i>
-        <span>{{ message }}</span>
+    <div class="message message-{{ message.tags }}" style="padding: 14px 20px; border-radius: 16px; margin-bottom: 12px; background: white; border-left: 4px solid var(--primary);">
+        {{ message }}
     </div>
     {% endfor %}
 </div>
 {% endif %}
 
-<!-- SERVICES SECTION -->
-<section class="services-section" id="services">
-    <div class="section-header">
-        <h2>What We <span>Offer</span></h2>
-        <p>We provide multiple delivery solutions for your daily needs</p>
-    </div>
-
-    <div class="services-grid">
-        {% for service in services %}
-        <div class="service-card">
-            {% if service.image %}
-            <img src="{{ service.image.url }}" alt="{{ service.title }}" class="service-image">
-            {% else %}
-            <div class="service-image-placeholder">
-                <i class="fa-solid fa-utensils"></i>
-            </div>
-            {% endif %}
-
-            <div class="service-content">
-                <div class="service-header">
-                    <h3 class="service-title">{{ service.title }}</h3>
-                    {% if service.is_active %}
-                    <span class="status-badge status-active">Active</span>
-                    {% else %}
-                    <span class="status-badge status-inactive">Inactive</span>
-                    {% endif %}
-                </div>
-
-                {% if service.short_description %}
-                <p class="service-description">{{ service.short_description|truncatechars:120 }}</p>
-                {% endif %}
-
-                <div class="service-meta">
-                    <i class="fa-regular fa-calendar"></i>
-                    <span>Created {{ service.created_at|date:"M d, Y" }}</span>
-                </div>
-
-                {% if user.is_staff or user.is_superuser %}
-                <div class="service-actions">
-                    <a href="{% url 'service_detail' service.id %}" class="service-btn btn-view">
-                        <i class="fa-regular fa-eye"></i> View
-                    </a>
-                    <a href="{% url 'service_update' service.id %}" class="service-btn btn-edit">
-                        <i class="fa-solid fa-pen"></i> Edit
-                    </a>
-                    <a href="{% url 'service_delete' service.id %}" class="service-btn btn-delete">
-                        <i class="fa-solid fa-trash"></i> Delete
-                    </a>
-                </div>
-                {% else %}
-                <a href="{% url 'service_detail' service.id %}" class="service-btn btn-view" style="width: 100%;">
-                    <i class="fa-regular fa-eye"></i> View Details
-                </a>
-                {% endif %}
-            </div>
-        </div>
-
-        {% empty %}
-        <div class="empty-state" style="grid-column: 1 / -1;">
-            <div class="empty-state-icon">
-                <i class="fa-solid fa-box-open"></i>
-            </div>
-            <h3>No Services Found</h3>
-            <p>Start by adding your first service</p>
-            {% if user.is_staff or user.is_superuser %}
-            <a href="{% url 'service_create' %}" class="add-service-btn">
-                <i class="fa-solid fa-plus"></i> Create Your First Service
-            </a>
-            {% endif %}
-        </div>
-        {% endfor %}
-    </div>
-
-    {% if services and user.is_staff or user.is_superuser %}
-    <div style="text-align: center;">
-        <a href="{% url 'service_create' %}" class="add-service-btn">
-            <i class="fa-solid fa-plus"></i> Add New Service
-        </a>
-    </div>
-    {% endif %}
-</section>
-
-<script>
-    // Auto-hide messages after 5 seconds
-    document.addEventListener('DOMContentLoaded', function() {
-        const messages = document.querySelectorAll('.message');
-        messages.forEach(msg => {
-            setTimeout(() => {
-                msg.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
-                msg.style.opacity = '0';
-                msg.style.transform = 'translateY(-20px)';
-                setTimeout(() => msg.remove(), 400);
-            }, 5000);
-        });
-
-        // Smooth scroll for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            });
-        });
-    });
-</script>
 {% endblock %}

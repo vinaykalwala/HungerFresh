@@ -517,8 +517,7 @@
     
     .contact-card .card-image-header {
         height: 220px;
-        background: linear-gradient(135deg, rgba(255,122,0,0.9), rgba(255,159,58,0.95)),
-                    url('{% static "images/contact.png" %}') center/cover no-repeat;
+        background: url('{% static "images/contact.png" %}') center/cover no-repeat;
     }
     
     .contact-card .card-image-overlay {
@@ -616,40 +615,94 @@
     }
     
     @media (max-width: 768px) {
-        .privacy-bg-decor { display: none; }
-        
-        .privacy-hero {
-            padding: 60px 5% 40px;
-            background: linear-gradient(135deg, #fffaf5 0%, #ffffff 100%);
-        }
-        
-        .privacy-container {
-            grid-template-columns: 1fr;
-            padding: 0 5% 40px;
-            gap: 24px;
-        }
-        
-        .privacy-card {
-            border-radius: var(--hf-radius-xl);
-        }
-        
-        .card-image-header { height: 140px; }
-        .card-content { padding: 22px; }
-        
-        .intro-card-image { 
-            width: 100%; 
-            max-width: 240px; 
-            height: 180px;
-            margin: 0 auto 18px;
-        }
-        
-        .privacy-title { font-size: clamp(2.2rem, 8vw, 3rem); }
-        .privacy-subtitle { font-size: 1.1rem; }
-        .privacy-hero-icon { width: 120px; height: 120px; }
-        
-        .contact-card .card-image-header { height: 180px; }
-        .contact-btn { font-size: 1.1rem; padding: 14px 32px; }
+
+    .privacy-bg-decor {
+        display: none;
     }
+
+    .privacy-hero {
+        padding: 60px 5% 40px;
+        background: linear-gradient(135deg, #fffaf5 0%, #ffffff 100%);
+    }
+
+    .privacy-container {
+        grid-template-columns: 1fr;
+        padding: 0 5% 40px;
+        gap: 24px;
+    }
+
+    .privacy-card {
+        border-radius: var(--hf-radius-xl);
+    }
+
+    .card-image-header {
+        height: 140px;
+    }
+
+    .card-content {
+        padding: 22px;
+    }
+
+    /* =========================
+       INTRO CARD MOBILE FIX
+    ========================= */
+
+    .privacy-card.intro-card {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 20px;
+    }
+
+    .intro-card-image {
+        width: 100%;
+        max-width: 240px;
+        height: auto;
+        margin: 0 auto 22px auto;
+        flex: unset;
+    }
+
+    .intro-card-image img {
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+        display: block;
+    }
+
+    .intro-card-content {
+        width: 100%;
+        align-items: center;
+        text-align: center;
+    }
+
+    .intro-card-content p {
+        font-size: 1rem;
+        line-height: 1.8;
+        margin: 0;
+    }
+
+    .privacy-title {
+        font-size: clamp(2.2rem, 8vw, 3rem);
+    }
+
+    .privacy-subtitle {
+        font-size: 1.1rem;
+    }
+
+    .privacy-hero-icon {
+        width: 120px;
+        height: 120px;
+    }
+
+    .contact-card .card-image-header {
+        height: 180px;
+    }
+
+    .contact-btn {
+        font-size: 1.1rem;
+        padding: 14px 32px;
+    }
+}
     
     @media (max-width: 480px) {
         .privacy-hero { padding: 50px 5% 35px; }
@@ -742,36 +795,7 @@
     <section class="privacy-hero fade-up">
         <span class="privacy-badge">
             <i class="fa-regular fa-shield-check"></i> Last Updated: May 2026
-        </span>
-        
-        <div class="privacy-hero-icon">
-            <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                    <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" style="stop-color:#fff7ed"/>
-                        <stop offset="100%" style="stop-color:#ffffff"/>
-                    </linearGradient>
-                    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-                        <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-                        <feMerge>
-                            <feMergeNode in="coloredBlur"/>
-                            <feMergeNode in="SourceGraphic"/>
-                        </feMerge>
-                    </filter>
-                </defs>
-                <path d="M50 10 L20 28 V52 C20 74 33 92 50 96 C67 92 80 74 80 52 V28 L50 10Z" 
-                      fill="url(#shieldGrad)" stroke="#ff7a00" stroke-width="3" filter="url(#glow)"/>
-                <rect x="36" y="46" width="28" height="24" rx="5" fill="white" stroke="#ff7a00" stroke-width="3"/>
-                <path d="M42 46 V36 Q42 30 50 30 Q58 30 58 36 V46" 
-                      fill="none" stroke="#ff7a00" stroke-width="3" stroke-linecap="round"/>
-                <circle cx="50" cy="58" r="4" fill="#ff7a00"/>
-                <rect x="48" y="62" width="4" height="5" rx="1.5" fill="#ff7a00"/>
-                <circle cx="30" cy="40" r="5" fill="#fb923c" opacity="0.9"/>
-                <path d="M70 65 Q73 69 70 73 Q67 69 70 65" fill="#ff7a00" opacity="0.8"/>
-                <circle cx="68" cy="38" r="4" fill="#fdba74" opacity="0.85"/>
-            </svg>
-        </div>
-        
+        </span>        
         <h1 class="privacy-title">Privacy <span>Policy</span></h1>
         <p class="privacy-subtitle">Your trust is the secret ingredient in every meal we deliver. 🧡</p>
         <div class="privacy-divider"></div>
@@ -786,9 +810,6 @@
                 <img src="{% static 'images/hungerfreshlogo.png' %}" alt="HungerFresh Logo">
             </div>
             <div class="intro-card-content">
-                <div class="intro-icon-wrapper">
-                    <i class="fa-solid fa-lock"></i>
-                </div>
                 <p>At <strong>HungerFresh</strong>, we value your privacy like we value fresh ingredients. This policy explains how we collect, use, and protect your data—so you can order with complete peace of mind.</p>
             </div>
         </div>
@@ -876,6 +897,40 @@
             </div>
         </div>
 
+        <!-- Policy Updates -->
+        <div class="privacy-card fade-up">
+            <div class="card-image-header">
+                <img src="{% static 'images/bg4.jpg' %}" alt="Updates">
+                <div class="card-image-overlay">
+                    <span class="card-image-badge"><i class="fa-solid fa-rotate"></i> Section 7</span>
+                </div>
+            </div>
+            <div class="card-content">
+                <div class="card-icon-badge">
+                    <i class="fa-solid fa-rotate"></i>
+                </div>
+                <h3 class="card-title"><i class="fa-solid fa-file-signature"></i> Policy Updates</h3>
+                <p class="card-description">We may update this policy occasionally to reflect service improvements or legal changes. Updates take effect upon posting. We encourage you to review this page periodically. Continued use of HungerFresh means you accept the latest version.</p>
+            </div>
+        </div>
+
+        <!-- Cookies & Tracking -->
+        <div class="privacy-card fade-up">
+            <div class="card-image-header">
+                <img src="{% static 'images/bg5.avif' %}" alt="Cookies">
+                <div class="card-image-overlay">
+                    <span class="card-image-badge"><i class="fa-solid fa-cookie"></i> Section 6</span>
+                </div>
+            </div>
+            <div class="card-content">
+                <div class="card-icon-badge">
+                    <i class="fa-solid fa-cookie-bite"></i>
+                </div>
+                <h3 class="card-title"><i class="fa-solid fa-cookie"></i> Cookies & Tracking</h3>
+                <p class="card-description">We use cookies to remember your preferences, keep you logged in, and improve our service. You can manage cookie settings in your browser anytime. We never sell your browsing data to third parties. 🚫</p>
+            </div>
+        </div>
+
         <!-- User Rights -->
         <div class="privacy-card fade-up">
             <div class="card-image-header">
@@ -898,40 +953,6 @@
                     <li>Export your order history</li>
                 </ul>
                 <p style="margin-top:12px; font-size:0.95rem; color:var(--hf-text-tertiary);">Just contact us and we'll guide you through the process—no hassle, no hidden steps.</p>
-            </div>
-        </div>
-
-        <!-- Cookies & Tracking -->
-        <div class="privacy-card fade-up">
-            <div class="card-image-header">
-                <img src="{% static 'images/bg5.avif' %}" alt="Cookies">
-                <div class="card-image-overlay">
-                    <span class="card-image-badge"><i class="fa-solid fa-cookie"></i> Section 6</span>
-                </div>
-            </div>
-            <div class="card-content">
-                <div class="card-icon-badge">
-                    <i class="fa-solid fa-cookie-bite"></i>
-                </div>
-                <h3 class="card-title"><i class="fa-solid fa-cookie"></i> Cookies & Tracking</h3>
-                <p class="card-description">We use cookies to remember your preferences, keep you logged in, and improve our service. You can manage cookie settings in your browser anytime. We never sell your browsing data to third parties. 🚫</p>
-            </div>
-        </div>
-
-        <!-- Policy Updates -->
-        <div class="privacy-card fade-up">
-            <div class="card-image-header">
-                <img src="{% static 'images/bg4.jpg' %}" alt="Updates">
-                <div class="card-image-overlay">
-                    <span class="card-image-badge"><i class="fa-solid fa-rotate"></i> Section 7</span>
-                </div>
-            </div>
-            <div class="card-content">
-                <div class="card-icon-badge">
-                    <i class="fa-solid fa-rotate"></i>
-                </div>
-                <h3 class="card-title"><i class="fa-solid fa-file-signature"></i> Policy Updates</h3>
-                <p class="card-description">We may update this policy occasionally to reflect service improvements or legal changes. Updates take effect upon posting. We encourage you to review this page periodically. Continued use of HungerFresh means you accept the latest version.</p>
             </div>
         </div>
 
