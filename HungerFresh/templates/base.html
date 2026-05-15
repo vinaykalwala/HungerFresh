@@ -8,7 +8,17 @@
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+     <!-- FAVICON -->
+{% load static %}
+<link rel="icon"
+      type="image/png"
+      href="{% static 'images/hunger.png' %}">
 
+<link rel="shortcut icon"
+      href="{% static 'images/hunger.png' %}">
+
+<link rel="apple-touch-icon"
+      href="{% static 'images/hunger.png' %}">
     <!-- Font Awesome -->
     <link rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
@@ -138,7 +148,7 @@
         .nav-links{
             display:flex;
             align-items:center;
-            gap:42px;
+            gap:38px;
         }
 
         .nav-links a{
@@ -216,7 +226,7 @@
 
         .dropdown-menu{
             position:absolute;
-            top:55px;
+            top:45px;
             right: 0;
             left: auto;
             width:260px;
@@ -545,7 +555,13 @@
             line-height:1.7;
             font-family: 'Inter', sans-serif;
         }
-
+        .dropdown-menu a i{
+    margin-right:10px;
+    font-size:16px;
+    color:var(--orange);
+    width:20px;
+    text-align:center;
+}
         /* RESPONSIVE */
         @media(max-width:992px){
             .footer-top{
@@ -658,6 +674,26 @@
                 font-size: 14px;
             }
         }
+        @media(max-width:1250px){
+
+    .nav-links{
+        gap:20px;
+    }
+
+    .nav-links a{
+        font-size:14px;
+    }
+
+    .join-btn{
+        padding:8px 18px;
+        font-size:14px;
+    }
+
+    .dropdown-menu a{
+        font-size:13px;
+    }
+
+}
     </style>
 </head>
 
@@ -683,7 +719,29 @@
             <a href="{% url 'about' %}">About</a>
             <a href="{% url 'service_list' %}">Services</a>
             <a href="{% url 'gallery_page' %}">Gallery</a>
+            <a href="{% url 'diet_plan' %}">Diet Plan</a>
             <a href="{% url 'contact_create' %}">Contact</a>
+            <div class="dropdown">
+
+    <a href="#">
+        Order Now
+        <i class="fa-solid fa-angle-down"></i>
+    </a>
+
+    <div class="dropdown-menu">
+
+    <a href="https://play.google.com/" target="_blank">
+        <i class="fa-brands fa-google-play"></i>
+        Play Store
+    </a>
+
+    <a href="https://www.apple.com/app-store/" target="_blank">
+        <i class="fa-brands fa-apple"></i>
+        App Store
+    </a>
+
+</div>
+</div>
               {% if user.is_authenticated %}
 
         <a href="{% url 'dashboard' %}">
@@ -705,6 +763,8 @@
                     <a href="#">Delivery Partner Registration</a>
                 </div>
             </div>
+            
+            
         </div>
     </nav>
 </header>

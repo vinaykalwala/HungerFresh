@@ -36,6 +36,9 @@ def home(request):
 def about(request):
     return render(request, 'about.html')
 
+def diet_plan(request):
+    return render(request, 'diet_plan.html')
+
 
 def terms_conditions(request):
     return render(request, 'terms_conditions.html')

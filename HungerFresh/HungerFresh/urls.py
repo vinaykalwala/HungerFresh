@@ -9,6 +9,7 @@ urlpatterns = [
     path('captcha/',include('captcha.urls')),
     path('', views.home, name='home'),
     path('about/', views.about, name='about'),
+    path('diet_plan/', views.diet_plan, name='diet_plan'),
     path('contact/',views.contact_create,name='contact_create'),
     path('terms-and-conditions/', views.terms_conditions, name='terms_conditions'),
     path('privacy-policy/', views.privacy_policy, name='privacy_policy'),
