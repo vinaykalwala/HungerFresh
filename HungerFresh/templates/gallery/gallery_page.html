@@ -57,7 +57,7 @@
     .modern-gallery-page {
         width: 100%;
         max-width: 1500px;
-        margin: auto;
+        margin:60px auto;
         padding: 20px 32px 70px;
     }
 
@@ -1095,18 +1095,7 @@
 
             </div>
 
-            <div class="minimal-content">
-
-                <span class="minimal-tag">
-                    {{ gallery.category|default:"gallery" }}
-                </span>
-
-                <h3>{{ gallery.title|truncatechars:28 }}</h3>
-
-                <p>{{ gallery.description|truncatechars:55 }}</p>
-
-            </div>
-
+           
         </div>
 
         {% empty %}
